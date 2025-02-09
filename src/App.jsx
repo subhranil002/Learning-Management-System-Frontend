@@ -1,9 +1,13 @@
+import { Route, Routes } from "react-router-dom";
+
+import HomePage from "./Pages/HomePage";
+
 function App() {
-  return (
-      <div>
-          <button className="btn btn-active btn-secondary">Secondary</button>
-      </div>
-  );
+    return (
+        <Routes>
+            <Route path="/" element={<HomePage />} />
+        </Routes>
+    );
 }
 
 export default App;
