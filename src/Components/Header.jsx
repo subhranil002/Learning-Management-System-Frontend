@@ -3,9 +3,11 @@ import { FiMenu } from "react-icons/fi";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 
+import { logout } from "../Redux/Slices/AuthSlice";
+
 function Header() {
     const dispatch = useDispatch();
-    const navigate = useNavigate;
+    const navigate = useNavigate();
 
     const isLoggedIn = useSelector((state) => state?.auth?.isLoggedIn);
     const role = useSelector((state) => state?.auth?.role);
@@ -22,8 +24,9 @@ function Header() {
         drawerSide[0].style.width = "0";
     }
 
-    function handleLogout() {
-        dispatch();
+    async function handleLogout() {
+        await dispatch(logout());
+        hideDrawer();
         navigate("/");
     }
 
@@ -42,37 +45,39 @@ function Header() {
             <div className="drawer-side w-48 sm:w-80 bg-base-200 text-base-content transition-all duration-300">
                 <label htmlFor="my-drawer" className="drawer-overlay"></label>
                 <ul className="menu p-4 w-full relative overflow-hidden">
-                    {/* Close Button */}
                     <li className="absolute right-2 top-2 z-50">
-                        <button onClick={hideDrawer}>
+                        <button onClick={() => hideDrawer()}>
                             <AiFillCloseCircle size={24} />
                         </button>
                     </li>
 
                     <li className="pt-5">
-                        <Link to="/" onClick={hideDrawer}>
+                        <Link to="/" onClick={() => hideDrawer()}>
                             Home
                         </Link>
                     </li>
                     {isLoggedIn && role === "ADMIN" && (
                         <li>
-                            <Link to="/admin/dashboard" onClick={hideDrawer}>
+                            <Link
+                                to="/admin/dashboard"
+                                onClick={() => hideDrawer()}
+                            >
                                 Admin Dashboard
                             </Link>
                         </li>
                     )}
                     <li>
-                        <Link to="/courses" onClick={hideDrawer}>
+                        <Link to="/courses" onClick={() => hideDrawer()}>
                             All Courses
                         </Link>
                     </li>
                     <li>
-                        <Link to="/contact" onClick={hideDrawer}>
+                        <Link to="/contact" onClick={() => hideDrawer()}>
                             Contact Us
                         </Link>
                     </li>
                     <li>
-                        <Link to="/about" onClick={hideDrawer}>
+                        <Link to="/about" onClick={() => hideDrawer()}>
                             About Us
                         </Link>
                     </li>
@@ -83,14 +88,14 @@ function Header() {
                             <>
                                 <Link
                                     to="/login"
-                                    onClick={hideDrawer}
+                                    onClick={() => hideDrawer()}
                                     className="btn btn-primary w-full text-center"
                                 >
                                     Login
                                 </Link>
                                 <Link
                                     to="/signup"
-                                    onClick={hideDrawer}
+                                    onClick={() => hideDrawer()}
                                     className="btn btn-secondary w-full text-center"
                                 >
                                     Signup
@@ -100,16 +105,13 @@ function Header() {
                             <>
                                 <Link
                                     to="/user/profile"
-                                    onClick={hideDrawer}
+                                    onClick={() => hideDrawer()}
                                     className="btn btn-primary w-full text-center"
                                 >
                                     Profile
                                 </Link>
                                 <button
-                                    onClick={() => {
-                                        handleLogout();
-                                        hideDrawer();
-                                    }}
+                                    onClick={() => handleLogout()}
                                     className="btn btn-secondary w-full"
                                 >
                                     Logout
