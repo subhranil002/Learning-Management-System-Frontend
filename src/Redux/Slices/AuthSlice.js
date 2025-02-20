@@ -3,11 +3,20 @@ import toast from "react-hot-toast";
 
 import axiosInstance from "../../Helpers/axiosInstance";
 
-const initialState = {
-    isLoggedIn: localStorage.getItem("isLoggedIn") || false,
-    role: localStorage.getItem("role") || "",
-    data: localStorage.getItem("data") || {},
+const safeParse = (item, defaultValue) => {
+    try {
+        return item ? JSON.parse(item) : defaultValue;
+    } catch (e) {
+        return defaultValue;
+    }
 };
+
+const initialState = {
+    isLoggedIn: safeParse(sessionStorage.getItem("isLoggedIn"), false),
+    role: sessionStorage.getItem("role") || "GUEST", 
+    data: safeParse(sessionStorage.getItem("data"), { _: "" }),
+};
+
 
 export const signUp = createAsyncThunk("/auth/signup", async (formData) => {
     try {
@@ -56,6 +65,15 @@ export const logout = createAsyncThunk("auth/logout", async () => {
     }
 });
 
+export const getProfile = createAsyncThunk("auth/me", async () => {
+    try {
+        const res = await axiosInstance.get("/user/me");
+        return res.data;
+    } catch (error) {
+        console.log(error.message);
+    }
+});
+
 const AuthSlice = createSlice({
     name: "auth",
     initialState,
@@ -63,34 +81,54 @@ const AuthSlice = createSlice({
     extraReducers: (builder) => {
         builder
             .addCase(signUp.fulfilled, (state, action) => {
-                localStorage.setItem("isLoggedIn", true);
-                localStorage.setItem("role", action?.payload?.user?.role);
-                localStorage.setItem(
-                    "data",
-                    JSON.stringify(action?.payload?.user)
-                );
-                state.isLoggedIn = true;
+                state.isLoggedIn = action.payload?.success;
                 state.role = action.payload?.user?.role;
                 state.data = action.payload?.user;
+                sessionStorage.setItem(
+                    "isLoggedIn",
+                    JSON.stringify(action.payload?.success)
+                );
+                sessionStorage.setItem("role", action.payload?.user?.role);
+                sessionStorage.setItem(
+                    "data",
+                    JSON.stringify(action.payload?.user)
+                );
             })
             .addCase(login.fulfilled, (state, action) => {
-                localStorage.setItem("isLoggedIn", true);
-                localStorage.setItem("role", action?.payload?.user?.role);
-                localStorage.setItem(
-                    "data",
-                    JSON.stringify(action?.payload?.user)
-                );
-                state.isLoggedIn = true;
+                state.isLoggedIn = action.payload?.success;
                 state.role = action.payload?.user?.role;
                 state.data = action.payload?.user;
+                sessionStorage.setItem(
+                    "isLoggedIn",
+                    JSON.stringify(action.payload?.success)
+                );
+                sessionStorage.setItem("role", action.payload?.user?.role);
+                sessionStorage.setItem(
+                    "data",
+                    JSON.stringify(action.payload?.user)
+                );
             })
             .addCase(logout.fulfilled, (state) => {
-                localStorage.setItem("isLoggedIn", false);
-                localStorage.setItem("role", "");
-                localStorage.setItem("data", {});
                 state.isLoggedIn = false;
-                state.role = "";
+                state.role = "GUEST";
                 state.data = {};
+                sessionStorage.setItem("isLoggedIn", JSON.stringify(false));
+                sessionStorage.setItem("role", "GUEST");
+                sessionStorage.setItem("data", JSON.stringify({ _: "" }));
+            })
+            .addCase(getProfile.fulfilled, (state, action) => {
+                state.isLoggedIn = action.payload?.success;
+                state.role = action.payload?.user?.role;
+                state.data = action.payload?.user;
+                sessionStorage.setItem(
+                    "isLoggedIn",
+                    JSON.stringify(action.payload?.success)
+                );
+                sessionStorage.setItem("role", action.payload?.user?.role);
+                sessionStorage.setItem(
+                    "data",
+                    JSON.stringify(action.payload?.user)
+                );
             });
     },
 });

@@ -9,8 +9,7 @@ function Header() {
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
-    const isLoggedIn = useSelector((state) => state?.auth?.isLoggedIn);
-    const role = useSelector((state) => state?.auth?.role);
+    const { isLoggedIn, role } = useSelector((state) => state.auth);
 
     function changeWidth() {
         const drawerSide = document.getElementsByClassName("drawer-side");
@@ -82,9 +81,24 @@ function Header() {
                         </Link>
                     </li>
 
-                    {/* Authentication Buttons */}
                     <div className="w-full flex flex-col items-center justify-center space-y-2 mt-4">
-                        {!isLoggedIn ? (
+                        {isLoggedIn ? (
+                            <>
+                                <Link
+                                    to="/user/profile"
+                                    onClick={() => hideDrawer()}
+                                    className="btn btn-primary w-full text-center"
+                                >
+                                    Profile
+                                </Link>
+                                <button
+                                    onClick={() => handleLogout()}
+                                    className="btn btn-secondary w-full"
+                                >
+                                    Logout
+                                </button>
+                            </>
+                        ) : (
                             <>
                                 <Link
                                     to="/login"
@@ -100,22 +114,6 @@ function Header() {
                                 >
                                     Signup
                                 </Link>
-                            </>
-                        ) : (
-                            <>
-                                <Link
-                                    to="/user/profile"
-                                    onClick={() => hideDrawer()}
-                                    className="btn btn-primary w-full text-center"
-                                >
-                                    Profile
-                                </Link>
-                                <button
-                                    onClick={() => handleLogout()}
-                                    className="btn btn-secondary w-full"
-                                >
-                                    Logout
-                                </button>
                             </>
                         )}
                     </div>
