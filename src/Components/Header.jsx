@@ -70,6 +70,16 @@ function Header() {
                             All Courses
                         </Link>
                     </li>
+                    {isLoggedIn && role === "ADMIN" && (
+                        <li>
+                            <Link
+                                to="/courses/create"
+                                onClick={() => hideDrawer()}
+                            >
+                                Create Course
+                            </Link>
+                        </li>
+                    )}
                     <li>
                         <Link to="/contact" onClick={() => hideDrawer()}>
                             Contact Us
