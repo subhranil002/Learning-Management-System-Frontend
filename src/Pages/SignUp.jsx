@@ -70,7 +70,7 @@ function Signup() {
                         name="image_uploads"
                         id="image_uploads"
                         accept=".jpg, .jpeg, .png, .svg"
-                        {...register("file", { required: "File is required" })}
+                        {...register("file", { required: "Avatar is required" })}
                     />
                     <div className="flex flex-col gap-1">
                         <label htmlFor="fullName" className="font-semibold">
