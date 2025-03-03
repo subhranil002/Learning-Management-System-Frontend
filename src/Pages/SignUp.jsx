@@ -14,12 +14,7 @@ function Signup() {
     const selectedFile = watch("file")?.[0];
 
     async function onSubmit(data) {
-        const formData = new FormData();
-        formData.append("fullName", data.fullName);
-        formData.append("email", data.email);
-        formData.append("password", data.password);
-        formData.append("avatar", data.file[0]);
-        const res = await dispatch(signUp(formData));
+        const res = await dispatch(signUp(data));
         if (res.payload.success) {
             navigate("/");
         }

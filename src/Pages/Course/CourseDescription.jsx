@@ -6,7 +6,7 @@ import HomeLayout from "../../Layouts/HomeLayout";
 function CourseDescription() {
     const { state } = useLocation();
     const { role, data } = useSelector((state) => state.auth);
-    
+
     return (
         <HomeLayout>
             <div className="min-h-[90vh] pt-12 px-20 flex flex-col items-center justify-center text-white">
@@ -23,17 +23,17 @@ function CourseDescription() {
                                     <span className="text-yellow-500 font-bold">
                                         Total lectures :{" "}
                                     </span>
-                                    {state?.numberOfLectures}
+                                    {state?.numbersOfLectures}
                                 </p>
                                 <p className="font-semibold">
                                     <span className="text-yellow-500 font-bold">
                                         Instructor :{" "}
                                     </span>
-                                    {state?.createdBy}
+                                    {state?.createdBy?.name}
                                 </p>
                             </div>
                             {role === "ADMIN" ||
-                            data?.subscription?.status === "ACTIVE" ? (
+                            data?.subscription?.status === "active" ? (
                                 <button className="bg-yellow-600 text-xl rounded-md font-bold px-5 py-3 w-full hover:bg-yellow-500 transition-all ease-in-out duration-300">
                                     Watch lectures
                                 </button>

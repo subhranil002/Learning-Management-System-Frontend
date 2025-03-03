@@ -6,7 +6,7 @@ function CourseCard({ data }) {
     return (
         <div
             onClick={() =>
-                navigate("/course/description/", { state: { ...data } })
+                navigate("/courses/description/", { state: { ...data } })
             }
             className="text-white w-[22rem] h-[430px] shadow-lg rounded-lg cursor-pointer group overflow-hidden bg-zinc-700"
         >
@@ -31,13 +31,13 @@ function CourseCard({ data }) {
                         <span className="text-yellow-500 font-bold">
                             Total lectures :{" "}
                         </span>
-                        {data?.numberoflectures}
+                        {data?.numbersOfLectures}
                     </p>
                     <p className="font-semibold">
                         <span className="text-yellow-500 font-bold">
                             Instructor :{" "}
                         </span>
-                        {data?.createdBy}
+                        {data?.createdBy?.name}
                     </p>
                 </div>
             </div>

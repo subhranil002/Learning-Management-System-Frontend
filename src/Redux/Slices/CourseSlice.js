@@ -11,7 +11,7 @@ export const getAllCourses = createAsyncThunk(
     "course/getAllCourses",
     async () => {
         try {
-            const res = axiosInstance.get("/course");
+            const res = axiosInstance.get("/courses/");
             toast.promise(res, {
                 loading: "Wait! loading courses...",
                 success: (data) => {
@@ -21,7 +21,7 @@ export const getAllCourses = createAsyncThunk(
             });
             return (await res).data;
         } catch (error) {
-            console.log(error.message);
+            console.log(error?.response?.data?.message || error.message);
         }
     }
 );
@@ -30,14 +30,24 @@ export const createNewCourse = createAsyncThunk(
     "course/createNewCourse",
     async (data) => {
         try {
-            const res = axiosInstance.post("/course/create-course", data);
-            toast.promise(res, {
-                loading: "Wait! Creating course",
-                success: (data) => {
-                    return data?.data?.message;
-                },
+            const courseRes = axiosInstance.post("/courses/create", data);
+            toast.promise(courseRes, {
+                loading: "Wait! Creating course...",
             });
-            return (await res).data;
+            const res = (await courseRes).data;
+            const thumbnail = new FormData();
+            thumbnail.append("thumbnail", data.file[0]);
+            const thumbnailRes = axiosInstance.post(
+                `/courses/change-thumbnail/${res.data._id}`,
+                thumbnail
+            );
+            toast.promise(thumbnailRes, {
+                loading: "Wait! Uploading course thumbnail...",
+            });
+            await thumbnailRes;
+            return {
+                success: true,
+            };
         } catch (error) {
             if (error?.response?.data?.message) {
                 toast.error(error?.response?.data?.message);
@@ -54,7 +64,9 @@ const CourseSlice = createSlice({
     reducers: {},
     extraReducers: (builder) => {
         builder.addCase(getAllCourses.fulfilled, (state, action) => {
-            state.courseData = [...action.payload.courses];
+            if (action?.payload?.data?.length) {
+                state.courseData = action.payload?.data;
+            }
         });
     },
 });
