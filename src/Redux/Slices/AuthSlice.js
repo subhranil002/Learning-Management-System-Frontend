@@ -91,6 +91,36 @@ export const getProfile = createAsyncThunk("auth/profile", async () => {
     }
 });
 
+export const updateProfile = createAsyncThunk(
+    "auth/editprofile",
+    async (data) => {
+        try {
+            const accountRes = axiosInstance.post("/users/update", data);
+            toast.promise(accountRes, {
+                loading: "Wait! creating your account...",
+            });
+            await accountRes;
+            const avatar = new FormData();
+            avatar.append("avatar", data.file[0]);
+            const avatarRes = axiosInstance.post(
+                "/users/change-avatar",
+                avatar
+            );
+            toast.promise(avatarRes, {
+                loading: "Wait! uploading your avatar...",
+                success: "Profile updated successfully",
+            });
+            await avatarRes;
+        } catch (error) {
+            if (error?.response?.data?.message) {
+                toast.error(error?.response?.data?.message);
+            } else {
+                console.log(error.message);
+            }
+        }
+    }
+);
+
 const AuthSlice = createSlice({
     name: "auth",
     initialState,

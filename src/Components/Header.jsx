@@ -95,7 +95,7 @@ function Header() {
                         {isLoggedIn ? (
                             <>
                                 <Link
-                                    to="/user/profile"
+                                    to="/users/profile"
                                     onClick={() => hideDrawer()}
                                     className="btn btn-primary w-full text-center"
                                 >

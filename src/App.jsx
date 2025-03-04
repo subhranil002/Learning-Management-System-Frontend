@@ -13,6 +13,8 @@ import HomePage from "./Pages/HomePage";
 import Login from "./Pages/login";
 import NotFound from "./Pages/NotFound";
 import Signup from "./Pages/SignUp";
+import EditProfile from "./Pages/User/EditProfile";
+import Profile from "./Pages/User/Profile";
 import { getProfile } from "./Redux/Slices/AuthSlice";
 
 function App() {
@@ -31,6 +33,10 @@ function App() {
             <Route path="/about" element={<AboutUs />} />
             <Route path="/signup" element={<Signup />} />
             <Route path="/login" element={<Login />} />
+            <Route element={<RequireAuth allowedRoles={["USER", "ADMIN"]} />}>
+                <Route path="users/profile" element={<Profile />} />
+                <Route path="users/editprofile" element={<EditProfile />} />
+            </Route>
             <Route path="/courses" element={<CourseList />} />
             <Route
                 path="/courses/description"
