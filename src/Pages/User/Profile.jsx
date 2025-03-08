@@ -1,10 +1,20 @@
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 
 import HomeLayout from "../../Layouts/HomeLayout";
+import { getProfile } from "../../Redux/Slices/AuthSlice";
+import { unsubscribe } from "../../Redux/Slices/PaymentSlice";
 
 function Profile() {
     const userData = useSelector((state) => state?.auth?.data);
+    const dispatch = useDispatch();
+
+    async function handleCancelation() {
+        const res = await dispatch(unsubscribe());
+        if (res?.payload?.success) {
+            await dispatch(getProfile());
+        }
+    }
 
     return (
         <HomeLayout>
@@ -47,7 +57,10 @@ function Profile() {
                     </div>
                     {userData?.role !== "ADMIN" &&
                         userData?.subscription?.status === "active" && (
-                            <button className="w-full bg-red-600 hover:bg-red-500 transition-all ease-in-out duration-300 rounded-sm font-semibold py-2 cursor-pointer text-center">
+                            <button
+                                onClick={handleCancelation}
+                                className="w-full bg-red-600 hover:bg-red-500 transition-all ease-in-out duration-300 rounded-sm font-semibold py-2 cursor-pointer text-center"
+                            >
                                 Cancel Subscription
                             </button>
                         )}

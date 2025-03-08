@@ -59,8 +59,14 @@ export const unsubscribe = createAsyncThunk(
     "/payments/unsubscribe",
     async () => {
         try {
-            const res = await axiosInstance.get("/payments/unsubscribe");
-            return res.data;
+            const res = axiosInstance.get("/payments/unsubscribe");
+            toast.promise(res, {
+                loading: "Wait! canceling the subscription",
+                success: (data) => {
+                    return data?.data?.message;
+                },
+            });
+            return (await res).data;
         } catch (error) {
             if (error?.response?.data?.message) {
                 toast.error(error?.response?.data?.message);

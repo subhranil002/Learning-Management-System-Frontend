@@ -64,7 +64,7 @@ export const login = createAsyncThunk("/auth/login", async (formData) => {
     }
 });
 
-export const logout = createAsyncThunk("auth/logout", async () => {
+export const logout = createAsyncThunk("/auth/logout", async () => {
     try {
         const res = axiosInstance.get("/users/logout");
         toast.promise(res, {
@@ -82,7 +82,7 @@ export const logout = createAsyncThunk("auth/logout", async () => {
     }
 });
 
-export const getProfile = createAsyncThunk("auth/profile", async () => {
+export const getProfile = createAsyncThunk("/auth/profile", async () => {
     try {
         const res = await axiosInstance.get("/users/profile");
         return res.data;

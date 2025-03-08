@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { BiRupee } from "react-icons/bi";
@@ -17,13 +16,12 @@ function Checkout() {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const { handleSubmit } = useForm();
-    const apiKey = useSelector((state) => state?.payment?.key);
-    const subscription_id = useSelector(
-        (state) => state?.payment?.subscription_id
-    );
     const userData = useSelector((state) => state?.auth?.data);
 
     async function onSubmit() {
+        const apiKey = (await dispatch(getKey()))?.payload?.data?.key;
+        const subscription_id = (await dispatch(subscribe()))?.payload?.data?.id;
+
         if (!apiKey || !subscription_id) {
             toast.error("Something went wrong");
             return;
@@ -53,15 +51,6 @@ function Checkout() {
         const paymentObject = new window.Razorpay(options);
         paymentObject.open();
     }
-
-    async function load() {
-        await dispatch(getKey());
-        await dispatch(subscribe());
-    }
-
-    useEffect(() => {
-        load();
-    }, []);
 
     return (
         <HomeLayout>
