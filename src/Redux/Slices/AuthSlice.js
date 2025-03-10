@@ -95,22 +95,26 @@ export const updateProfile = createAsyncThunk(
     "auth/editprofile",
     async (data) => {
         try {
-            const accountRes = axiosInstance.post("/users/update", data);
-            toast.promise(accountRes, {
-                loading: "Wait! creating your account...",
-            });
-            await accountRes;
-            const avatar = new FormData();
-            avatar.append("avatar", data.file[0]);
-            const avatarRes = axiosInstance.post(
-                "/users/change-avatar",
-                avatar
-            );
-            toast.promise(avatarRes, {
-                loading: "Wait! uploading your avatar...",
-                success: "Profile updated successfully",
-            });
-            await avatarRes;
+            if (data.fullName) {
+                const accountRes = axiosInstance.post("/users/update", data);
+                toast.promise(accountRes, {
+                    loading: "Wait! updating your account...",
+                });
+                await accountRes;
+            }
+            if (data.file.length) {
+                const avatar = new FormData();
+                avatar.append("avatar", data.file[0]);
+                const avatarRes = axiosInstance.post(
+                    "/users/change-avatar",
+                    avatar
+                );
+                toast.promise(avatarRes, {
+                    loading: "Wait! uploading your avatar...",
+                });
+                await avatarRes;
+            }
+            toast.success("Profile updated successfully");
         } catch (error) {
             if (error?.response?.data?.message) {
                 toast.error(error?.response?.data?.message);

@@ -1,5 +1,4 @@
 import { useForm } from "react-hook-form";
-import toast from "react-hot-toast";
 import { AiOutlineArrowLeft } from "react-icons/ai";
 import { BsPersonCircle } from "react-icons/bs";
 import { useDispatch } from "react-redux";
@@ -20,22 +19,12 @@ function EditProfile() {
         navigate("/users/profile");
     }
 
-    async function onError(errors) {
-        if (errors.file) {
-            toast.error(errors.file.message);
-        }
-
-        if (errors.fullName) {
-            toast.error(errors.fullName.message);
-        }
-    }
-
     return (
         <HomeLayout>
             <div className="flex items-center justify-center h-[100vh]">
                 <form
                     noValidate
-                    onSubmit={handleSubmit(onSubmit, onError)}
+                    onSubmit={handleSubmit(onSubmit)}
                     className="flex flex-col justify-center gap-5 rounded-lg p-4 text-white w-80 min-h-[26rem] shadow-[0_0_10px_black]"
                 >
                     <h1 className="text-center text-2xl font-semibold">
@@ -57,9 +46,7 @@ function EditProfile() {
                         id="image_uploads"
                         name="image_uploads"
                         accept=".jpg, .png, .svg, .jpeg"
-                        {...register("file", {
-                            required: "Avatar is required",
-                        })}
+                        {...register("file")}
                     />
                     <div className="flex flex-col gap-1">
                         <label
@@ -74,9 +61,7 @@ function EditProfile() {
                             id="fullName"
                             placeholder="Enter your name"
                             className="bg-transparent px-2 py-1 border"
-                            {...register("fullName", {
-                                required: "Name is required",
-                            })}
+                            {...register("fullName")}
                         />
                     </div>
                     <button
