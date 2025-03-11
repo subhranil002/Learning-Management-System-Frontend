@@ -4,7 +4,7 @@ import toast from "react-hot-toast";
 import axiosInstance from "../../Helpers/axiosInstance";
 
 const initialState = {
-    lecture: [],
+    lectures: [],
 };
 
 export const createLecture = createAsyncThunk(
@@ -18,18 +18,18 @@ export const createLecture = createAsyncThunk(
             toast.promise(lectureRes, {
                 loading: "Wait! creating lecture...",
             });
-            await lectureRes;
+            const lectureResRes = await lectureRes;
             const lecture = new FormData();
             lecture.append("lecture", data.file[0]);
             const lecvidRes = axiosInstance.post(
-                `/courses/${data.courseId}/${lectureRes.data.data._id}`,
+                `/courses/${data.courseId}/${lectureResRes.data.data._id}`,
                 lecture
             );
             toast.promise(lecvidRes, {
                 loading: "Wait! uploading your lecture...",
                 success: "Lecture created successfully",
             });
-            await lecvidRes;
+            return (await lecvidRes).data;
         } catch (error) {
             if (error?.response?.data?.message) {
                 toast.error(error?.response?.data?.message);
@@ -129,7 +129,7 @@ const lectureSlice = createSlice({
     reducers: {},
     extraReducers: (builder) => {
         builder.addCase(getLecturesByCourse.fulfilled, (state, action) => {
-            state.lecture = action.payload?.data;
+            state.lectures = action.payload?.data;
         });
     },
 });
