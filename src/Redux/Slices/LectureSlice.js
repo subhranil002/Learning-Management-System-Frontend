@@ -123,7 +123,7 @@ export const deleteLecture = createAsyncThunk(
     }
 );
 
-const lectureSlice = createSlice({
+const LectureSlice = createSlice({
     name: "lecture",
     initialState,
     reducers: {},
@@ -134,4 +134,4 @@ const lectureSlice = createSlice({
     },
 });
 
-export default lectureSlice;
+export default LectureSlice;

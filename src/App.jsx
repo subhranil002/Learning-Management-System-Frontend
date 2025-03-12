@@ -5,6 +5,7 @@ import { Route, Routes } from "react-router-dom";
 import RequireAuth from "./Components/Auth/RequireAuth";
 import RequireSubscription from "./Components/Auth/RequireSubscription";
 import AboutUs from "./Pages/AboutUs";
+import AdminDashboard from "./Pages/Admin/AdminDashboard";
 import Contact from "./Pages/Contact";
 import CourseDescription from "./Pages/Course/CourseDescription";
 import CourseList from "./Pages/Course/CourseList";
@@ -62,6 +63,7 @@ function App() {
                     path="/courses/lectures/add"
                     element={<CreateLecture />}
                 />
+                <Route path="/admin/dashboard" element={<AdminDashboard />} />
             </Route>
             <Route path="*" element={<NotFound />} />
         </Routes>

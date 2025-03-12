@@ -6,7 +6,7 @@ import { useDispatch } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
 
 import HomeLayout from "../../../Layouts/HomeLayout";
-import { createLecture } from "../../../Redux/Slices/lectureSlice";
+import { createLecture } from "../../../Redux/Slices/LectureSlice";
 
 function CreateLecture() {
     const { state } = useLocation();

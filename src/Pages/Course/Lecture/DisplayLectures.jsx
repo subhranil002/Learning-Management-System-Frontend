@@ -6,7 +6,7 @@ import HomeLayout from "../../../Layouts/HomeLayout";
 import {
     deleteLecture,
     getLecturesByCourse,
-} from "../../../Redux/Slices/lectureSlice";
+} from "../../../Redux/Slices/LectureSlice";
 
 function Displaylectures() {
     const navigate = useNavigate();
