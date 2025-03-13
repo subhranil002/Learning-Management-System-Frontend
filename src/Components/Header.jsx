@@ -1,5 +1,4 @@
-import { AiFillCloseCircle } from "react-icons/ai";
-import { FiMenu } from "react-icons/fi";
+import { FaUserCircle } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 
@@ -8,126 +7,159 @@ import { logout } from "../Redux/Slices/AuthSlice";
 function Header() {
     const dispatch = useDispatch();
     const navigate = useNavigate();
-
-    const { isLoggedIn, role } = useSelector((state) => state.auth);
-
-    function changeWidth() {
-        const drawerSide = document.getElementsByClassName("drawer-side");
-        drawerSide[0].style.width = "20vw";
-    }
-
-    function hideDrawer() {
-        const element = document.getElementsByClassName("drawer-toggle");
-        element[0].checked = false;
-        const drawerSide = document.getElementsByClassName("drawer-side");
-        drawerSide[0].style.width = "0";
-    }
+    const { isLoggedIn, role, data } = useSelector((state) => state.auth);
 
     async function handleLogout() {
         await dispatch(logout());
-        hideDrawer();
         navigate("/");
     }
 
     return (
-        <div className="drawer fixed left-0 top-0 z-50 w-fit">
-            <input className="drawer-toggle" id="my-drawer" type="checkbox" />
-            <div className="drawer-content">
-                <label htmlFor="my-drawer" className="cursor-pointer relative">
-                    <FiMenu
-                        onClick={changeWidth}
-                        size="32px"
-                        className="font-bold text-white m-4"
-                    />
-                </label>
+        <div className="navbar bg-base-100 shadow-sm">
+            <div className="navbar-start">
+                <div className="dropdown">
+                    <div
+                        tabIndex={0}
+                        role="button"
+                        className="btn btn-ghost lg:hidden"
+                    >
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="h-5 w-5"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                        >
+                            {" "}
+                            <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth="2"
+                                d="M4 6h16M4 12h8m-8 6h16"
+                            />{" "}
+                        </svg>
+                    </div>
+                    <ul
+                        tabIndex={0}
+                        className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow"
+                    >
+                        <li>
+                            <Link to="/courses">All Courses</Link>
+                        </li>
+                        {isLoggedIn &&
+                            (role === "TEACHER" || role === "ADMIN") && (
+                                <li>
+                                    <details>
+                                        <summary>Admin/Teacher</summary>
+                                        <ul className="p-2">
+                                            {isLoggedIn && role === "ADMIN" && (
+                                                <li>
+                                                    <Link to="/admin/dashboard">
+                                                        Admin Dashboard
+                                                    </Link>
+                                                </li>
+                                            )}
+
+                                            <li>
+                                                <Link to="/courses/create">
+                                                    Add Lecture
+                                                </Link>
+                                            </li>
+                                        </ul>
+                                    </details>
+                                </li>
+                            )}
+                        <li>
+                            <Link to="/about">About Us</Link>
+                        </li>
+                        <li>
+                            <Link to="/contact">Contact Us</Link>
+                        </li>
+                    </ul>
+                </div>
+                <Link to="/" className="btn btn-ghost text-xl">
+                    Brain-2xl
+                </Link>
             </div>
-            <div className="drawer-side w-48 sm:w-80 bg-base-200 text-base-content transition-all duration-300">
-                <label htmlFor="my-drawer" className="drawer-overlay"></label>
-                <ul className="menu p-4 w-full relative overflow-hidden">
-                    <li className="absolute right-2 top-2 z-50">
-                        <button onClick={() => hideDrawer()}>
-                            <AiFillCloseCircle size={24} />
-                        </button>
+            <div className="navbar-center hidden text-3xl font-semibold lg:flex">
+                <ul className="menu menu-horizontal px-1 gap-6">
+                    <li>
+                        <Link to="/courses">All Courses</Link>
                     </li>
-
-                    <li className="pt-5">
-                        <Link to="/" onClick={() => hideDrawer()}>
-                            Home
-                        </Link>
-                    </li>
-                    {isLoggedIn && role === "ADMIN" && (
+                    {isLoggedIn && (role === "TEACHER" || role === "ADMIN") && (
                         <li>
-                            <Link
-                                to="/admin/dashboard"
-                                onClick={() => hideDrawer()}
-                            >
-                                Admin Dashboard
-                            </Link>
+                            <details>
+                                <summary>Admin/Teacher</summary>
+                                <ul className="p-2">
+                                    {isLoggedIn && role === "ADMIN" && (
+                                        <li>
+                                            <Link to="/admin/dashboard">
+                                                Admin Dashboard
+                                            </Link>
+                                        </li>
+                                    )}
+
+                                    <li>
+                                        <Link to="/courses/create">
+                                            Add Lecture
+                                        </Link>
+                                    </li>
+                                </ul>
+                            </details>
                         </li>
                     )}
                     <li>
-                        <Link to="/courses" onClick={() => hideDrawer()}>
-                            All Courses
-                        </Link>
-                    </li>
-                    {isLoggedIn && role === "ADMIN" && (
-                        <li>
-                            <Link
-                                to="/courses/create"
-                                onClick={() => hideDrawer()}
-                            >
-                                Create Course
-                            </Link>
-                        </li>
-                    )}
-                    <li>
-                        <Link to="/contact" onClick={() => hideDrawer()}>
-                            Contact Us
-                        </Link>
+                        <Link to="/about">About Us</Link>
                     </li>
                     <li>
-                        <Link to="/about" onClick={() => hideDrawer()}>
-                            About Us
-                        </Link>
+                        <Link to="/contact">Contact Us</Link>
                     </li>
-
-                    <div className="w-full flex flex-col items-center justify-center space-y-2 mt-4">
+                </ul>
+            </div>
+            <div className="navbar-end dropdown dropdown-bottom">
+                <div
+                    tabIndex={0}
+                    role="button"
+                    className="btn btn-ghost btn-circle avatar"
+                >
+                    <div className="w-10 rounded-full">
                         {isLoggedIn ? (
-                            <>
-                                <Link
-                                    to="/users/profile"
-                                    onClick={() => hideDrawer()}
-                                    className="btn btn-primary w-full text-center"
-                                >
-                                    Profile
-                                </Link>
-                                <button
-                                    onClick={() => handleLogout()}
-                                    className="btn btn-secondary w-full"
-                                >
-                                    Logout
-                                </button>
-                            </>
+                            <img
+                                alt="Tailwind CSS Navbar component"
+                                src={data?.avatar?.secure_url}
+                            />
                         ) : (
-                            <>
-                                <Link
-                                    to="/login"
-                                    onClick={() => hideDrawer()}
-                                    className="btn btn-primary w-full text-center"
-                                >
-                                    Login
-                                </Link>
-                                <Link
-                                    to="/signup"
-                                    onClick={() => hideDrawer()}
-                                    className="btn btn-secondary w-full text-center"
-                                >
-                                    Signup
-                                </Link>
-                            </>
+                            <FaUserCircle size={36} />
                         )}
                     </div>
-                </ul>
+                </div>
+                {isLoggedIn ? (
+                    <ul
+                        tabIndex={0}
+                        className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow"
+                    >
+                        <li>
+                            <Link to="/users/profile">Profile</Link>
+                        </li>
+                        <li>
+                            <button onClick={() => handleLogout()}>
+                                Logout
+                            </button>
+                        </li>
+                    </ul>
+                ) : (
+                    <ul
+                        tabIndex={0}
+                        className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow"
+                    >
+                        <li>
+                            <Link to="/login">Login</Link>
+                        </li>
+                        <li>
+                            <Link to="/signup">Signup</Link>
+                        </li>
+                    </ul>
+                )}
             </div>
         </div>
     );
