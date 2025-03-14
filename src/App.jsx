@@ -14,7 +14,7 @@ import CreateLecture from "./Pages/Course/Lecture/CreateLecture";
 import Displaylectures from "./Pages/Course/Lecture/DisplayLectures";
 import Denied from "./Pages/Denied";
 import HomePage from "./Pages/HomePage";
-import Login from "./Pages/Login";
+import Login from "./Pages/login";
 import NotFound from "./Pages/NotFound";
 import Checkout from "./Pages/Payment/Checkout";
 import CheckoutFailure from "./Pages/Payment/CheckoutFailure";
