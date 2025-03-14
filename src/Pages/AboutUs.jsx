@@ -62,7 +62,7 @@ function AboutUs() {
                         </div>
                     </div>
                     <div className="mt-20 flex flex-col items-center w-full">
-                        <h3 className="text-2xl md:text-3xl font-bold text-center text-warning/90">
+                        <h3 className="text-2xl md:text-3xl font-bold text-center bg-gradient-to-r from-warning to-success bg-clip-text text-transparent">
                             Voices of Great Minds
                         </h3>
                         <div className="carousel w-[90vw] md:w-[70vw] lg:w-[50vw] my-5">

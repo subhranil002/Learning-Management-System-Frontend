@@ -39,8 +39,10 @@ function Login() {
                         className="card-body p-8 space-y-6"
                     >
                         <div className="text-center space-y-2">
-                            <FiLogIn className="inline-block text-4xl text-primary mb-2" />
-                            <h2 className="text-3xl font-bold">Welcome Back</h2>
+                            <FiLogIn className="inline-block text-4xl text-warning mb-2" />
+                            <h2 className="text-3xl bg-gradient-to-r from-warning to-success bg-clip-text text-transparent font-bold">
+                                Welcome Back
+                            </h2>
                             <p className="text-sm text-base-content/70">
                                 Please Login to continue
                             </p>
@@ -99,7 +101,7 @@ function Login() {
                         </div>
                         <button
                             type="submit"
-                            className="btn btn-primary btn-block gap-2"
+                            className="btn btn-warning btn-block gap-2"
                         >
                             <FiLogIn className="text-xl" />
                             Login
@@ -109,7 +111,7 @@ function Login() {
                                 Don&apos;t have an account? &nbsp;
                                 <Link
                                     to="/signup"
-                                    className="link link-primary font-semibold"
+                                    className="link link-accent font-semibold"
                                 >
                                     Create account
                                 </Link>

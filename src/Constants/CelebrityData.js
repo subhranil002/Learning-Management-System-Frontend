@@ -8,12 +8,12 @@ export const celebrities = [
     {
         title: "Nelson Mandela",
         description:
-            "Education is the most powerful tool you can use to change the world.",
+            "Education is the most powerful weapon which you can use to change the world.",
         image: nelsonMandela,
         slideNumber: 1,
     },
     {
-        title: "APJ Abdul Kamal",
+        title: "APJ Abdul Kalam",
         description:
             "Failure will never overtake me if my determination to succeed is strong enough.",
         image: apj,
@@ -29,7 +29,7 @@ export const celebrities = [
     {
         title: "Steve Jobs",
         description:
-            "We don't get a chance to do that many things, and every one should be really excellent.",
+            "We don’t get a chance to do that many things, and every one should be really excellent. Because this is our life.",
         image: steveJobs,
         slideNumber: 4,
     },

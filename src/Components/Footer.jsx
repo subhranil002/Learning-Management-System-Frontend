@@ -21,9 +21,9 @@ function Footer() {
                     </a>
                 </nav>
                 <nav className="grid-flow-col gap-6 md:place-self-center md:justify-self-end text-xl">
-                    <BsFacebook />
-                    <BsInstagram />
-                    <BsLinkedin />
+                    <BsFacebook className="text-info" />
+                    <BsInstagram className="text-warning" />
+                    <BsLinkedin className="text-info" />
                     <BsTwitter />
                 </nav>
             </footer>

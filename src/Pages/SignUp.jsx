@@ -33,8 +33,8 @@ function Signup() {
                         className="card-body p-8 space-y-3"
                     >
                         <div className="text-center space-y-2">
-                            <FiUserPlus className="inline-block text-4xl text-primary mb-2" />
-                            <h2 className="text-3xl font-bold">
+                            <FiUserPlus className="inline-block text-4xl text-warning mb-2" />
+                            <h2 className="text-3xl font-bold bg-gradient-to-r from-warning to-success bg-clip-text text-transparent">
                                 Create Account
                             </h2>
                             <p className="text-sm text-base-content/70">
@@ -141,7 +141,7 @@ function Signup() {
                         </div>
                         <button
                             type="submit"
-                            className="btn btn-primary btn-block gap-2"
+                            className="btn btn-warning btn-block gap-2"
                         >
                             <FiUserPlus className="text-xl" />
                             Create Account
@@ -151,7 +151,7 @@ function Signup() {
                                 Already have an account? &nbsp;
                                 <Link
                                     to="/login"
-                                    className="link link-primary font-semibold"
+                                    className="link link-accent font-semibold"
                                 >
                                     Sign in
                                 </Link>

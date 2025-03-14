@@ -21,7 +21,7 @@ function CarouselSlide({
                     <p className="text-lg md:text-xl leading-relaxed max-w-2xl">
                         {description}
                     </p>
-                    <h3 className="text-2xl md:text-3xl font-bold text-warning/80">
+                    <h3 className="text-2xl md:text-3xl font-bold text-error">
                         {title}
                     </h3>
                 </div>
@@ -48,8 +48,8 @@ function CarouselSlide({
                             href={`#slide${index + 1}`}
                             className={`w-2 h-2 md:w-3 md:h-3 rounded-full transition-colors ${
                                 slideNumber === index + 1
-                                    ? "bg-warning"
-                                    : "bg-warning/50"
+                                    ? "bg-error"
+                                    : "bg-warning/80"
                             }`}
                         />
                     ))}
