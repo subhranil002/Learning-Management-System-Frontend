@@ -1,28 +1,31 @@
 import { BsFacebook, BsInstagram, BsLinkedin, BsTwitter } from "react-icons/bs";
-function Footer() {
-    const currentDate = new Date();
-    const year = currentDate.getFullYear();
 
+function Footer() {
     return (
         <>
-            <footer className="relative left-0 bottom-0 h-[10vh] py-5 flex flex-col sm:flex-row items-center justify-between text-white bg-gray-800 sm:px-20">
-                <section className="text-lg text-red">
-                    Copyright {year} | All rights reserved
-                </section>
-                <section className="flex items-center justify-center gap-5 text-2xl text-white">
-                    <a className="hover:text-yellow-500 transition-all ease-in-out duration-300">
-                        <BsFacebook />
+            <footer className="footer md:footer-horizontal bg-base-100 border-t border-base-300 items-center p-4 text-base">
+                <aside className="grid-flow-col items-center">
+                    <p>
+                        Copyright © {new Date().getFullYear()} - All rights
+                        reserved
+                    </p>
+                </aside>
+                <nav className="navbar-center lg:mx-auto">
+                    Made with ❤️ by{" "}
+                    <a
+                        className="link link-accent link-hover"
+                        href="https://github.com/subhranil002"
+                        target="_blank"
+                    >
+                        Subhranil Chakraborty
                     </a>
-                    <a className="hover:text-yellow-500 transition-all ease-in-out duration-300">
-                        <BsInstagram />
-                    </a>
-                    <a className="hover:text-yellow-500 transition-all ease-in-out duration-300">
-                        <BsLinkedin />
-                    </a>
-                    <a className="hover:text-yellow-500 transition-all ease-in-out duration-300">
-                        <BsTwitter />
-                    </a>
-                </section>
+                </nav>
+                <nav className="grid-flow-col gap-6 md:place-self-center md:justify-self-end text-xl">
+                    <BsFacebook />
+                    <BsInstagram />
+                    <BsLinkedin />
+                    <BsTwitter />
+                </nav>
             </footer>
         </>
     );

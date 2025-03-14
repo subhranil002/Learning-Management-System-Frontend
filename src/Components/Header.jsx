@@ -11,11 +11,11 @@ function Header() {
 
     async function handleLogout() {
         await dispatch(logout());
-        navigate("/");
+        navigate("/login");
     }
 
     return (
-        <div className="navbar bg-base-100 shadow-sm">
+        <div className="navbar bg-base-100 border-b border-base-300 shadow-sm">
             <div className="navbar-start">
                 <div className="dropdown">
                     <div
@@ -59,7 +59,6 @@ function Header() {
                                                     </Link>
                                                 </li>
                                             )}
-
                                             <li>
                                                 <Link to="/courses/create">
                                                     Add Lecture
@@ -98,7 +97,6 @@ function Header() {
                                             </Link>
                                         </li>
                                     )}
-
                                     <li>
                                         <Link to="/courses/create">
                                             Add Lecture

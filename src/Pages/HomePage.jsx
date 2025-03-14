@@ -1,41 +1,56 @@
+import { FaArrowCircleRight } from "react-icons/fa";
 import { Link } from "react-router-dom";
 
-import HomePageImage from "../Assets/Images/homePageMainImage.png"
+import HomePageImage from "../Assets/Images/homePageMainImage.jpeg";
 import HomeLayout from "../Layouts/HomeLayout";
 
 function HomePage() {
     return (
         <HomeLayout>
-            <div className="pt-10 text-white flex items-center justify-center gap-10 mx-16 h-[90vh]">
-                <div className="w-1/2 space-y-6">
-                    <h1 className="text-5xl font-semibold">
-                        Find out best
-                        <p className="text-yellow-500 font-bold">
-                            Online Courses
-                        </p>
-                    </h1>
-                    <p className="text-xl text-gray-200">
-                        We have a large library of courses taught by highly
-                        skilled and qualified faculties at a very affordable
-                        cost.
-                    </p>
-                    <div className="space-x-6">
-                        <Link to="/courses">
-                            <button className="bg-yellow-500 px-5 py-3 rounded-md font-semibold text-lg cursor-pointer hover:bg-yellow-600 transition-all ease-in-out duration-300">
-                                Explore courses
-                            </button>
-                        </Link>
-                        <Link to="/contact">
-                            <button className="border border-yellow-500 px-5 py-3 rounded-md font-semibold text-lg cursor-pointer hover:bg-yellow-600 transition-all ease-in-out duration-300">
-                                Contact Us
-                            </button>
-                        </Link>
+            <section className="min-h-[90vh] flex items-center bg-gradient-to-r from-base-100 via-base-200 to-base-100 py-12 md:py-24">
+                <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
+                        <div className="order-2 lg:order-1 text-center lg:text-left">
+                            <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold leading-tight mb-6">
+                                Discover Your Next
+                                <span className="bg-gradient-to-r from-warning to-success bg-clip-text text-transparent block">
+                                    Learning Adventure
+                                </span>
+                            </h1>
+                            <p className="text-lg md:text-xl opacity-90 mb-8 max-w-2xl mx-auto lg:mx-0">
+                                Join 500k+ developers and tech professionals
+                                mastering in-demand technologies through
+                                expert-led courses
+                            </p>
+                            <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+                                <Link
+                                    to="/courses"
+                                    className="btn btn-warning btn-lg rounded-full hover:scale-105 transition-transform w-full sm:w-auto"
+                                >
+                                    Explore Courses
+                                    <FaArrowCircleRight className="ml-2 text-lg" />
+                                </Link>
+                                <Link
+                                    to="/contact"
+                                    className="btn btn-outline btn-lg rounded-full hover:btn-warning hover:border-transparent w-full sm:w-auto"
+                                >
+                                    Contact Us
+                                </Link>
+                            </div>
+                        </div>
+                        <div className="order-1 lg:order-2 relative group mt-8 lg:mt-0">
+                            <div className="animate-float mx-auto max-w-lg lg:max-w-full">
+                                <img
+                                    src={HomePageImage}
+                                    alt="Online Learning"
+                                    className="rounded-lg shadow-2xl transform transition-all duration-500 
+                                        group-hover:scale-102 border-4 border-white/20"
+                                />
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <div className="w-1/2 flex items-center justify-center">
-                    <img alt="homepage image" src={HomePageImage} />
-                </div>
-            </div>
+            </section>
         </HomeLayout>
     );
 }
