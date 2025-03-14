@@ -1,101 +1,136 @@
 import { useForm } from "react-hook-form";
 import { toast } from "react-hot-toast";
+import { FaComment, FaEnvelope, FaPaperPlane, FaUser } from "react-icons/fa";
+import { useDispatch } from "react-redux";
 
-import axiosInstance from "../Helpers/axiosInstance";
 import HomeLayout from "../Layouts/HomeLayout";
+import { contactUs } from "../Redux/Slices/AuthSlice";
 
 function Contact() {
     const { handleSubmit, register, reset } = useForm();
+    const dispatch = useDispatch();
 
     async function onSubmit(data) {
-        try {
-            const res = axiosInstance.post("/contact", data);
-            toast.promise(res, {
-                loading: "Submitting your message...",
-                success: "Form submitted successfully",
-                error: "Failed to submit the form",
-            });
-            const response = await res;
-            console.log(response);
-            if (response?.data?.success) {
-                reset();
-            }
-        } catch (error) {
-            console.log(error);
+        reset();
+        await dispatch(contactUs(data));
+    }
+
+    function onError(errors) {
+        if (errors.name) {
+            toast.error(errors.name.message);
+        }
+        if (errors.email) {
+            toast.error(errors.email.message);
+        }
+        if (errors.message) {
+            toast.error(errors.message.message);
         }
     }
+
     return (
         <HomeLayout>
-            <div className="flex items-center justify-center h-[100vh]">
-                <form
-                    noValidate
-                    onSubmit={handleSubmit(onSubmit)}
-                    className="flex flex-col items-center justify-center gap-2 p-5 rounded-md text-white shadow-[0_0_10px_black] w-[22rem]"
-                >
-                    <h1 className="text-3xl font-semibold">Contact Form</h1>
-                    <div className="flex flex-col w-full gap-1">
-                        <label htmlFor="name" className="text-xl font-semibold">
-                            Name
-                        </label>
-                        <input
-                            className="bg-transparent border px-2 py-1 rounded-sm"
-                            id="name"
-                            type="text"
-                            name="name"
-                            placeholder="Enter your name"
-                            {...register("name", {
-                                required: "Name is required",
-                            })}
-                        />
-                    </div>
-                    <div className="flex flex-col w-full gap-1">
-                        <label
-                            htmlFor="email"
-                            className="text-xl font-semibold"
+            <div className="min-h-[90vh] flex items-center justify-center bg-gradient-to-br from-base-100 to-base-200 p-4">
+                <div className="card w-full max-w-md bg-base-100 shadow-lg rounded-box">
+                    <div className="card-body p-6 md:p-8">
+                        <div className="text-center space-y-2 mb-6">
+                            <FaPaperPlane className="inline-block text-4xl text-warning mb-2" />
+                            <h2 className="text-3xl bg-gradient-to-r from-warning to-success bg-clip-text text-transparent font-bold">
+                                Contact Us
+                            </h2>
+                            <p className="text-sm text-base-content/70">
+                                We&apos;ll get back to you within 24 hours
+                            </p>
+                        </div>
+                        <form
+                            onSubmit={handleSubmit(onSubmit, onError)}
+                            className="space-y-4"
                         >
-                            Email
-                        </label>
-                        <input
-                            className="bg-transparent border px-2 py-1 rounded-sm"
-                            id="email"
-                            type="email"
-                            name="email"
-                            placeholder="Enter your email"
-                            {...register("email", {
-                                required: "Email is required",
-                                pattern: {
-                                    value: /^(?=.{1,254}$)(?=.{1,64}@)[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/,
-                                    message: "Invalid email format",
-                                },
-                            })}
-                        />
+                            <div className="form-control">
+                                <label className="label pb-1">
+                                    <span className="label-text flex items-center gap-2">
+                                        <FaUser className="text-base-content/70" />
+                                        Name
+                                    </span>
+                                </label>
+                                <div className="relative">
+                                    <input
+                                        type="text"
+                                        placeholder="John Doe"
+                                        className="input input-bordered w-full pl-10"
+                                        {...register("name", {
+                                            required: "Name is required",
+                                        })}
+                                    />
+                                    <FaUser className="absolute left-3 top-1/2 transform -translate-y-1/2 text-base-content/50" />
+                                </div>
+                            </div>
+                            <div className="form-control">
+                                <label className="label pb-1">
+                                    <span className="label-text flex items-center gap-2">
+                                        <FaEnvelope className="text-base-content/70" />
+                                        Email
+                                    </span>
+                                </label>
+                                <div className="relative">
+                                    <input
+                                        type="email"
+                                        placeholder="john@example.com"
+                                        className="input input-bordered w-full pl-10"
+                                        {...register("email", {
+                                            required: "Email is required",
+                                            pattern: {
+                                                value: /^(?=.{1,254}$)(?=.{1,64}@)[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/,
+                                                message: "Invalid email format",
+                                            },
+                                        })}
+                                    />
+                                    <FaEnvelope className="absolute left-3 top-1/2 transform -translate-y-1/2 text-base-content/50" />
+                                </div>
+                            </div>
+                            <div className="form-control">
+                                <label className="label pb-1">
+                                    <span className="label-text flex items-center gap-2">
+                                        <FaComment className="text-base-content/70" />
+                                        Message
+                                    </span>
+                                </label>
+                                <textarea
+                                    className="textarea textarea-bordered h-32 w-full resize-none"
+                                    placeholder="Your message here..."
+                                    {...register("message", {
+                                        required: "Message is required",
+                                        minLength: {
+                                            value: 20,
+                                            message:
+                                                "Message must be at least 20 characters",
+                                        },
+                                    })}
+                                ></textarea>
+                            </div>
+                            <button
+                                type="submit"
+                                className="btn btn-warning btn-block gap-2"
+                            >
+                                Send Message
+                                <FaPaperPlane className="text-xl" />
+                            </button>
+                        </form>
+                        <div className="text-center pt-6">
+                            <p className="text-sm text-base-content/70">
+                                Prefer direct contact? &nbsp;
+                                <a
+                                    href="mailto:subhranil.chak.sc@gmail.com"
+                                    className="link link-accent font-semibold"
+                                >
+                                    Email us
+                                </a>
+                            </p>
+                        </div>
                     </div>
-                    <div className="flex flex-col w-full gap-1">
-                        <label
-                            htmlFor="message"
-                            className="text-xl font-semibold"
-                        >
-                            Message
-                        </label>
-                        <textarea
-                            className="bg-transparent border px-2 py-1 rounded-sm resize-none h-40"
-                            id="message"
-                            name="message"
-                            placeholder="Enter your email"
-                            {...register("message", {
-                                required: "Message is required",
-                            })}
-                        />
-                    </div>
-                    <button
-                        type="submit"
-                        className="w-full bg-yellow-600 hover:bg-yellow-500 transition-all ease-in-out duration-300 rounded-sm py-2 font-semibold text-lg cursor-pointer"
-                    >
-                        Submit
-                    </button>
-                </form>
+                </div>
             </div>
         </HomeLayout>
     );
 }
+
 export default Contact;

@@ -12,29 +12,44 @@ function CourseList() {
     async function loadCourses() {
         await dispatch(getAllCourses());
     }
-    
+
     useEffect(() => {
         loadCourses();
     }, []);
+
     return (
         <HomeLayout>
-            <div className="min-h-[90vh] pt-12 pl-20 flex flex-col gap-10 text-white">
-                <h1 className="text-center text-3xl font-semibold mb-5">
-                    Explore the courses made by &nbsp;
-                    <span className="font-bold text-yellow-500">
-                        Industry experts
-                    </span>
-                </h1>
-                <div className="mb-10 flex flex-wrap gap-14">
-                    {courseData.length > 0 &&
-                        courseData.map((course) => {
-                            return (
-                                <CourseCard key={course._id} data={course} />
-                            );
-                        })}
+            <div className="min-h-[90vh] py-12  bg-base-100">
+                <div className="container mx-auto px-4">
+                    <div className="text-center mb-12">
+                        <h1 className="bg-gradient-to-r from-warning via-error to-warning bg-clip-text text-transparent text-3xl md:text-4xl font-bold mb-2">
+                            Expert-Led Courses
+                        </h1>
+                        <p className="text-lg text-base-content/70">
+                            Learn from industry professionals and level up your
+                            skills
+                        </p>
+                        <div className="divider divider-primary w-24 mx-auto my-4" />
+                    </div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
+                        {courseData.map((course) => (
+                            <CourseCard key={course._id} data={course} />
+                        ))}
+                    </div>
+                    <div className="max-w-xl mx-auto text-center py-20">
+                        <div className="text-4xl mb-4">📚</div>
+                        <h2 className="text-xl font-semibold mb-4">
+                            New Courses Coming Soon
+                        </h2>
+                        <p className="text-base-content/70 mb-6">
+                            Our team is working hard to bring you the latest
+                            content
+                        </p>
+                    </div>
                 </div>
             </div>
         </HomeLayout>
     );
 }
+
 export default CourseList;

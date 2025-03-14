@@ -125,6 +125,25 @@ export const updateProfile = createAsyncThunk(
     }
 );
 
+export const contactUs = createAsyncThunk("/auth/contactus", async (data) => {
+    try {
+        const res = axiosInstance.post("/users/contact", data);
+        toast.promise(res, {
+            loading: "Wait! sending your message...",
+            success: (data) => {
+                return data?.data?.message;
+            },
+        });
+        return (await res).data;
+    } catch (error) {
+        if (error?.response?.data?.message) {
+            toast.error(error?.response?.data?.message);
+        } else {
+            console.log(error.message);
+        }
+    }
+});
+
 const AuthSlice = createSlice({
     name: "auth",
     initialState,
