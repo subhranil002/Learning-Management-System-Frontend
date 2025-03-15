@@ -1,6 +1,5 @@
 import { useForm } from "react-hook-form";
-import { AiOutlineArrowLeft } from "react-icons/ai";
-import { BsPersonCircle } from "react-icons/bs";
+import { FiArrowLeft, FiImage, FiUser } from "react-icons/fi";
 import { useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 
@@ -21,61 +20,85 @@ function EditProfile() {
 
     return (
         <HomeLayout>
-            <div className="flex items-center justify-center h-[100vh]">
-                <form
-                    noValidate
-                    onSubmit={handleSubmit(onSubmit)}
-                    className="flex flex-col justify-center gap-5 rounded-lg p-4 text-white w-80 min-h-[26rem] shadow-[0_0_10px_black]"
-                >
-                    <h1 className="text-center text-2xl font-semibold">
-                        Edit profile
-                    </h1>
-                    <label className="cursor-pointer" htmlFor="image_uploads">
-                        {selectedFile?.type?.startsWith("image/") ? (
-                            <img
-                                className="w-28 h-28 rounded-full m-auto"
-                                src={URL.createObjectURL(selectedFile)}
-                            />
-                        ) : (
-                            <BsPersonCircle className="w-28 h-28 rounded-full m-auto" />
-                        )}
-                    </label>
-                    <input
-                        className="hidden"
-                        type="file"
-                        id="image_uploads"
-                        name="image_uploads"
-                        accept=".jpg, .png, .svg, .jpeg"
-                        {...register("file")}
-                    />
-                    <div className="flex flex-col gap-1">
-                        <label
-                            htmlFor="fullName"
-                            className="text-lg font-semibold"
-                        >
-                            Full Name
-                        </label>
-                        <input
-                            type="text"
-                            name="fullName"
-                            id="fullName"
-                            placeholder="Enter your name"
-                            className="bg-transparent px-2 py-1 border"
-                            {...register("fullName")}
-                        />
-                    </div>
-                    <button
-                        type="submit"
-                        className="w-full bg-yellow-600 hover:bg-yellow-500 transition-all ease-in-out duration-300 rounded-sm py-2 text-lg cursor-pointer"
+            <div className="min-h-[90vh] flex items-center justify-center bg-gradient-to-br from-base-100 to-base-200 p-4">
+                <div className="card w-full max-w-md bg-base-100 shadow-lg relative">
+                    <Link
+                        to="/users/profile"
+                        className="absolute top-4 left-4 btn btn-ghost btn-circle z-10"
                     >
-                        Update profile
-                    </button>
-                    <Link to="/users/profile">
-                        <p className="link text-accent cursor-pointer flex items-center justify-center w-full gap-2">
-                            <AiOutlineArrowLeft /> Go back to profile
-                        </p>
+                        <FiArrowLeft className="text-xl text-error" />
                     </Link>
-                </form>
+                    <form
+                        noValidate
+                        onSubmit={handleSubmit(onSubmit)}
+                        className="card-body p-8 space-y-4"
+                    >
+                        <div className="form-control mx-auto my-auto">
+                            <label className="label justify-center cursor-pointer w-full">
+                                <div className="avatar">
+                                    <div className="w-24 rounded-full bg-base-200 relative group">
+                                        {selectedFile?.type?.startsWith(
+                                            "image/"
+                                        ) ? (
+                                            <img
+                                                src={URL.createObjectURL(
+                                                    selectedFile
+                                                )}
+                                                className="rounded-full object-cover w-full h-full"
+                                                alt="Profile preview"
+                                            />
+                                        ) : (
+                                            <FiUser className="w-full h-full p-4 text-base-content/50" />
+                                        )}
+                                        <div className="absolute inset-0 bg-black/50 flex items-center justify-center rounded-full opacity-0 group-hover:opacity-100 transition-opacity">
+                                            <FiImage className="text-2xl text-white" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <input
+                                    type="file"
+                                    className="hidden"
+                                    accept=".jpg, .jpeg, .png"
+                                    {...register("file")}
+                                />
+                            </label>
+                            <p className="text-center text-sm text-base-content/70 mt-2">
+                                Click to change profile photo
+                            </p>
+                        </div>
+                        <div className="form-control">
+                            <label className="label">
+                                <span className="label-text flex items-center gap-2">
+                                    <FiUser className="text-base-content/70" />
+                                    Full Name
+                                </span>
+                            </label>
+                            <div className="relative">
+                                <input
+                                    type="text"
+                                    placeholder="Enter your name"
+                                    className="input input-bordered pl-10 w-full"
+                                    {...register("fullName", {
+                                        required: "Full name is required",
+                                        minLength: {
+                                            value: 3,
+                                            message:
+                                                "Name must be at least 3 characters",
+                                        },
+                                    })}
+                                />
+                                <FiUser className="absolute left-3 top-1/2 -translate-y-1/2 text-base-content/50" />
+                            </div>
+                        </div>
+                        <button
+                            type="submit"
+                            className="btn btn-info btn-block gap-2"
+                        >
+                            <FiUser className="text-lg" />
+                            Update Profile
+                        </button>
+                    </form>
+                </div>
             </div>
         </HomeLayout>
     );
