@@ -19,14 +19,10 @@ function Login() {
         }
     }
 
-    async function onError(errors) {
-        if (errors.email) {
-            toast.error(errors.email.message);
-        }
-
-        if (errors.password) {
-            toast.error(errors.password.message);
-        }
+    function onError(errors) {
+        Object.values(errors).forEach((error) => {
+            if (error.message) toast.error(error.message);
+        });
     }
 
     return (

@@ -3,6 +3,7 @@ import { RiMenu2Fill } from "react-icons/ri";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 
+import Logo from "../Assets/Images/Logo.png";
 import { logout } from "../Redux/Slices/AuthSlice";
 
 function Header() {
@@ -13,6 +14,13 @@ function Header() {
     async function handleLogout() {
         await dispatch(logout());
         navigate("/login");
+    }
+
+    function modifyCloudinaryURL(url) {
+        return url.replace(
+            "/upload/",
+            "/upload/ar_1:1,c_auto,g_auto,w_500/r_max/"
+        );
     }
 
     return (
@@ -63,12 +71,11 @@ function Header() {
                         </li>
                     </ul>
                 </div>
-                <Link
-                    to="/"
-                    className="flex items-center gap-2"
-                >
-                    <img src="./favicon.png" alt="Logo" className="w-10 h-10" />
-                    <span className="hidden sm:block text-xl font-bold">Brain-2xl</span>
+                <Link to="/" className="flex items-center gap-2">
+                    <img src={Logo} alt="Logo" className="w-10 h-10" />
+                    <span className="hidden sm:block text-xl font-bold">
+                        Brain-2xl
+                    </span>
                 </Link>
             </div>
             <div className="navbar-center hidden lg:flex">
@@ -115,7 +122,9 @@ function Header() {
                         {isLoggedIn ? (
                             <img
                                 alt="Tailwind CSS Navbar component"
-                                src={data?.avatar?.secure_url}
+                                src={modifyCloudinaryURL(
+                                    data?.avatar?.secure_url
+                                )}
                             />
                         ) : (
                             <FaUserCircle size={38} />

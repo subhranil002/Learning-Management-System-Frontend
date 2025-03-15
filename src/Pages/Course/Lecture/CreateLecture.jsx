@@ -27,18 +27,10 @@ function CreateLecture() {
         }
     }
 
-    async function onError(errors) {
-        if (errors.file) {
-            toast.error(errors.file.message);
-        }
-
-        if (errors.title) {
-            toast.error(errors.title.message);
-        }
-
-        if (errors.description) {
-            toast.error(errors.description.message);
-        }
+    function onError(errors) {
+        Object.values(errors).forEach((error) => {
+            if (error.message) toast.error(error.message);
+        });
     }
 
     useEffect(() => {

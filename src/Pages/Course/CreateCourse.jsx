@@ -21,21 +21,9 @@ function CreateCourse() {
     }
 
     function onError(errors) {
-        if (errors.file) {
-            toast.error(errors.file.message);
-        }
-
-        if (errors.title) {
-            toast.error(errors.title.message);
-        }
-
-        if (errors.category) {
-            toast.error(errors.category.message);
-        }
-
-        if (errors.description) {
-            toast.error(errors.description.message);
-        }
+        Object.values(errors).forEach((error) => {
+            if (error.message) toast.error(error.message);
+        });
     }
 
     return (

@@ -1,6 +1,6 @@
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
-import { FiLock, FiMail, FiUser, FiUserPlus } from "react-icons/fi";
+import { FiImage, FiLock, FiMail, FiUser, FiUserPlus } from "react-icons/fi";
 import { useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 
@@ -18,7 +18,7 @@ function Signup() {
         if (res.payload?.success) navigate("/");
     }
 
-    async function onError(errors) {
+    function onError(errors) {
         Object.values(errors).forEach((error) => {
             if (error.message) toast.error(error.message);
         });
@@ -29,6 +29,7 @@ function Signup() {
             <div className="min-h-[90vh] flex items-center justify-center bg-gradient-to-br from-base-100 to-base-200 p-4">
                 <div className="card w-full max-w-md bg-base-100 shadow-lg">
                     <form
+                        noValidate
                         onSubmit={handleSubmit(onSubmit, onError)}
                         className="card-body p-8 space-y-3"
                     >
@@ -44,7 +45,7 @@ function Signup() {
                         <div className="form-control mx-auto my-auto">
                             <label className="label justify-center cursor-pointer">
                                 <div className="avatar">
-                                    <div className="w-24 rounded-full bg-base-200 relative">
+                                    <div className="w-24 rounded-full bg-base-200 relative group">
                                         {selectedFile?.type?.startsWith(
                                             "image/"
                                         ) ? (
@@ -52,10 +53,15 @@ function Signup() {
                                                 src={URL.createObjectURL(
                                                     selectedFile
                                                 )}
+                                                className="rounded-full object-cover w-full h-full"
+                                                alt="Profile preview"
                                             />
                                         ) : (
                                             <FiUser className="w-full h-full p-4 text-base-content/50" />
                                         )}
+                                        <div className="absolute inset-0 bg-black/50 flex items-center justify-center rounded-full opacity-0 group-hover:opacity-100 transition-opacity">
+                                            <FiImage className="text-2xl text-white" />
+                                        </div>
                                     </div>
                                 </div>
                                 <input

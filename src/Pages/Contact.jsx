@@ -16,15 +16,9 @@ function Contact() {
     }
 
     function onError(errors) {
-        if (errors.name) {
-            toast.error(errors.name.message);
-        }
-        if (errors.email) {
-            toast.error(errors.email.message);
-        }
-        if (errors.message) {
-            toast.error(errors.message.message);
-        }
+        Object.values(errors).forEach((error) => {
+            if (error.message) toast.error(error.message);
+        });
     }
 
     return (
@@ -42,6 +36,7 @@ function Contact() {
                             </p>
                         </div>
                         <form
+                            noValidate
                             onSubmit={handleSubmit(onSubmit, onError)}
                             className="space-y-4"
                         >
