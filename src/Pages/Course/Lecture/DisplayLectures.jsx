@@ -1,4 +1,7 @@
-import { useEffect, useState } from "react";
+import parser from "html-react-parser";
+import { useEffect, useRef, useState } from "react";
+import { AiOutlineClose, AiOutlineMenu } from "react-icons/ai";
+import { IoIosAddCircle } from "react-icons/io";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
 
@@ -14,90 +17,119 @@ function Displaylectures() {
     const { state } = useLocation();
     const { lectures } = useSelector((state) => state.lecture);
     const { role } = useSelector((state) => state.auth);
-
-    async function getLectures() {
-        await dispatch(getLecturesByCourse(state._id));
-    }
-
     const [currentVideo, setCurrentVideo] = useState(0);
+    const inputRef = useRef();
 
     async function onLectureDelete(courseId, lectureId) {
-        await dispatch(
-            deleteLecture({ courseId: courseId, lectureId: lectureId })
-        );
+        await dispatch(deleteLecture({ courseId, lectureId }));
         await dispatch(getLecturesByCourse(courseId));
     }
 
     useEffect(() => {
         if (!state) navigate("/courses");
-        getLectures();
+        (async () => {
+            await dispatch(getLecturesByCourse(state._id));
+        })();
     }, []);
 
     return (
         <HomeLayout>
-            <div className="flex flex-col gap-10 items-center justify-center min-h-[90vh] py-10 text-wihte mx-[5%]">
-                <div className="text-center text-2xl font-semibold text-yellow-500">
-                    Course Name: {state?.title}
-                </div>
-
-                <div className="flex justify-center gap-10 w-full">
-                    <div className="space-y-5 w-[28rem] p-2 rounded-lg shadow-[0_0_10px_black]">
-                        <video
-                            src={
-                                lectures &&
-                                lectures[currentVideo]?.lecture?.secure_url
-                            }
-                            className="object-fill rounded-tl-lg rounded-tr-lg w-full"
-                            controls
-                            disablePictureInPicture
-                            controlsList="nodownload"
-                        ></video>
-                        <div>
-                            <h1>
-                                <span className="text-yellow-500">
-                                    {" "}
-                                    Title:{" "}
-                                </span>
-                                {lectures && lectures[currentVideo]?.title}
-                            </h1>
-                            <p>
-                                <span className="text-yellow-500 line-clamp-4">
-                                    Description:{" "}
-                                </span>
-                                {lectures &&
-                                    lectures[currentVideo]?.description}
+            <div className="drawer lg:drawer-open">
+                <input
+                    id="lecture-drawer"
+                    type="checkbox"
+                    className="drawer-toggle"
+                    ref={inputRef}
+                />
+                <div className="drawer-content flex flex-col min-h-[90vh]">
+                    <div className="lg:hidden flex justify-between items-center p-4 bg-base-200">
+                        <label
+                            htmlFor="lecture-drawer"
+                            className="btn btn-ghost drawer-button"
+                        >
+                            <AiOutlineMenu className="text-2xl" />
+                        </label>
+                        <h1 className="text-xl text-warning font-bold">{state?.title}</h1>
+                    </div>
+                    <div className="flex-1 p-4 lg:p-6">
+                        <div className="relative aspect-video bg-neutral rounded-xl overflow-hidden shadow-2xl">
+                            <video
+                                src={
+                                    lectures?.[currentVideo]?.lecture
+                                        ?.secure_url
+                                }
+                                className="w-full h-full object-contain"
+                                controls
+                                disablePictureInPicture
+                                controlsList="nodownload"
+                            />
+                        </div>
+                        <div className="mt-6 bg-base-200 rounded-box p-6 shadow">
+                            <h2 className="text-2xl font-bold mb-4">
+                                {lectures?.[currentVideo]?.title}
+                            </h2>
+                            <p className="text-base-content/80 leading-relaxed">
+                                {parser(lectures?.[currentVideo]?.description ||
+                                    "No description available")}
                             </p>
                         </div>
                     </div>
-
-                    <ul className="w-[28rem] p-2 rounded-lg shadow-[0_0_10px_black] space-y-4">
-                        <li className="font-semibold text-xl text-yellow-500 flex items-center justify-between">
-                            <p>Lectures list</p>
-                            {role === "ADMIN" && (
-                                <button
-                                    onClick={() =>
-                                        navigate("/courses/lectures/add", {
-                                            state: { ...state },
-                                        })
-                                    }
-                                    className="btn btn-primary px-2 py-1 rounded-md font-semibold text-sm"
-                                >
-                                    Add new lecture
-                                </button>
-                            )}
-                        </li>
-                        {lectures &&
-                            lectures.map((lecture, idx) => {
-                                return (
-                                    <li className="space-y-2" key={lecture._id}>
-                                        <p
-                                            className="cursor-pointer"
-                                            onClick={() => setCurrentVideo(idx)}
-                                        >
-                                            <span> Lecture {idx + 1} : </span>
-                                            {lecture?.title}
-                                        </p>
-                                        {role === "ADMIN" && (
+                </div>
+                <div className="drawer-side z-50">
+                    <label
+                        htmlFor="lecture-drawer"
+                        aria-label="close sidebar"
+                        className="drawer-overlay"
+                    ></label>
+                    <div className="menu bg-base-200 text-base-content w-80 min-h-full p-4">
+                        <h1 className="text-2xl text-warning hidden lg:block font-bold mb-5">
+                            {state?.title}
+                        </h1>
+                        <div className="flex justify-between items-center mb-6">
+                            <h2 className="text-xl font-bold">Lectures</h2>
+                            <label
+                                htmlFor="lecture-drawer"
+                                className="lg:hidden btn btn-ghost btn-sm"
+                            >
+                                <AiOutlineClose className="text-xl" />
+                            </label>
+                        </div>
+                        {role === "TEACHER" || role === "ADMIN" && (
+                            <button
+                                onClick={() =>
+                                    navigate("/courses/lectures/add", { state })
+                                }
+                                className="btn btn-neutral btn-block mb-6"
+                            >
+                                <IoIosAddCircle className="text-xl" />
+                                Add New Lecture
+                            </button>
+                        )}
+                        <ul className="space-y-2">
+                            {lectures?.map((lecture, idx) => (
+                                <li key={lecture._id}>
+                                    <a
+                                        className={`flex items-center justify-between p-3 rounded-lg ${
+                                            currentVideo === idx
+                                                ? "bg-info text-info-content"
+                                                : ""
+                                        }`}
+                                        onClick={() => {
+                                            setCurrentVideo(idx);
+                                            if (inputRef.current) {
+                                                inputRef.current.checked = false;
+                                            }
+                                        }}
+                                    >
+                                        <div className="flex items-center gap-3 text-base font-semibold">
+                                            <span className="badge badge-neutral">
+                                                {idx + 1}
+                                            </span>
+                                            <span className="line-clamp-1">
+                                                {lecture.title}
+                                            </span>
+                                        </div>
+                                        {role === "TEACHER" || role === "ADMIN" && (
                                             <button
                                                 onClick={() =>
                                                     onLectureDelete(
@@ -105,15 +137,16 @@ function Displaylectures() {
                                                         lecture?._id
                                                     )
                                                 }
-                                                className="btn btn-accent px-2 py-1 rounded-md font-semibold text-sm"
+                                                className="btn btn-error btn-xs"
                                             >
-                                                Delete lecture
+                                                Delete
                                             </button>
                                         )}
-                                    </li>
-                                );
-                            })}
-                    </ul>
+                                    </a>
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
                 </div>
             </div>
         </HomeLayout>
