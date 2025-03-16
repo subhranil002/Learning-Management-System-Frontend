@@ -4,7 +4,7 @@ import { Navigate, Outlet } from "react-router-dom";
 function RequireSubscription() {
     const { isLoggedIn, data, role } = useSelector((state) => state.auth);
 
-    return role === "ADMIN" ||
+    return role === "TEACHER" || role === "ADMIN" ||
         (data?.subscription && data?.subscription?.status === "active") ? (
         <Outlet />
     ) : isLoggedIn ? (

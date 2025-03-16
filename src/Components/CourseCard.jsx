@@ -1,3 +1,4 @@
+import parser from "html-react-parser";
 import { FaBook, FaChalkboardTeacher, FaListUl } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 
@@ -26,7 +27,9 @@ function CourseCard({ data }) {
                 <h2 className="card-title text-xl font-bold line-clamp-1 mb-1">
                     {data?.title}
                 </h2>
-                <p className="text-sm line-clamp-3 mb-2">{data?.description}</p>
+                <p className="text-sm line-clamp-3 mb-2">
+                    {parser(data?.description)}
+                </p>
                 <div className="flex flex-col text-base">
                     <div className="flex items-center gap-2 py-1 rounded-lg">
                         <FaBook className="text-warning" />
@@ -36,7 +39,7 @@ function CourseCard({ data }) {
                     <div className="flex items-center gap-2 py-1 rounded-lg">
                         <FaChalkboardTeacher className="text-warning" />
                         <span className="font-medium">Instructor:</span>
-                        <span className="text-warning line-clamp-1">
+                        <span className="text-warning line-clamp-1 capitalize">
                             {data?.createdBy?.name}
                         </span>
                     </div>

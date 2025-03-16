@@ -47,11 +47,6 @@ function Profile() {
                         </div>
                         <h2 className="card-title text-lg sm:text-xl capitalize">
                             {userData?.fullName}
-                            {userData?.role === "ADMIN" && (
-                                <div className="badge badge-accent ml-2 text-xs sm:text-sm">
-                                    ADMIN
-                                </div>
-                            )}
                         </h2>
                         <div className="w-full text-left space-y-2 sm:space-y-3">
                             <div className="flex items-center gap-2 text-sm sm:text-base">
@@ -73,17 +68,20 @@ function Profile() {
                                 <span className="flex-1">Subscription:</span>
                                 <span
                                     className={`badge text-black font-semibold text-xs sm:text-sm ${
-                                        userData?.subscription?.status ===
-                                            "active" ||
+                                        userData?.role === "TEACHER" ||
                                         userData?.role === "ADMIN"
+                                            ? "badge-success"
+                                            : userData?.subscription?.status ===
+                                            "active"
                                             ? "badge-success"
                                             : "badge-error"
                                     }`}
                                 >
-                                    {userData?.role === "ADMIN"
+                                    {userData?.role === "TEACHER" ||
+                                    userData?.role === "ADMIN"
                                         ? "Active"
                                         : userData?.subscription?.status ===
-                                          "active"
+                                        "active"
                                         ? "Active"
                                         : "Inactive"}
                                 </span>
@@ -104,7 +102,8 @@ function Profile() {
                                 <FaEdit className="text-sm sm:text-lg" />
                                 <span>Edit Profile</span>
                             </Link>
-                            {userData?.role !== "ADMIN" &&
+                            {userData?.role !== "TEACHER" &&
+                                userData?.role !== "ADMIN" &&
                                 userData?.subscription?.status === "active" && (
                                     <button
                                         onClick={handleCancelation}

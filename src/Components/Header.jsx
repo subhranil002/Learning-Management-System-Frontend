@@ -56,7 +56,7 @@ function Header() {
                                             )}
                                             <li>
                                                 <Link to="/courses/create">
-                                                    Add Lecture
+                                                    Add Course
                                                 </Link>
                                             </li>
                                         </ul>
@@ -97,7 +97,7 @@ function Header() {
                                     )}
                                     <li>
                                         <Link to="/courses/create">
-                                            Add Lecture
+                                            Add Course
                                         </Link>
                                     </li>
                                 </ul>

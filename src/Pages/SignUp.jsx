@@ -159,7 +159,7 @@ function Signup() {
                                     to="/login"
                                     className="link link-accent font-semibold"
                                 >
-                                    Sign in
+                                    Login
                                 </Link>
                             </span>
                         </div>

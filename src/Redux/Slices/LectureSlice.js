@@ -48,7 +48,7 @@ export const getLecturesByCourse = createAsyncThunk(
             toast.promise(lectureRes, {
                 loading: "Wait! getting lectures...",
                 success: (data) => {
-                    return data?.data?.lectures;
+                    return data?.data?.message;
                 },
             });
             return (await lectureRes).data;
@@ -109,7 +109,7 @@ export const deleteLecture = createAsyncThunk(
             toast.promise(lectureRes, {
                 loading: "Wait! deleting lecture...",
                 success: (data) => {
-                    return data?.data?.lectures;
+                    return data?.data?.message;
                 },
             });
             await lectureRes;
