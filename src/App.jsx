@@ -20,6 +20,7 @@ import Checkout from "./Pages/Payment/Checkout";
 import CheckoutFailure from "./Pages/Payment/CheckoutFailure";
 import CheckoutSuccess from "./Pages/Payment/CheckoutSuccess";
 import Signup from "./Pages/SignUp";
+import ChangePassword from "./Pages/User/ChangePassword";
 import EditProfile from "./Pages/User/EditProfile";
 import Profile from "./Pages/User/Profile";
 import { getProfile } from "./Redux/Slices/AuthSlice";
@@ -40,9 +41,17 @@ function App() {
             <Route path="/about" element={<AboutUs />} />
             <Route path="/signup" element={<Signup />} />
             <Route path="/login" element={<Login />} />
-            <Route element={<RequireAuth allowedRoles={["USER", "ADMIN"]} />}>
+            <Route
+                element={
+                    <RequireAuth allowedRoles={["USER", "TEACHER", "ADMIN"]} />
+                }
+            >
                 <Route path="users/profile" element={<Profile />} />
                 <Route path="users/editprofile" element={<EditProfile />} />
+                <Route
+                    path="users/changepassword"
+                    element={<ChangePassword />}
+                />
                 <Route path="/checkout" element={<Checkout />} />
                 <Route path="/checkout/success" element={<CheckoutSuccess />} />
                 <Route path="/checkout/failure" element={<CheckoutFailure />} />
@@ -57,12 +66,16 @@ function App() {
             </Route>
             <Route path="/contact" element={<Contact />} />
             <Route path="/denied" element={<Denied />} />
-            <Route element={<RequireAuth allowedRoles={["ADMIN"]} />}>
+            <Route
+                element={<RequireAuth allowedRoles={["TEACHER", "ADMIN"]} />}
+            >
                 <Route path="/courses/create" element={<CreateCourse />} />
                 <Route
                     path="/courses/lectures/add"
                     element={<CreateLecture />}
                 />
+            </Route>
+            <Route element={<RequireAuth allowedRoles={["ADMIN"]} />}>
                 <Route path="/admin/dashboard" element={<AdminDashboard />} />
             </Route>
             <Route path="*" element={<NotFound />} />

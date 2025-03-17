@@ -125,6 +125,28 @@ export const updateProfile = createAsyncThunk(
     }
 );
 
+export const changePassword = createAsyncThunk(
+    "auth/changepassword",
+    async (data) => {
+        try {
+            const res = axiosInstance.post("/users/change-password", data);
+            toast.promise(res, {
+                loading: "Wait! changing your password...",
+                success: (data) => {
+                    return data?.data?.message;
+                },
+            });
+            return (await res).data;
+        } catch (error) {
+            if (error?.response?.data?.message) {
+                toast.error(error?.response?.data?.message);
+            } else {
+                console.log(error.message);
+            }
+        }
+    }
+);
+
 export const contactUs = createAsyncThunk("/auth/contactus", async (data) => {
     try {
         const res = axiosInstance.post("/users/contact", data);
