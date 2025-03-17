@@ -90,7 +90,7 @@ function Profile() {
                         <div className="card-actions w-full gap-2 grid grid-cols-1 sm:grid-cols-2">
                             <Link
                                 to="/users/changepassword"
-                                className="btn btn-warning gap-2 text-sm sm:text-base"
+                                className="btn btn-error gap-2 text-sm sm:text-base"
                             >
                                 <FaKey className="text-sm sm:text-lg" />
                                 <span>Change Password</span>

@@ -1,6 +1,9 @@
-import { useForm } from "react-hook-form";
+import { Editor } from "@tinymce/tinymce-react";
+import { Controller, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
-import { AiOutlineArrowLeft } from "react-icons/ai";
+import { AiOutlineArrowLeft, AiOutlineCloudUpload } from "react-icons/ai";
+import { BsTag, BsTextParagraph } from "react-icons/bs";
+import { FiBook } from "react-icons/fi";
 import { useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 
@@ -10,7 +13,7 @@ import { createNewCourse } from "../../Redux/Slices/CourseSlice";
 function CreateCourse() {
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const { register, handleSubmit, watch } = useForm();
+    const { register, handleSubmit, watch, control } = useForm();
     const selectedFile = watch("file")?.[0];
 
     async function onSubmit(data) {
@@ -28,134 +31,195 @@ function CreateCourse() {
 
     return (
         <HomeLayout>
-            <div className="flex items-center justify-center h-[100vh]">
+            <div className="flex items-center justify-center p-4 bg-gradient-to-br from-base-200 to-base-300">
                 <form
                     noValidate
                     onSubmit={handleSubmit(onSubmit, onError)}
-                    className="flex flex-col justify-center gap-10 rounded-lg p-4 text-white w-[50vw] shadow-[0_0_10px_black] relative"
+                    className="card w-full max-w-4xl bg-base-100 shadow-2xl border border-base-300"
                 >
-                    <Link
-                        to={-1}
-                        className="absolute top-8 text-2xl link text-accent cursor-pointer"
-                    >
-                        <AiOutlineArrowLeft />
-                    </Link>
-                    <h1 className="text-center text-2xl font-bold">
-                        Create New Course
-                    </h1>
-                    <main className="grid grid-cols-2 w-full">
-                        <div className="flex flex-col justify-center items-center w-[20vw]">
-                            <label
-                                htmlFor="image_uploads"
-                                className="cursor-pointer w-full h-full flex flex-col justify-center items-center"
-                            >
-                                {selectedFile?.type?.startsWith("image/") ? (
-                                    <img
-                                        className="w-full h-44 border"
-                                        src={URL.createObjectURL(selectedFile)}
+                    <div className="card-body relative p-8">
+                        <Link
+                            to={-1}
+                            className="absolute top-6 left-6 btn btn-ghost btn-circle btn-sm hover:-translate-x-1 transition-transform"
+                        >
+                            <AiOutlineArrowLeft className="text-xl text-error" />
+                        </Link>
+                        <h1 className="card-title text-3xl justify-center mt-10 sm:mt-4 mb-8 font-bold text-warning">
+                            Create New Course
+                        </h1>
+                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                            <div className="col-span-1">
+                                <div className="form-control w-full">
+                                    <label className="label">
+                                        <span className="label-text text-lg font-semibold flex items-center gap-2">
+                                            <AiOutlineCloudUpload className="text-xl" />
+                                            Course Thumbnail
+                                        </span>
+                                    </label>
+                                    <label
+                                        htmlFor="image_uploads"
+                                        className="group relative block w-full rounded-box overflow-hidden cursor-pointer bg-base-200"
+                                        style={{ paddingTop: "55%" }}
+                                    >
+                                        <div className="absolute inset-0 flex items-center justify-center">
+                                            {selectedFile?.type?.startsWith(
+                                                "image/"
+                                            ) ? (
+                                                <div className="relative w-full h-full">
+                                                    <img
+                                                        className="w-full h-full object-cover rounded-box"
+                                                        src={URL.createObjectURL(
+                                                            selectedFile
+                                                        )}
+                                                        alt="Course thumbnail"
+                                                    />
+                                                    <div className="absolute inset-0 bg-black/50 flex items-center justify-center rounded-box opacity-0 group-hover:opacity-100 transition-opacity">
+                                                        <AiOutlineCloudUpload className="text-3xl text-white" />
+                                                    </div>
+                                                </div>
+                                            ) : (
+                                                <div className="flex flex-col items-center gap-2 p-4 text-center">
+                                                    <AiOutlineCloudUpload className="text-4xl text-base-content/50 group-hover:text-primary transition-colors" />
+                                                    <p className="font-medium">
+                                                        Click to upload
+                                                        thumbnail
+                                                    </p>
+                                                </div>
+                                            )}
+                                        </div>
+                                    </label>
+                                    <input
+                                        className="hidden"
+                                        type="file"
+                                        id="image_uploads"
+                                        accept=".jpg, .jpeg, .png"
+                                        {...register("file", {
+                                            required: "Thumbnail is required",
+                                        })}
                                     />
-                                ) : (
-                                    <div className="w-full h-44 flex items-center justify-center border">
-                                        <h1 className="font-bold text-lg">
-                                            Upload your course thumbnail
-                                        </h1>
-                                    </div>
-                                )}
+                                </div>
+                            </div>
+                            <div className="col-span-1 space-y-6 gap-5">
+                                <div className="form-control w-full">
+                                    <label className="label pr-5">
+                                        <span className="label-text text-lg font-semibold flex items-center gap-2">
+                                            <FiBook className="text-xl" />
+                                            Course Title
+                                        </span>
+                                    </label>
+                                    <input
+                                        type="text"
+                                        placeholder="Enter course title"
+                                        className="input input-bordered input-lg"
+                                        {...register("title", {
+                                            required: "Title is required",
+                                            minLength: {
+                                                value: 5,
+                                                message:
+                                                    "Title must be at least 5 characters",
+                                            },
+                                            maxLength: {
+                                                value: 50,
+                                                message:
+                                                    "Title must be at most 50 characters",
+                                            },
+                                        })}
+                                    />
+                                </div>
+                                <div className="form-control w-full">
+                                    <label className="label pr-5">
+                                        <span className="label-text text-lg font-semibold flex items-center gap-2">
+                                            <BsTag className="text-xl" />
+                                            Course Category
+                                        </span>
+                                    </label>
+                                    <input
+                                        type="text"
+                                        placeholder="Enter course category"
+                                        className="input input-bordered input-lg"
+                                        {...register("category", {
+                                            required: "Category is required",
+                                            minLength: {
+                                                value: 3,
+                                                message:
+                                                    "Category must be at least 5 characters",
+                                            },
+                                            maxLength: {
+                                                value: 15,
+                                                message:
+                                                    "Category must be at most 15 characters",
+                                            },
+                                        })}
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                        <div className="form-control w-full mt-6">
+                            <label className="label">
+                                <span className="label-text text-lg font-semibold flex items-center gap-2">
+                                    <BsTextParagraph className="text-xl" />
+                                    Course Description
+                                </span>
                             </label>
-                            <input
-                                className="hidden"
-                                type="file"
-                                id="image_uploads"
-                                accept=".jpg, .jpeg, .png"
-                                name="image_uploads"
-                                {...register("file", {
-                                    required: "Thumbnail is required",
-                                })}
+                            <Controller
+                                name="description"
+                                control={control}
+                                rules={{
+                                    required: "Course description is required",
+                                    validate: (value) =>
+                                        value.replace(/<[^>]+>/g, "").length >=
+                                            50 ||
+                                        "Description must be at least 50 characters",
+                                }}
+                                render={({ field }) => (
+                                    <Editor
+                                        apiKey={
+                                            import.meta.env.VITE_TINY_MCE_KEY
+                                        }
+                                        init={{
+                                            height: 300,
+                                            menubar: false,
+                                            plugins: [
+                                                "advlist",
+                                                "autolink",
+                                                "lists",
+                                                "link",
+                                                "image",
+                                                "charmap",
+                                                "preview",
+                                                "anchor",
+                                                "searchreplace",
+                                                "visualblocks",
+                                                "code",
+                                                "fullscreen",
+                                                "insertdatetime",
+                                                "media",
+                                                "table",
+                                                "help",
+                                                "wordcount",
+                                            ],
+                                            toolbar:
+                                                "undo redo | formatselect | bold italic | alignleft aligncenter alignright | bullist numlist outdent indent | removeformat | help",
+                                            content_style:
+                                                "body { font-family: Inter, sans-serif; font-size: 18px }",
+                                        }}
+                                        onEditorChange={(content) =>
+                                            field.onChange(content)
+                                        }
+                                    />
+                                )}
                             />
                         </div>
-                        <div className="flex flex-col gap-1">
-                            <div className="flex flex-col gap-1">
-                                <label
-                                    className="text-lg font-semibold"
-                                    htmlFor="title"
-                                >
-                                    Course title
-                                </label>
-                                <input
-                                    type="text"
-                                    name="title"
-                                    id="title"
-                                    placeholder="Enter course title"
-                                    className="bg-transparent px-2 py-1 border"
-                                    {...register("title", {
-                                        required: "Title is required",
-                                        minLength: {
-                                            value: 5,
-                                            message:
-                                                "Title must be at least 5 characters",
-                                        },
-                                        maxLength: {
-                                            value: 50,
-                                            message:
-                                                "Title must be at most 50 characters",
-                                        },
-                                    })}
-                                />
-                            </div>
-                            <div className="flex flex-col gap-1">
-                                <label
-                                    className="text-lg font-semibold"
-                                    htmlFor="category"
-                                >
-                                    Course category
-                                </label>
-                                <input
-                                    type="text"
-                                    name="category"
-                                    id="category"
-                                    placeholder="Enter course category"
-                                    className="bg-transparent px-2 py-1 border"
-                                    {...register("category", {
-                                        required: "Category is required",
-                                    })}
-                                />
-                            </div>
-                            <div className="flex flex-col gap-1">
-                                <label
-                                    className="text-lg font-semibold"
-                                    htmlFor="description"
-                                >
-                                    Course description
-                                </label>
-                                <textarea
-                                    type="text"
-                                    name="description"
-                                    id="description"
-                                    placeholder="Enter course description"
-                                    className="bg-transparent px-2 py-1 h-24 overflow-y-scroll resize-none border"
-                                    {...register("description", {
-                                        required: "Description is required",
-                                        minLength: {
-                                            value: 50,
-                                            message:
-                                                "Description must be at least 50 characters",
-                                        },
-                                        maxLength: {
-                                            value: 200,
-                                            message:
-                                                "Description must be at most 200 characters",
-                                        },
-                                    })}
-                                />
-                            </div>
+                        <div className="card-actions justify-center mt-8">
+                            <button
+                                type="submit"
+                                className="btn btn-warning btn-lg w-full md:w-1/2 gap-2"
+                            >
+                                <AiOutlineCloudUpload className="text-xl" />
+                                Publish Course
+                            </button>
                         </div>
-                    </main>
-                    <button
-                        type="submit"
-                        className="w-full py-2 rounded-sm font-semibold text-lg cursor-pointer bg-yellow-600 hover:bg-yellow-500 transition-all ease-in-out duration-300"
-                    >
-                        Create Course
-                    </button>
+                    </div>
                 </form>
             </div>
         </HomeLayout>

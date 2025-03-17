@@ -16,7 +16,7 @@ function Displaylectures() {
     const dispatch = useDispatch();
     const { state } = useLocation();
     const { lectures } = useSelector((state) => state.lecture);
-    const { role } = useSelector((state) => state.auth);
+    const { role, data } = useSelector((state) => state.auth);
     const [currentVideo, setCurrentVideo] = useState(0);
     const inputRef = useRef();
 
@@ -49,7 +49,12 @@ function Displaylectures() {
                         >
                             <AiOutlineMenu className="text-2xl" />
                         </label>
-                        <h1 className="text-xl text-warning font-bold">{state?.title}</h1>
+                        <h1
+                            onClick={() => navigate(-1)}
+                            className="text-2xl text-warning font-bold cursor-pointer"
+                        >
+                            {state?.title}
+                        </h1>
                     </div>
                     <div className="flex-1 p-4 lg:p-6">
                         <div className="relative aspect-video bg-neutral rounded-xl overflow-hidden shadow-2xl">
@@ -69,8 +74,10 @@ function Displaylectures() {
                                 {lectures?.[currentVideo]?.title}
                             </h2>
                             <p className="text-base-content/80 leading-relaxed">
-                                {parser(lectures?.[currentVideo]?.description ||
-                                    "No description available")}
+                                {parser(
+                                    lectures?.[currentVideo]?.description ||
+                                        "No description available"
+                                )}
                             </p>
                         </div>
                     </div>
@@ -82,7 +89,10 @@ function Displaylectures() {
                         className="drawer-overlay"
                     ></label>
                     <div className="menu bg-base-200 text-base-content w-80 min-h-full p-4">
-                        <h1 className="text-2xl text-warning hidden lg:block font-bold mb-5">
+                        <h1
+                            onClick={() => navigate(-1)}
+                            className="text-2xl text-warning hidden lg:block font-bold mb-5 cursor-pointer"
+                        >
                             {state?.title}
                         </h1>
                         <div className="flex justify-between items-center mb-6">
@@ -94,17 +104,21 @@ function Displaylectures() {
                                 <AiOutlineClose className="text-xl" />
                             </label>
                         </div>
-                        {role === "TEACHER" || role === "ADMIN" && (
-                            <button
-                                onClick={() =>
-                                    navigate("/courses/lectures/add", { state })
-                                }
-                                className="btn btn-neutral btn-block mb-6"
-                            >
-                                <IoIosAddCircle className="text-xl" />
-                                Add New Lecture
-                            </button>
-                        )}
+                        {(role === "TEACHER" &&
+                            state?.createdBy?._id === data?._id) ||
+                            (role === "ADMIN" && (
+                                <button
+                                    onClick={() =>
+                                        navigate("/courses/lectures/add", {
+                                            state,
+                                        })
+                                    }
+                                    className="btn btn-neutral btn-block mb-6"
+                                >
+                                    <IoIosAddCircle className="text-xl" />
+                                    Add New Lecture
+                                </button>
+                            ))}
                         <ul className="space-y-2">
                             {lectures?.map((lecture, idx) => (
                                 <li key={lecture._id}>
@@ -129,19 +143,22 @@ function Displaylectures() {
                                                 {lecture.title}
                                             </span>
                                         </div>
-                                        {role === "TEACHER" || role === "ADMIN" && (
-                                            <button
-                                                onClick={() =>
-                                                    onLectureDelete(
-                                                        state?._id,
-                                                        lecture?._id
-                                                    )
-                                                }
-                                                className="btn btn-error btn-xs"
-                                            >
-                                                Delete
-                                            </button>
-                                        )}
+                                        {(role === "TEACHER" &&
+                                            state?.createdBy?._id ===
+                                                data?._id) ||
+                                            (role === "ADMIN" && (
+                                                <button
+                                                    onClick={() =>
+                                                        onLectureDelete(
+                                                            state?._id,
+                                                            lecture?._id
+                                                        )
+                                                    }
+                                                    className="btn btn-error btn-xs"
+                                                >
+                                                    Delete
+                                                </button>
+                                            ))}
                                     </a>
                                 </li>
                             ))}
