@@ -1,6 +1,7 @@
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
-import { BiRupee } from "react-icons/bi";
+import { BiCheckCircle, BiErrorCircle, BiRupee } from "react-icons/bi";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
@@ -17,21 +18,30 @@ function Checkout() {
     const navigate = useNavigate();
     const { handleSubmit } = useForm();
     const userData = useSelector((state) => state?.auth?.data);
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
     async function onSubmit() {
+        if (isSubmitting) return;
+
+        setIsSubmitting(true);
+        toast.loading("Wait! Redirecting to the payment page...");
+
         const apiKey = (await dispatch(getKey()))?.payload?.data?.key;
-        const subscription_id = (await dispatch(subscribe()))?.payload?.data?.id;
+        const subscription_id = (await dispatch(subscribe()))?.payload?.data
+            ?.id;
 
         if (!apiKey || !subscription_id) {
+            toast.dismiss();
             toast.error("Something went wrong");
+            setIsSubmitting(false);
             return;
         }
 
         const options = {
             key: apiKey,
             subscription_id,
-            name: "Coursify Pvt. Ltd.",
-            description: "Subscription",
+            name: "BrainXcel Pvt. Ltd.",
+            description: "Subscription for BrainXcel",
             theme: {
                 color: "#F37254",
             },
@@ -45,48 +55,81 @@ function Checkout() {
                 if (res?.payload?.success) {
                     await dispatch(getProfile());
                     navigate("/checkout/success");
-                } else navigate("/checkout/fail");
+                } else {
+                    navigate("/checkout/failure");
+                }
             },
         };
+
         const paymentObject = new window.Razorpay(options);
         paymentObject.open();
+
+        setIsSubmitting(false);
+        toast.dismiss();
     }
 
     return (
         <HomeLayout>
             <form
                 onSubmit={handleSubmit(onSubmit)}
-                className="min-h-[90vh] flex items-center justify-center text-white"
+                className="min-h-[90vh] flex items-center justify-center px-4"
             >
-                <div className="w-80 h-[26rem] flex flex-col justify-center shadow-[0_0_10px_black] rounded-lg relative">
-                    <h1 className="bg-yellow-500 absolute top-0 w-full text-center py-4 text-2xl font-bold rounded-tl0lg rounded-tr-lg">
-                        Subscription Bundle
-                    </h1>
-                    <div className="px-4 space-y-5 text-center">
-                        <p className="text-[17px]">
-                            This purchase will allow you to access all available
-                            course of our platform for{" "}
-                            <span className="text-yellow-500 font-bold">
-                                <br />1 Year duration
-                            </span>{" "}
-                            All the existing and new launched courses will be
-                            also available
-                        </p>
-
-                        <p className="flex items-center justify-center gap-1 text-2xl font-bold text-yellow-500">
-                            <BiRupee />
-                            <span>1000</span> only
-                        </p>
-                        <div className="text-gray-200">
-                            <p>100% refund on cancellation</p>
-                            <p>* Terms and conditions applied *</p>
+                <div className="card w-full max-w-md bg-base-300 text-base-content shadow-xl hover:shadow-2xl transition-shadow duration-300">
+                    <div className="card-body p-8">
+                        <h2 className="card-title justify-center text-3xl mb-6 text-warning">
+                            Premium Subscription
+                        </h2>
+                        <div className="space-y-4 mb-6">
+                            <div className="flex items-center gap-2 text-lg">
+                                <BiCheckCircle className="text-success" />
+                                <span>Full access to all courses</span>
+                            </div>
+                            <div className="flex items-center gap-2 text-lg">
+                                <BiCheckCircle className="text-success" />
+                                <span>New courses included</span>
+                            </div>
+                            <div className="flex items-center gap-2 text-lg">
+                                <BiCheckCircle className="text-success" />
+                                <span>1 Year duration</span>
+                            </div>
+                        </div>
+                        <div className="text-center mb-8">
+                            <div className="flex justify-center items-center gap-5">
+                                <span className="line-through opacity-70 text-xl text-error">
+                                    ₹2000
+                                </span>
+                                <span className="text-4xl font-bold text-primary flex items-center">
+                                    ₹1000
+                                </span>
+                            </div>
+                            <p className="text-sm mt-2 text-error">
+                                Save ₹1000 (50% OFF!)
+                            </p>
+                        </div>
+                        <div className="flex items-center gap-2 text-base mb-6">
+                            <BiErrorCircle className="text-warning text-base" />
+                            <span className="opacity-90">
+                                30-day money-back guarantee
+                            </span>
                         </div>
                         <button
                             type="submit"
-                            className="bg-yellow-500 hover:bg-yellow-600 transition-all ease-in-out duration-300 absolute bottom-0 w-full left-0 text-xl font-bold rounded-bl-lg rounded-br-lg py-2"
+                            className="btn btn-warning btn-lg hover:scale-105 transition-transform"
+                            disabled={isSubmitting}
                         >
-                            Buy now
+                            {isSubmitting ? (
+                                <span className="flex items-center gap-2">
+                                    <span className="loading loading-spinner"></span>
+                                    Processing...
+                                </span>
+                            ) : (
+                                "Get Premium Access"
+                            )}
                         </button>
+                        <p className="text-xs text-center mt-4 opacity-75">
+                            * By continuing, you agree to our Terms of Service
+                            and Privacy Policy
+                        </p>
                     </div>
                 </div>
             </form>

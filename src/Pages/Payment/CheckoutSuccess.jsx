@@ -6,30 +6,49 @@ import HomeLayout from "../../Layouts/HomeLayout";
 function CheckoutSuccess() {
     return (
         <HomeLayout>
-            <div className="min-h-[90vh] flex items-center justify-center text-white">
-                <div className="w-80 h-[26rem] flex flex-col justify-center items-center shadow-[0_0_10px_black] rounded-lg relative">
-                    <h1 className="bg-green-500 absolute text-center top-0 w-full py-4 text-2xl font-bold rounded-tl-lg rounded-tr-lg">
-                        Payment Successfull
-                    </h1>
-
-                    <div className="px-4 flex flex-col items-center justify-center space-y-2">
-                        <div className="text-center space-y-2">
-                            <h2 className="text-lg font-semibold">
-                                Welcome to the pro bundle
-                            </h2>
-                            <p className="text-left">
-                                Now you can enjoy all the courses.
-                            </p>
+            <div className="min-h-[90vh] flex items-center justify-center px-4">
+                <div className="card w-full max-w-md bg-base-300 text-base-content shadow-xl hover:shadow-2xl transition-shadow duration-300">
+                    <div className="card-body items-center text-center p-8">
+                        <div className="mb-6">
+                            <AiFillCheckCircle className="text-6xl text-success animate-pulse" />
                         </div>
-                        <AiFillCheckCircle className="text-green-500 text-5xl" />
+                        <h2 className="card-title text-3xl text-success mb-4">
+                            Payment Successful!
+                        </h2>
+                        <div className="space-y-4 mb-8">
+                            <p className="text-xl font-semibold">
+                                Welcome to the Pro Bundle
+                            </p>
+                            <div className="text-left space-y-2">
+                                <p className="flex items-center gap-2">
+                                    <AiFillCheckCircle className="text-success" />
+                                    Full access to all courses
+                                </p>
+                                <p className="flex items-center gap-2">
+                                    <AiFillCheckCircle className="text-success" />
+                                    Premium content unlocked
+                                </p>
+                                <p className="flex items-center gap-2">
+                                    <AiFillCheckCircle className="text-success" />
+                                    1 Year subscription
+                                </p>
+                            </div>
+                        </div>
+                        <Link to="/courses" className="w-full">
+                            <button className="btn btn-success btn-lg w-full hover:scale-105 transition-transform">
+                                Start Learning Now
+                            </button>
+                        </Link>
+                        <p className="text-sm mt-4 opacity-75">
+                            Need help? &nbsp;
+                            <Link
+                                to="/contact"
+                                className="link link-accent font-semibold"
+                            >
+                                Contact Support
+                            </Link>
+                        </p>
                     </div>
-
-                    <Link
-                        to="/"
-                        className="bg-green-500 hover:bg-green-600 transition-all ease-in-out duration-300 absolute bottom-0 w-full py-2 text-xl font-semibold text-center rounded-br-lg rounded-bl-lg"
-                    >
-                        <button>Go to Home</button>
-                    </Link>
                 </div>
             </div>
         </HomeLayout>

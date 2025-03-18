@@ -1,7 +1,7 @@
 import { FaUserCircle } from "react-icons/fa";
 import { RiMenu2Fill } from "react-icons/ri";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useLocation,useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
 import Logo from "../Assets/Images/Logo.png";
 import { logout } from "../Redux/Slices/AuthSlice";
@@ -122,7 +122,7 @@ function Header() {
                 <Link to="/" className="flex items-center gap-2">
                     <img src={Logo} alt="Logo" className="w-10 h-10" />
                     <span className="hidden sm:block text-xl font-bold">
-                        Brain-2xl
+                        BrainXcel
                     </span>
                 </Link>
             </div>
