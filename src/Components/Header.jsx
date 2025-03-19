@@ -120,8 +120,12 @@ function Header() {
                     </ul>
                 </div>
                 <Link to="/" className="flex items-center gap-2">
-                    <img src={Logo} alt="Logo" className="w-10 h-10" />
-                    <span className="hidden sm:block text-xl font-bold">
+                    <img
+                        src={Logo}
+                        alt="Logo"
+                        className="w-8 h-8 md:w-10 md:h-10"
+                    />
+                    <span className="text-lg md:text-xl font-bold">
                         BrainXcel
                     </span>
                 </Link>
@@ -207,7 +211,7 @@ function Header() {
                     role="button"
                     className="btn btn-ghost btn-circle avatar"
                 >
-                    <div className="w-10 rounded-full">
+                    <div className="w-8 md:w-10 rounded-full">
                         {isLoggedIn ? (
                             <img
                                 alt="Profile Avatar"
@@ -216,7 +220,10 @@ function Header() {
                                 )}
                             />
                         ) : (
-                            <FaUserCircle size={38} />
+                            <FaUserCircle
+                                size={32}
+                                className="md:size-10 object-cover"
+                            />
                         )}
                     </div>
                 </div>

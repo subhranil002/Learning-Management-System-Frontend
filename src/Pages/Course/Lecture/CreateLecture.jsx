@@ -169,6 +169,7 @@ function CreateLecture() {
                                         init={{
                                             height: 300,
                                             menubar: false,
+                                            contextmenu: "paste copy cut",
                                             plugins: [
                                                 "advlist",
                                                 "autolink",

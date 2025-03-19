@@ -1,6 +1,7 @@
 import parser from "html-react-parser";
 import { useEffect, useRef, useState } from "react";
 import { AiOutlineClose, AiOutlineMenu } from "react-icons/ai";
+import { FaCheck, FaEdit, FaExclamationTriangle } from "react-icons/fa";
 import { IoIosAddCircle } from "react-icons/io";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -18,6 +19,10 @@ function Displaylectures() {
     const { lectures } = useSelector((state) => state.lecture);
     const { role, data } = useSelector((state) => state.auth);
     const [currentVideo, setCurrentVideo] = useState(0);
+    const [lectureToDelete, setLectureToDelete] = useState({
+        courseId: null,
+        lectureId: null,
+    });
     const inputRef = useRef();
 
     async function onLectureDelete(courseId, lectureId) {
@@ -34,6 +39,52 @@ function Displaylectures() {
 
     return (
         <HomeLayout>
+            <dialog id="lecture-delete-modal" className="modal">
+                <div className="modal-box bg-base-100 border border-error/20 shadow-xl mx-2">
+                    <div className="flex flex-col items-center text-center space-y-4">
+                        <div className="text-error mb-2 sm:mb-4">
+                            <FaExclamationTriangle className="text-4xl sm:text-5xl animate-pulse" />
+                        </div>
+                        <h3 className="font-bold text-xl sm:text-2xl flex items-center gap-2">
+                            Delete Lecture Permanently?
+                        </h3>
+                        <p className="py-2 sm:py-4 text-base sm:text-lg text-base-content/80">
+                            This will remove the lecture from the course.
+                            <br />
+                            <span className="text-error font-semibold mt-1 sm:mt-2 block text-sm sm:text-base">
+                                This action cannot be undone!
+                            </span>
+                        </p>
+                        <div className="modal-action flex flex-col sm:flex-row justify-center gap-2 sm:gap-4 w-full">
+                            <button
+                                className="btn btn-outline btn-sm sm:btn-md gap-2"
+                                onClick={() =>
+                                    document
+                                        .getElementById("lecture-delete-modal")
+                                        .close()
+                                }
+                            >
+                                Cancel
+                            </button>
+                            <button
+                                onClick={() => {
+                                    document
+                                        .getElementById("lecture-delete-modal")
+                                        .close();
+                                    onLectureDelete(
+                                        lectureToDelete.courseId,
+                                        lectureToDelete.lectureId
+                                    );
+                                }}
+                                className="btn btn-error btn-sm sm:btn-md gap-2"
+                            >
+                                <FaCheck />
+                                Confirm Delete
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </dialog>
             <div className="drawer lg:drawer-open">
                 <input
                     id="lecture-drawer"
@@ -73,12 +124,12 @@ function Displaylectures() {
                             <h2 className="text-2xl font-bold mb-4">
                                 {lectures?.[currentVideo]?.title}
                             </h2>
-                            <p className="text-base-content/80 leading-relaxed">
+                            <span className="text-base-content/80 leading-relaxed">
                                 {parser(
                                     lectures?.[currentVideo]?.description ||
                                         "No description available"
                                 )}
-                            </p>
+                            </span>
                         </div>
                     </div>
                 </div>
@@ -147,17 +198,44 @@ function Displaylectures() {
                                             state?.createdBy?._id ===
                                                 data?._id) ||
                                             (role === "ADMIN" && (
-                                                <button
-                                                    onClick={() =>
-                                                        onLectureDelete(
-                                                            state?._id,
-                                                            lecture?._id
-                                                        )
-                                                    }
-                                                    className="btn btn-error btn-xs"
-                                                >
-                                                    Delete
-                                                </button>
+                                                <div className="flex gap-2">
+                                                    <button
+                                                        onClick={() => {
+                                                            navigate(
+                                                                "/courses/lectures/edit",
+                                                                {
+                                                                    state: {
+                                                                        course: state,
+                                                                        lecture:
+                                                                            lecture,
+                                                                    },
+                                                                }
+                                                            );
+                                                        }}
+                                                        className="btn btn-warning btn-xs gap-1"
+                                                    >
+                                                        <FaEdit className="text-xs" />
+                                                        Edit
+                                                    </button>
+                                                    <button
+                                                        onClick={() => {
+                                                            setLectureToDelete({
+                                                                courseId:
+                                                                    state?._id,
+                                                                lectureId:
+                                                                    lecture?._id,
+                                                            });
+                                                            document
+                                                                .getElementById(
+                                                                    "lecture-delete-modal"
+                                                                )
+                                                                .showModal();
+                                                        }}
+                                                        className="btn btn-error btn-xs gap-1"
+                                                    >
+                                                        Delete
+                                                    </button>
+                                                </div>
                                             ))}
                                     </a>
                                 </li>
