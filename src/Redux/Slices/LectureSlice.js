@@ -89,6 +89,9 @@ export const updateLecture = createAsyncThunk(
                 await lecvidRes;
             }
             toast.success("Lecture updated successfully");
+            return {
+                success: true,
+            };
         } catch (error) {
             if (error?.response?.data?.message) {
                 toast.error(error?.response?.data?.message);

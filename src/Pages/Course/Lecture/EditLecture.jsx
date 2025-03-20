@@ -27,11 +27,10 @@ function EditLecture() {
         const res = await dispatch(
             updateLecture({
                 ...data,
-                courseId: state.courseId,
+                courseId: state.course._id,
                 lectureId: state.lecture._id,
             })
         );
-
         if (res?.payload?.success) {
             navigate(-1);
         }
@@ -89,7 +88,9 @@ function EditLecture() {
                                                     src={URL.createObjectURL(
                                                         selectedFile
                                                     )}
-                                                    controls
+                                                    autoPlay
+                                                    muted
+                                                    controlsList=""
                                                 />
                                             ) : (
                                                 <div className="flex flex-col items-center gap-2 p-4 text-center">
@@ -101,6 +102,7 @@ function EditLecture() {
                                                                 ?.secure_url
                                                         }
                                                         autoPlay
+                                                        muted
                                                     />
                                                 </div>
                                             )}
@@ -113,8 +115,8 @@ function EditLecture() {
                                         accept="video/*"
                                         {...register("file", {
                                             validate: (file) => {
-                                                if (!file?.[0]) return true; // Existing file is valid
-                                                return file[0].type.startsWith(
+                                                if (!file[0]) return true;
+                                                return file[0]?.type?.startsWith(
                                                     "video/"
                                                 )
                                                     ? true
@@ -124,7 +126,6 @@ function EditLecture() {
                                     />
                                 </div>
                             </div>
-
                             <div className="col-span-1 space-y-6">
                                 <div className="form-control w-full">
                                     <label className="label mr-5">
@@ -138,7 +139,6 @@ function EditLecture() {
                                         placeholder="Enter lecture title"
                                         className="input input-bordered input-lg"
                                         {...register("title", {
-                                            required: "Title is required",
                                             minLength: {
                                                 value: 5,
                                                 message:
@@ -165,7 +165,6 @@ function EditLecture() {
                                 name="description"
                                 control={control}
                                 rules={{
-                                    required: "Lecture description is required",
                                     validate: (value) =>
                                         value.replace(/<[^>]+>/g, "").length >=
                                             50 ||
