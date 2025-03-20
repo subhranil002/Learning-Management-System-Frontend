@@ -85,7 +85,7 @@ function Displaylectures() {
                     </div>
                 </div>
             </dialog>
-            <div className="drawer lg:drawer-open">
+            <div className="drawer lg:drawer-open md:px-4 ">
                 <input
                     id="lecture-drawer"
                     type="checkbox"

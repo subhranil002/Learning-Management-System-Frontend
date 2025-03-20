@@ -3,7 +3,7 @@ import { BsFacebook, BsInstagram, BsLinkedin, BsTwitter } from "react-icons/bs";
 function Footer() {
     return (
         <>
-            <footer className="footer md:footer-horizontal bg-base-100 border-t border-base-300 items-center p-4 text-base">
+            <footer className="footer md:footer-horizontal bg-base-100 border-t border-base-300 items-center p-4 text-base md:px-8">
                 <aside className="grid-flow-col items-center">
                     <p>
                         Copyright © {new Date().getFullYear()} - All rights

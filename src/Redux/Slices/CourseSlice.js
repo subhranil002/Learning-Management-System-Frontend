@@ -45,6 +45,51 @@ export const createNewCourse = createAsyncThunk(
                 loading: "Wait! Uploading course thumbnail...",
             });
             await thumbnailRes;
+            toast.success("Course created successfully");
+            return {
+                success: true,
+            };
+        } catch (error) {
+            if (error?.response?.data?.message) {
+                toast.error(error?.response?.data?.message);
+            } else {
+                console.log(error.message);
+            }
+        }
+    }
+);
+
+export const updateCourse = createAsyncThunk(
+    "/course/updateCourse",
+    async (data) => {
+        try {
+            if (
+                data?.title !== "" ||
+                data?.description !== "" ||
+                data?.category !== ""
+            ) {
+                const courseRes = axiosInstance.post(
+                    `/courses/update/${data.courseId}`,
+                    data
+                );
+                toast.promise(courseRes, {
+                    loading: "Wait! Updating course...",
+                });
+                await courseRes;
+            }
+            if (data.file.length) {
+                const thumbnail = new FormData();
+                thumbnail.append("thumbnail", data.file[0]);
+                const thumbnailRes = axiosInstance.post(
+                    `/courses/change-thumbnail/${data.courseId}`,
+                    thumbnail
+                );
+                toast.promise(thumbnailRes, {
+                    loading: "Wait! Uploading course thumbnail...",
+                });
+                await thumbnailRes;
+            }
+            toast.success("Course updated successfully");
             return {
                 success: true,
             };

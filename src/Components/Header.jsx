@@ -27,7 +27,7 @@ function Header() {
     const isActive = (path) => location.pathname === path;
 
     return (
-        <div className="navbar bg-base-100 border-b border-base-300 shadow-sm">
+        <div className="navbar bg-base-100 border-b border-base-300 shadow-sm md:px-8">
             <div className="navbar-start">
                 <div className="dropdown">
                     <div

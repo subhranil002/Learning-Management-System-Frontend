@@ -86,7 +86,7 @@ function CourseDescription() {
                             <div className="flex flex-col sm:flex-row justify-end gap-2 sm:gap-4 mb-4 sm:mb-6">
                                 <button
                                     onClick={() =>
-                                        navigate("/courses/edit", state)
+                                        navigate("/courses/edit", { state })
                                     }
                                     className="btn btn-info btn-sm sm:btn-md gap-2"
                                 >

@@ -20,7 +20,7 @@ function CourseList() {
     return (
         <HomeLayout>
             <div className="min-h-[90vh] py-12  bg-base-100">
-                <div className="container mx-auto px-4">
+                <div className="container mx-auto px-4 md:px-8">
                     <div className="text-center mb-12">
                         <h1 className="bg-gradient-to-r from-warning via-error to-warning bg-clip-text text-transparent text-3xl md:text-4xl font-bold mb-2">
                             Expert-Led Courses
