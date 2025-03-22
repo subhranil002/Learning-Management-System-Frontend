@@ -155,21 +155,21 @@ function Displaylectures() {
                                 <AiOutlineClose className="text-xl" />
                             </label>
                         </div>
-                        {(role === "TEACHER" &&
+                        {((role === "TEACHER" &&
                             state?.createdBy?._id === data?._id) ||
-                            (role === "ADMIN" && (
-                                <button
-                                    onClick={() =>
-                                        navigate("/courses/lectures/add", {
-                                            state,
-                                        })
-                                    }
-                                    className="btn btn-neutral btn-block mb-6"
-                                >
-                                    <IoIosAddCircle className="text-xl" />
-                                    Add New Lecture
-                                </button>
-                            ))}
+                            role === "ADMIN") && (
+                            <button
+                                onClick={() =>
+                                    navigate("/courses/lectures/add", {
+                                        state,
+                                    })
+                                }
+                                className="btn btn-neutral btn-block mb-6"
+                            >
+                                <IoIosAddCircle className="text-xl" />
+                                Add New Lecture
+                            </button>
+                        )}
                         <ul className="space-y-2">
                             {lectures?.map((lecture, idx) => (
                                 <li key={lecture._id}>

@@ -1,6 +1,8 @@
 import {
+    FaCheck,
     FaEdit,
     FaEnvelope,
+    FaExclamationTriangle,
     FaKey,
     FaStar,
     FaTimesCircle,
@@ -31,6 +33,53 @@ function Profile() {
 
     return (
         <HomeLayout>
+            <dialog id="cancel-subscription-modal" className="modal">
+                <div className="modal-box bg-base-100 border border-error/20 shadow-xl mx-2">
+                    <div className="flex flex-col items-center text-center space-y-4">
+                        <div className="text-error mb-2 sm:mb-4">
+                            <FaExclamationTriangle className="text-4xl sm:text-5xl animate-pulse" />
+                        </div>
+                        <h3 className="font-bold text-xl sm:text-2xl flex items-center gap-2">
+                            Cancel Subscription?
+                        </h3>
+                        <p className="py-2 sm:py-4 text-base sm:text-lg text-base-content/80">
+                            This will revoke your access to all premium content.
+                            <br />
+                            <span className="text-error font-semibold mt-1 sm:mt-2 block text-sm sm:text-base">
+                                This action is irreversible!
+                            </span>
+                        </p>
+                        <div className="modal-action flex flex-col sm:flex-row justify-center gap-2 sm:gap-4 w-full">
+                            <button
+                                className="btn btn-outline btn-sm sm:btn-md gap-2"
+                                onClick={() =>
+                                    document
+                                        .getElementById(
+                                            "cancel-subscription-modal"
+                                        )
+                                        .close()
+                                }
+                            >
+                                Cancel
+                            </button>
+                            <button
+                                className="btn btn-error btn-sm sm:btn-md gap-2"
+                                onClick={() => {
+                                    document
+                                        .getElementById(
+                                            "cancel-subscription-modal"
+                                        )
+                                        .close();
+                                    handleCancelation();
+                                }}
+                            >
+                                <FaCheck />
+                                Confirm
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </dialog>
             <div className="min-h-[90vh] flex items-center justify-center p-4">
                 <div className="card w-full max-w-md bg-base-100 shadow-xl bg-opacity-90 backdrop-blur-sm">
                     <div className="card-body items-center text-center gap-4 px-4 sm:px-6">
@@ -106,7 +155,13 @@ function Profile() {
                                 userData?.role !== "ADMIN" &&
                                 userData?.subscription?.status === "active" && (
                                     <button
-                                        onClick={handleCancelation}
+                                        onClick={() =>
+                                            document
+                                                .getElementById(
+                                                    "cancel-subscription-modal"
+                                                )
+                                                .showModal()
+                                        }
                                         className="btn btn-error gap-2 col-span-full text-sm sm:text-base"
                                     >
                                         <FaTimesCircle className="text-sm sm:text-lg" />

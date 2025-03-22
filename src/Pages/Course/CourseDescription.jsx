@@ -80,34 +80,32 @@ function CourseDescription() {
             </dialog>
             <div className="min-h-screen bg-gradient-to-br from-base-200 to-base-300 py-8 sm:py-12 px-4 md:px-8">
                 <div className="max-w-7xl mx-auto">
-                    {(role === "TEACHER" &&
+                    {((role === "TEACHER" &&
                         state?.createdBy?._id === data?._id) ||
-                        (role === "ADMIN" && (
-                            <div className="flex flex-col sm:flex-row justify-end gap-2 sm:gap-4 mb-4 sm:mb-6">
-                                <button
-                                    onClick={() =>
-                                        navigate("/courses/edit", { state })
-                                    }
-                                    className="btn btn-info btn-sm sm:btn-md gap-2"
-                                >
-                                    <FaEdit className="text-sm sm:text-lg" />
-                                    Edit Course
-                                </button>
-                                <button
-                                    onClick={() =>
-                                        document
-                                            .getElementById(
-                                                "course-delete-modal"
-                                            )
-                                            .showModal()
-                                    }
-                                    className="btn btn-error btn-sm sm:btn-md gap-2"
-                                >
-                                    <FaTrash className="text-sm sm:text-lg" />
-                                    Delete Course
-                                </button>
-                            </div>
-                        ))}
+                        role === "ADMIN") && (
+                        <div className="flex flex-col sm:flex-row justify-end gap-2 sm:gap-4 mb-4 sm:mb-6">
+                            <button
+                                onClick={() =>
+                                    navigate("/courses/edit", { state })
+                                }
+                                className="btn btn-info btn-sm sm:btn-md gap-2"
+                            >
+                                <FaEdit className="text-sm sm:text-lg" />
+                                Edit Course
+                            </button>
+                            <button
+                                onClick={() =>
+                                    document
+                                        .getElementById("course-delete-modal")
+                                        .showModal()
+                                }
+                                className="btn btn-error btn-sm sm:btn-md gap-2"
+                            >
+                                <FaTrash className="text-sm sm:text-lg" />
+                                Delete Course
+                            </button>
+                        </div>
+                    )}
                     <div className="text-center mb-8 space-y-2">
                         <h1 className="text-4xl md:text-5xl font-bold text-warning mb-2">
                             {state?.title}

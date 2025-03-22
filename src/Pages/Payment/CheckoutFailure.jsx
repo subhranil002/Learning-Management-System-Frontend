@@ -39,6 +39,11 @@ function CheckoutFailure() {
                                 Try Again
                             </button>
                         </Link>
+                        <Link to="/" className="w-full">
+                            <button className="btn btn-info btn-lg w-full hover:scale-105 transition-transform">
+                                Go To Home
+                            </button>
+                        </Link>
                         <p className="text-sm mt-4 opacity-75">
                             Need help? &nbsp;
                             <Link

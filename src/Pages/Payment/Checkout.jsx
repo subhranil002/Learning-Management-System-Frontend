@@ -1,7 +1,7 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
-import { BiCheckCircle, BiErrorCircle, BiRupee } from "react-icons/bi";
+import { BiCheckCircle, BiErrorCircle } from "react-icons/bi";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
@@ -19,6 +19,7 @@ function Checkout() {
     const { handleSubmit } = useForm();
     const userData = useSelector((state) => state?.auth?.data);
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const timeoutRef = useRef(null);
 
     async function onSubmit() {
         if (isSubmitting) return;
@@ -62,11 +63,81 @@ function Checkout() {
         };
 
         const paymentObject = new window.Razorpay(options);
-        paymentObject.open();
 
-        setIsSubmitting(false);
+        paymentObject.on("payment.success", () => {
+            navigate("/checkout/success");
+        });
+
+        paymentObject.on("payment.failed", () => {
+            navigate("/checkout/failure");
+        });
+
+        paymentObject.on("payment.cancel", () => {
+            navigate("/checkout/failure");
+        });
+
         toast.dismiss();
+
+        toast(
+            (t) => (
+                <div className="w-full">
+                    <div className="space-y-3">
+                        <div className="space-y-2">
+                            <h3 className="font-bold text-lg">
+                                Test Payment Instructions
+                            </h3>
+                            <div className="text-sm space-y-1">
+                                <p>
+                                    ✅ Use UPI ID:
+                                    <span className="font-mono px-2 py-1 rounded ml-1">
+                                        success@razorpay
+                                    </span>
+                                </p>
+                                <p>
+                                    ❌ Use UPI ID:
+                                    <span className="font-mono px-2 py-1 rounded ml-1">
+                                        failure@razorpay
+                                    </span>
+                                </p>
+                            </div>
+                        </div>
+                        <button
+                            className="btn btn-primary btn-sm w-full hover:scale-[0.98] transition-transform"
+                            onClick={() => {
+                                toast.dismiss(t.id);
+                                paymentObject.open();
+                                setIsSubmitting(false);
+                                if (timeoutRef.current)
+                                    clearTimeout(timeoutRef.current);
+                            }}
+                        >
+                            Open Payment Window
+                        </button>
+                        <p className="text-xs text-center opacity-75">
+                            Auto opening payment window in 10 seconds
+                        </p>
+                    </div>
+                </div>
+            ),
+            {
+                duration: 10000,
+            }
+        );
+
+        timeoutRef.current = setTimeout(() => {
+            toast.dismiss();
+            paymentObject.open();
+            setIsSubmitting(false);
+        }, 10000);
     }
+
+    useEffect(() => {
+        return () => {
+            if (timeoutRef.current) {
+                clearTimeout(timeoutRef.current);
+            }
+        };
+    }, []);
 
     return (
         <HomeLayout>
