@@ -1,7 +1,6 @@
 import { Editor } from "@tinymce/tinymce-react";
 import { useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
-import toast from "react-hot-toast";
 import { AiOutlineArrowLeft, AiOutlineCloudUpload } from "react-icons/ai";
 import { BsTag, BsTextParagraph } from "react-icons/bs";
 import { FiBook } from "react-icons/fi";
@@ -15,7 +14,13 @@ function EditCourse() {
     const { state } = useLocation();
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const { handleSubmit, register, watch, control } = useForm({
+    const {
+        handleSubmit,
+        register,
+        watch,
+        control,
+        formState: { errors },
+    } = useForm({
         defaultValues: {
             title: state?.title,
             category: state?.category,
@@ -37,12 +42,6 @@ function EditCourse() {
         }
     }
 
-    function onError(errors) {
-        Object.values(errors).forEach((error) => {
-            if (error.message) toast.error(error.message);
-        });
-    }
-
     useEffect(() => {
         if (!state) navigate("/courses");
     }, []);
@@ -52,7 +51,7 @@ function EditCourse() {
             <div className="flex items-center justify-center p-4 bg-gradient-to-br from-base-200 to-base-300">
                 <form
                     noValidate
-                    onSubmit={handleSubmit(onSubmit, onError)}
+                    onSubmit={handleSubmit(onSubmit)}
                     className="card w-full max-w-4xl bg-base-100 shadow-2xl border border-base-300"
                 >
                     <div className="card-body relative p-8">
@@ -154,6 +153,13 @@ function EditCourse() {
                                             },
                                         })}
                                     />
+                                    {errors.title && (
+                                        <label className="label">
+                                            <span className="label-text-alt text-error">
+                                                {errors.title.message}
+                                            </span>
+                                        </label>
+                                    )}
                                 </div>
                                 <div className="form-control w-full">
                                     <label className="label pr-5">
@@ -173,12 +179,19 @@ function EditCourse() {
                                                     "Category must be at least 3 characters",
                                             },
                                             maxLength: {
-                                                value: 15,
+                                                value: 10,
                                                 message:
-                                                    "Category must be at most 15 characters",
+                                                    "Category must be at most 10 characters",
                                             },
                                         })}
                                     />
+                                    {errors.category && (
+                                        <label className="label">
+                                            <span className="label-text-alt text-error">
+                                                {errors.category.message}
+                                            </span>
+                                        </label>
+                                    )}
                                 </div>
                             </div>
                         </div>
@@ -199,41 +212,51 @@ function EditCourse() {
                                         "Description must be at least 50 characters",
                                 }}
                                 render={({ field }) => (
-                                    <Editor
-                                        apiKey={
-                                            import.meta.env.VITE_TINY_MCE_KEY
-                                        }
-                                        init={{
-                                            height: 300,
-                                            menubar: false,
-                                            contextmenu: "paste copy cut",
-                                            plugins: [
-                                                "advlist",
-                                                "autolink",
-                                                "lists",
-                                                "link",
-                                                "image",
-                                                "charmap",
-                                                "preview",
-                                                "anchor",
-                                                "searchreplace",
-                                                "visualblocks",
-                                                "code",
-                                                "fullscreen",
-                                                "insertdatetime",
-                                                "media",
-                                                "table",
-                                                "help",
-                                                "wordcount",
-                                            ],
-                                            toolbar:
-                                                "undo redo | formatselect | bold italic | alignleft aligncenter alignright | bullist numlist outdent indent | removeformat | help",
-                                            content_style:
-                                                "body { font-family: Inter, sans-serif; font-size: 18px }",
-                                        }}
-                                        onEditorChange={field.onChange}
-                                        value={field.value}
-                                    />
+                                    <>
+                                        <Editor
+                                            apiKey={
+                                                import.meta.env
+                                                    .VITE_TINY_MCE_KEY
+                                            }
+                                            init={{
+                                                height: 300,
+                                                menubar: false,
+                                                contextmenu: "paste copy cut",
+                                                plugins: [
+                                                    "advlist",
+                                                    "autolink",
+                                                    "lists",
+                                                    "link",
+                                                    "image",
+                                                    "charmap",
+                                                    "preview",
+                                                    "anchor",
+                                                    "searchreplace",
+                                                    "visualblocks",
+                                                    "code",
+                                                    "fullscreen",
+                                                    "insertdatetime",
+                                                    "media",
+                                                    "table",
+                                                    "help",
+                                                    "wordcount",
+                                                ],
+                                                toolbar:
+                                                    "undo redo | formatselect | bold italic | alignleft aligncenter alignright | bullist numlist outdent indent | removeformat | help",
+                                                content_style:
+                                                    "body { font-family: Inter, sans-serif; font-size: 18px }",
+                                            }}
+                                            onEditorChange={field.onChange}
+                                            value={field.value}
+                                        />
+                                        {errors.description && (
+                                            <label className="label">
+                                                <span className="label-text-alt text-error">
+                                                    {errors.description.message}
+                                                </span>
+                                            </label>
+                                        )}
+                                    </>
                                 )}
                             />
                         </div>

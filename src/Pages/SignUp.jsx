@@ -1,5 +1,4 @@
 import { useForm } from "react-hook-form";
-import toast from "react-hot-toast";
 import { FiImage, FiLock, FiMail, FiUser, FiUserPlus } from "react-icons/fi";
 import { useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
@@ -10,18 +9,17 @@ import { signUp } from "../Redux/Slices/AuthSlice";
 function Signup() {
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const { register, handleSubmit, watch } = useForm();
+    const {
+        register,
+        handleSubmit,
+        watch,
+        formState: { errors },
+    } = useForm();
     const selectedFile = watch("file")?.[0];
 
     async function onSubmit(data) {
         const res = await dispatch(signUp(data));
         if (res.payload?.success) navigate("/");
-    }
-
-    function onError(errors) {
-        Object.values(errors).forEach((error) => {
-            if (error.message) toast.error(error.message);
-        });
     }
 
     return (
@@ -30,7 +28,7 @@ function Signup() {
                 <div className="card w-full max-w-md bg-base-100 shadow-lg">
                     <form
                         noValidate
-                        onSubmit={handleSubmit(onSubmit, onError)}
+                        onSubmit={handleSubmit(onSubmit)}
                         className="card-body p-8 space-y-3"
                     >
                         <div className="text-center space-y-2">
@@ -42,7 +40,7 @@ function Signup() {
                                 Join our tech learning community
                             </p>
                         </div>
-                        <div className="form-control mx-auto my-auto">
+                        <div className="form-control mx-auto my-auto flex flex-col">
                             <label className="label justify-center cursor-pointer">
                                 <div className="avatar">
                                     <div className="w-24 rounded-full bg-base-200 relative group">
@@ -73,6 +71,13 @@ function Signup() {
                                     })}
                                 />
                             </label>
+                            {errors.file && (
+                                <label className="label">
+                                    <span className="label-text-alt text-error">
+                                        {errors.file.message}
+                                    </span>
+                                </label>
+                            )}
                         </div>
                         <div className="form-control">
                             <label className="label">
@@ -92,6 +97,13 @@ function Signup() {
                                 />
                                 <FiUser className="absolute left-3 top-1/2 transform -translate-y-1/2 text-base-content/50" />
                             </div>
+                            {errors.fullName && (
+                                <label className="label">
+                                    <span className="label-text-alt text-error">
+                                        {errors.fullName.message}
+                                    </span>
+                                </label>
+                            )}
                         </div>
                         <div className="form-control">
                             <label className="label">
@@ -115,6 +127,13 @@ function Signup() {
                                 />
                                 <FiMail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-base-content/50" />
                             </div>
+                            {errors.email && (
+                                <label className="label">
+                                    <span className="label-text-alt text-error">
+                                        {errors.email.message}
+                                    </span>
+                                </label>
+                            )}
                         </div>
                         <div className="form-control">
                             <label className="label">
@@ -138,12 +157,19 @@ function Signup() {
                                         pattern: {
                                             value: /^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#])[A-Za-z\d@$!%*?&#]+$/,
                                             message:
-                                                "Password must contain at least one uppercase letter, one number, and one special character",
+                                                "Password must include an uppercase letter, a number, and a special character",
                                         },
                                     })}
                                 />
                                 <FiLock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-base-content/50" />
                             </div>
+                            {errors.password && (
+                                <label className="label">
+                                    <span className="label-text-alt text-error whitespace-normal">
+                                        {errors.password.message}
+                                    </span>
+                                </label>
+                            )}
                         </div>
                         <button
                             type="submit"

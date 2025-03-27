@@ -1,7 +1,6 @@
 import { Editor } from "@tinymce/tinymce-react";
 import { useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
-import toast from "react-hot-toast";
 import { AiOutlineArrowLeft, AiOutlineCloudUpload } from "react-icons/ai";
 import { BsTextParagraph } from "react-icons/bs";
 import { FiBook } from "react-icons/fi";
@@ -15,7 +14,13 @@ function EditLecture() {
     const { state } = useLocation();
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const { handleSubmit, register, watch, control } = useForm({
+    const {
+        handleSubmit,
+        register,
+        watch,
+        control,
+        formState: { errors },
+    } = useForm({
         defaultValues: {
             title: state?.lecture?.title,
             description: state?.lecture?.description,
@@ -36,12 +41,6 @@ function EditLecture() {
         }
     }
 
-    function onError(errors) {
-        Object.values(errors).forEach((error) => {
-            if (error.message) toast.error(error.message);
-        });
-    }
-
     useEffect(() => {
         if (!state?.lecture) navigate("/courses");
     }, []);
@@ -51,7 +50,7 @@ function EditLecture() {
             <div className="flex items-center justify-center p-4 bg-gradient-to-br from-base-200 to-base-300">
                 <form
                     noValidate
-                    onSubmit={handleSubmit(onSubmit, onError)}
+                    onSubmit={handleSubmit(onSubmit)}
                     className="card w-full max-w-4xl bg-base-100 shadow-2xl border border-base-300"
                 >
                     <div className="card-body relative p-8">
@@ -115,7 +114,7 @@ function EditLecture() {
                                         accept="video/*"
                                         {...register("file", {
                                             validate: (file) => {
-                                                if (!file[0]) return true;
+                                                if (!file?.[0]) return true;
                                                 return file[0]?.type?.startsWith(
                                                     "video/"
                                                 )
@@ -124,6 +123,13 @@ function EditLecture() {
                                             },
                                         })}
                                     />
+                                    {errors.file && (
+                                        <label className="label">
+                                            <span className="label-text-alt text-error">
+                                                {errors.file.message}
+                                            </span>
+                                        </label>
+                                    )}
                                 </div>
                             </div>
                             <div className="col-span-1 space-y-6">
@@ -151,6 +157,13 @@ function EditLecture() {
                                             },
                                         })}
                                     />
+                                    {errors.title && (
+                                        <label className="label">
+                                            <span className="label-text-alt text-error">
+                                                {errors.title.message}
+                                            </span>
+                                        </label>
+                                    )}
                                 </div>
                             </div>
                         </div>
@@ -171,41 +184,51 @@ function EditLecture() {
                                         "Description must be at least 50 characters",
                                 }}
                                 render={({ field }) => (
-                                    <Editor
-                                        apiKey={
-                                            import.meta.env.VITE_TINY_MCE_KEY
-                                        }
-                                        init={{
-                                            height: 300,
-                                            menubar: false,
-                                            contextmenu: "paste copy cut",
-                                            plugins: [
-                                                "advlist",
-                                                "autolink",
-                                                "lists",
-                                                "link",
-                                                "image",
-                                                "charmap",
-                                                "preview",
-                                                "anchor",
-                                                "searchreplace",
-                                                "visualblocks",
-                                                "code",
-                                                "fullscreen",
-                                                "insertdatetime",
-                                                "media",
-                                                "table",
-                                                "help",
-                                                "wordcount",
-                                            ],
-                                            toolbar:
-                                                "undo redo | formatselect | bold italic | alignleft aligncenter alignright | bullist numlist outdent indent | removeformat | help",
-                                            content_style:
-                                                "body { font-family: Inter, sans-serif; font-size: 18px }",
-                                        }}
-                                        onEditorChange={field.onChange}
-                                        value={field.value}
-                                    />
+                                    <>
+                                        <Editor
+                                            apiKey={
+                                                import.meta.env
+                                                    .VITE_TINY_MCE_KEY
+                                            }
+                                            init={{
+                                                height: 300,
+                                                menubar: false,
+                                                contextmenu: "paste copy cut",
+                                                plugins: [
+                                                    "advlist",
+                                                    "autolink",
+                                                    "lists",
+                                                    "link",
+                                                    "image",
+                                                    "charmap",
+                                                    "preview",
+                                                    "anchor",
+                                                    "searchreplace",
+                                                    "visualblocks",
+                                                    "code",
+                                                    "fullscreen",
+                                                    "insertdatetime",
+                                                    "media",
+                                                    "table",
+                                                    "help",
+                                                    "wordcount",
+                                                ],
+                                                toolbar:
+                                                    "undo redo | formatselect | bold italic | alignleft aligncenter alignright | bullist numlist outdent indent | removeformat | help",
+                                                content_style:
+                                                    "body { font-family: Inter, sans-serif; font-size: 18px }",
+                                            }}
+                                            onEditorChange={field.onChange}
+                                            value={field.value}
+                                        />
+                                        {errors.description && (
+                                            <label className="label">
+                                                <span className="label-text-alt text-error">
+                                                    {errors.description.message}
+                                                </span>
+                                            </label>
+                                        )}
+                                    </>
                                 )}
                             />
                         </div>

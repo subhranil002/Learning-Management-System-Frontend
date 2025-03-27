@@ -45,9 +45,9 @@ export const signUp = createAsyncThunk("/auth/signup", async (data) => {
     }
 });
 
-export const login = createAsyncThunk("/auth/login", async (formData) => {
+export const login = createAsyncThunk("/auth/login", async (data) => {
     try {
-        const res = axiosInstance.post("/users/login", formData);
+        const res = axiosInstance.post("/users/login", data);
         toast.promise(res, {
             loading: "Wait! logging in...",
             success: (data) => {
@@ -63,6 +63,50 @@ export const login = createAsyncThunk("/auth/login", async (formData) => {
         }
     }
 });
+
+export const forgotPassword = createAsyncThunk(
+    "/auth/forgetpassword",
+    async (data) => {
+        try {
+            const res = axiosInstance.post("/users/forgot-password", data);
+            toast.promise(res, {
+                loading: "Wait! sending reset link...",
+                success: (data) => {
+                    return data?.data?.message;
+                },
+            });
+            return (await res).data;
+        } catch (error) {
+            if (error?.response?.data?.message) {
+                toast.error(error?.response?.data?.message);
+            } else {
+                console.log(error.message);
+            }
+        }
+    }
+);
+
+export const resetPassword = createAsyncThunk(
+    "/auth/resetpassword",
+    async (data) => {
+        try {
+            const res = axiosInstance.post("/users/reset-password", data);
+            toast.promise(res, {
+                loading: "Wait! resetting password...",
+                success: (data) => {
+                    return data?.data?.message;
+                },
+            });
+            return (await res).data;
+        } catch (error) {
+            if (error?.response?.data?.message) {
+                toast.error(error?.response?.data?.message);
+            } else {
+                console.log(error.message);
+            }
+        }
+    }
+);
 
 export const logout = createAsyncThunk("/auth/logout", async () => {
     try {

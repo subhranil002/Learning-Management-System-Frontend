@@ -1,15 +1,17 @@
 import { useForm } from "react-hook-form";
 import { BiLock } from "react-icons/bi";
-import { FiArrowLeft, FiLock } from "react-icons/fi";
+import { FiLock } from "react-icons/fi";
 import { useDispatch } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 
 import HomeLayout from "../../Layouts/HomeLayout";
-import { changePassword } from "../../Redux/Slices/AuthSlice";
+import { resetPassword } from "../../Redux/Slices/AuthSlice";
 
-function ChangePassword() {
+function ResetPassword() {
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    const { token } = useParams();
+
     const {
         register,
         handleSubmit,
@@ -17,19 +19,18 @@ function ChangePassword() {
         formState: { errors },
     } = useForm();
 
-    const newPassword = watch("newPassword");
+    const newPassword = watch("password");
 
     const onSubmit = async (data) => {
-        if (data.oldPassword === data.newPassword) {
-            return;
-        }
-        if (data.newPassword !== data.confirmPassword) {
+        if (data.password !== data.confirmPassword) {
             return;
         }
 
-        const res = await dispatch(changePassword(data));
+        const res = await dispatch(
+            resetPassword({ ...data, resetToken: token })
+        );
         if (res?.payload?.success) {
-            navigate("/users/profile");
+            navigate("/login");
         }
     };
 
@@ -37,57 +38,17 @@ function ChangePassword() {
         <HomeLayout>
             <div className="min-h-[90vh] flex items-center justify-center bg-gradient-to-br from-base-100 to-base-200 p-4">
                 <div className="card w-full max-w-md bg-base-100 shadow-lg relative">
-                    <Link
-                        to="/users/profile"
-                        className="absolute top-4 left-4 btn btn-ghost btn-circle z-10"
-                    >
-                        <FiArrowLeft className="text-xl text-error" />
-                    </Link>
                     <form
                         onSubmit={handleSubmit(onSubmit)}
                         className="card-body p-8 space-y-4"
                     >
-                        <h1 className="text-2xl font-bold text-center my-4">
-                            Change Password
+                        <h1 className="text-2xl font-bold text-center my-4 text-success">
+                            Reset Your Password
                         </h1>
-                        <div className="form-control">
-                            <label className="label">
-                                <span className="label-text flex items-center gap-2">
-                                    <FiLock className="text-base-content/70" />
-                                    Old Password
-                                </span>
-                            </label>
-                            <div className="relative">
-                                <input
-                                    type="oldPassword"
-                                    placeholder="••••••••"
-                                    className="input input-bordered pl-10 w-full"
-                                    {...register("oldPassword", {
-                                        required: "Old password is required",
-                                        minLength: {
-                                            value: 8,
-                                            message:
-                                                "Old password must be at least 8 characters",
-                                        },
-                                        pattern: {
-                                            value: /^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#])[A-Za-z\d@$!%*?&#]+$/,
-                                            message:
-                                                "Must contain uppercase, number, and special character",
-                                        },
-                                        validate: (value) =>
-                                            value !== newPassword ||
-                                            "New password must be different",
-                                    })}
-                                />
-                                <FiLock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-base-content/50" />
-                            </div>
-                            {errors.oldPassword && (
-                                <label className="label">
-                                    <span className="label-text-alt text-error whitespace-normal">
-                                        {errors.oldPassword.message}
-                                    </span>
-                                </label>
-                            )}
+                        <div className="text-center mb-4">
+                            <p className="text-base-content/70">
+                                Create a new password for your account
+                            </p>
                         </div>
                         <div className="form-control">
                             <label className="label">
@@ -98,15 +59,15 @@ function ChangePassword() {
                             </label>
                             <div className="relative">
                                 <input
-                                    type="newPassword"
+                                    type="password"
                                     placeholder="••••••••"
                                     className="input input-bordered pl-10 w-full"
-                                    {...register("newPassword", {
+                                    {...register("password", {
                                         required: "New password is required",
                                         minLength: {
                                             value: 8,
                                             message:
-                                                "New password must be at least 8 characters",
+                                                "Password must be at least 8 characters",
                                         },
                                         pattern: {
                                             value: /^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#])[A-Za-z\d@$!%*?&#]+$/,
@@ -117,10 +78,10 @@ function ChangePassword() {
                                 />
                                 <FiLock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-base-content/50" />
                             </div>
-                            {errors.newPassword && (
+                            {errors.password && (
                                 <label className="label">
                                     <span className="label-text-alt text-error whitespace-normal">
-                                        {errors.newPassword.message}
+                                        {errors.password.message}
                                     </span>
                                 </label>
                             )}
@@ -134,7 +95,7 @@ function ChangePassword() {
                             </label>
                             <div className="relative">
                                 <input
-                                    type="confirmPassword"
+                                    type="password"
                                     placeholder="••••••••"
                                     className="input input-bordered pl-10 w-full"
                                     {...register("confirmPassword", {
@@ -157,11 +118,19 @@ function ChangePassword() {
                         </div>
                         <button
                             type="submit"
-                            className="btn btn-error btn-block gap-2 mt-4"
+                            className="btn btn-success btn-block gap-2 mt-4"
                         >
                             <BiLock className="text-lg" />
-                            Update Password
+                            Reset Password
                         </button>
+                        <div className="text-center mt-4">
+                            <p className="text-sm text-base-content/70">
+                                Remember your password?{" "}
+                                <Link to="/login" className="link link-accent">
+                                    Login here
+                                </Link>
+                            </p>
+                        </div>
                     </form>
                 </div>
             </div>
@@ -169,4 +138,4 @@ function ChangePassword() {
     );
 }
 
-export default ChangePassword;
+export default ResetPassword;

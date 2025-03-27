@@ -24,7 +24,9 @@ import CheckoutSuccess from "./Pages/Payment/CheckoutSuccess";
 import Signup from "./Pages/SignUp";
 import ChangePassword from "./Pages/User/ChangePassword";
 import EditProfile from "./Pages/User/EditProfile";
+import ForgotPassword from "./Pages/User/ForgotPassword";
 import Profile from "./Pages/User/Profile";
+import ResetPassword from "./Pages/User/ResetPassword";
 import { getProfile } from "./Redux/Slices/AuthSlice";
 
 function App() {
@@ -43,6 +45,8 @@ function App() {
             <Route path="/about" element={<AboutUs />} />
             <Route path="/signup" element={<Signup />} />
             <Route path="/login" element={<Login />} />
+            <Route path="/forgotpassword" element={<ForgotPassword />} />
+            <Route path="/resetpassword/:token" element={<ResetPassword />} />
             <Route
                 element={
                     <RequireAuth allowedRoles={["USER", "TEACHER", "ADMIN"]} />

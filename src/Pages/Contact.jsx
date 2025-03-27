@@ -1,5 +1,4 @@
 import { useForm } from "react-hook-form";
-import { toast } from "react-hot-toast";
 import { FaComment, FaEnvelope, FaPaperPlane, FaUser } from "react-icons/fa";
 import { useDispatch } from "react-redux";
 
@@ -7,18 +6,17 @@ import HomeLayout from "../Layouts/HomeLayout";
 import { contactUs } from "../Redux/Slices/AuthSlice";
 
 function Contact() {
-    const { handleSubmit, register, reset } = useForm();
+    const {
+        handleSubmit,
+        register,
+        reset,
+        formState: { errors },
+    } = useForm();
     const dispatch = useDispatch();
 
     async function onSubmit(data) {
         reset();
         await dispatch(contactUs(data));
-    }
-
-    function onError(errors) {
-        Object.values(errors).forEach((error) => {
-            if (error.message) toast.error(error.message);
-        });
     }
 
     return (
@@ -37,7 +35,7 @@ function Contact() {
                         </div>
                         <form
                             noValidate
-                            onSubmit={handleSubmit(onSubmit, onError)}
+                            onSubmit={handleSubmit(onSubmit)}
                             className="space-y-4"
                         >
                             <div className="form-control">
@@ -58,6 +56,13 @@ function Contact() {
                                     />
                                     <FaUser className="absolute left-3 top-1/2 transform -translate-y-1/2 text-base-content/50" />
                                 </div>
+                                {errors.name && (
+                                    <label className="label">
+                                        <span className="label-text-alt text-error">
+                                            {errors.name.message}
+                                        </span>
+                                    </label>
+                                )}
                             </div>
                             <div className="form-control">
                                 <label className="label pb-1">
@@ -81,6 +86,13 @@ function Contact() {
                                     />
                                     <FaEnvelope className="absolute left-3 top-1/2 transform -translate-y-1/2 text-base-content/50" />
                                 </div>
+                                {errors.email && (
+                                    <label className="label">
+                                        <span className="label-text-alt text-error">
+                                            {errors.email.message}
+                                        </span>
+                                    </label>
+                                )}
                             </div>
                             <div className="form-control">
                                 <label className="label pb-1">
@@ -101,6 +113,13 @@ function Contact() {
                                         },
                                     })}
                                 ></textarea>
+                                {errors.message && (
+                                    <label className="label">
+                                        <span className="label-text-alt text-error">
+                                            {errors.message.message}
+                                        </span>
+                                    </label>
+                                )}
                             </div>
                             <button
                                 type="submit"

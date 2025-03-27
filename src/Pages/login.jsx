@@ -1,5 +1,4 @@
 import { useForm } from "react-hook-form";
-import toast from "react-hot-toast";
 import { FiLock, FiLogIn, FiMail } from "react-icons/fi";
 import { useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
@@ -10,7 +9,11 @@ import { login } from "../Redux/Slices/AuthSlice";
 function Login() {
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const { register, handleSubmit } = useForm();
+    const {
+        register,
+        handleSubmit,
+        formState: { errors },
+    } = useForm();
 
     async function onSubmit(data) {
         const res = await dispatch(login(data));
@@ -19,19 +22,13 @@ function Login() {
         }
     }
 
-    function onError(errors) {
-        Object.values(errors).forEach((error) => {
-            if (error.message) toast.error(error.message);
-        });
-    }
-
     return (
         <HomeLayout>
             <div className="min-h-[90vh] flex items-center justify-center bg-gradient-to-br from-base-100 to-base-200 p-4">
                 <div className="card w-full max-w-md bg-base-100 shadow-lg">
                     <form
                         noValidate
-                        onSubmit={handleSubmit(onSubmit, onError)}
+                        onSubmit={handleSubmit(onSubmit)}
                         className="card-body p-8 space-y-6"
                     >
                         <div className="text-center space-y-2">
@@ -63,8 +60,15 @@ function Login() {
                                         },
                                     })}
                                 />
-                                <FiMail className="absolute left-3 top-1/2 transforFm -translate-y-1/2 text-base-content/50" />
+                                <FiMail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-base-content/50" />
                             </div>
+                            {errors.email && (
+                                <label className="label">
+                                    <span className="label-text-alt text-error">
+                                        {errors.email.message}
+                                    </span>
+                                </label>
+                            )}
                         </div>
                         <div className="form-control">
                             <label className="label">
@@ -94,6 +98,13 @@ function Login() {
                                 />
                                 <FiLock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-base-content/50" />
                             </div>
+                            {errors.password && (
+                                <label className="label">
+                                    <span className="label-text-alt text-error">
+                                        {errors.password.message}
+                                    </span>
+                                </label>
+                            )}
                         </div>
                         <button
                             type="submit"
@@ -102,7 +113,15 @@ function Login() {
                             <FiLogIn className="text-xl" />
                             Login
                         </button>
-                        <div className="text-center pt-4">
+                        <span>
+                            <Link
+                                to="/forgotpassword"
+                                className="text-sm link link-primary"
+                            >
+                                Forgot Password?
+                            </Link>
+                        </span>
+                        <div className="text-center">
                             <span className="text-sm text-base-content/70">
                                 Don&apos;t have an account? &nbsp;
                                 <Link
