@@ -1,4 +1,4 @@
-import { BsFacebook, BsInstagram, BsLinkedin, BsTwitter } from "react-icons/bs";
+import { BsFacebook, BsInstagram, BsTwitter } from "react-icons/bs";
 
 function Footer() {
     return (
@@ -21,10 +21,9 @@ function Footer() {
                     </a>
                 </nav>
                 <nav className="grid-flow-col gap-6 md:place-self-center md:justify-self-end text-xl">
-                    <BsFacebook className="text-info" />
-                    <BsInstagram className="text-warning" />
-                    <BsLinkedin className="text-info" />
-                    <BsTwitter />
+                    <BsFacebook className="text-[#1877F2]" />
+                    <BsInstagram className="text-[#F56040]" />
+                    <BsTwitter className="text-[#1DA1F2]" />
                 </nav>
             </footer>
         </>

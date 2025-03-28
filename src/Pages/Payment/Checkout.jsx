@@ -167,14 +167,14 @@ function Checkout() {
                         <div className="text-center mb-8">
                             <div className="flex justify-center items-center gap-5">
                                 <span className="line-through opacity-70 text-xl text-error">
-                                    ₹2000
+                                    ₹999
                                 </span>
                                 <span className="text-4xl font-bold text-primary flex items-center">
-                                    ₹1000
+                                    ₹499
                                 </span>
                             </div>
                             <p className="text-sm mt-2 text-error">
-                                Save ₹1000 (50% OFF!)
+                                Save ₹500 (50% OFF!)
                             </p>
                         </div>
                         <div className="flex items-center gap-2 text-base mb-6">
