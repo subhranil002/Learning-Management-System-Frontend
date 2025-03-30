@@ -73,7 +73,7 @@ function Signup() {
                             </label>
                             {errors.file && (
                                 <label className="label">
-                                    <span className="label-text-alt text-error">
+                                    <span className="label-text-alt text-error whitespace-normal">
                                         {errors.file.message}
                                     </span>
                                 </label>
@@ -99,7 +99,7 @@ function Signup() {
                             </div>
                             {errors.fullName && (
                                 <label className="label">
-                                    <span className="label-text-alt text-error">
+                                    <span className="label-text-alt text-error whitespace-normal">
                                         {errors.fullName.message}
                                     </span>
                                 </label>
@@ -129,7 +129,7 @@ function Signup() {
                             </div>
                             {errors.email && (
                                 <label className="label">
-                                    <span className="label-text-alt text-error">
+                                    <span className="label-text-alt text-error whitespace-normal">
                                         {errors.email.message}
                                     </span>
                                 </label>

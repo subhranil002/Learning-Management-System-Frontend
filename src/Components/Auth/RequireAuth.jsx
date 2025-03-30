@@ -10,11 +10,7 @@ function RequireAuth({ allowedRoles }) {
         <Navigate
             to="/denied"
             state={{
-                message: `${
-                    allowedRoles.length > 1
-                        ? allowedRoles.join(", ")
-                        : allowedRoles[0]
-                } only access!`,
+                message: "You are not authorized to access this page",
             }}
         />
     ) : (

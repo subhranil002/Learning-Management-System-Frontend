@@ -114,7 +114,7 @@ function CreateLecture() {
                                     />
                                     {errors.file && (
                                         <label className="label">
-                                            <span className="label-text-alt text-error">
+                                            <span className="label-text-alt text-error whitespace-normal">
                                                 {errors.file.message}
                                             </span>
                                         </label>
@@ -150,7 +150,7 @@ function CreateLecture() {
                                     />
                                     {errors.title && (
                                         <label className="label">
-                                            <span className="label-text-alt text-error">
+                                            <span className="label-text-alt text-error whitespace-normal">
                                                 {errors.title.message}
                                             </span>
                                         </label>
@@ -216,7 +216,7 @@ function CreateLecture() {
                                         />
                                         {errors.description && (
                                             <label className="label">
-                                                <span className="label-text-alt text-error">
+                                                <span className="label-text-alt text-error whitespace-normal">
                                                     {errors.description.message}
                                                 </span>
                                             </label>

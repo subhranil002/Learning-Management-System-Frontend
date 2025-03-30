@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Route, Routes, useLocation } from "react-router-dom";
 
 import RequireAuth from "./Components/Auth/RequireAuth";
@@ -32,15 +32,31 @@ import { getProfile, refreshToken } from "./Redux/Slices/AuthSlice";
 function App() {
     const dispatch = useDispatch();
     const location = useLocation();
+    const {isLoggedIn} = useSelector((state) => state.auth);
+
+    const paths = [
+        "/",
+        "/about",
+        "/signup",
+        "/login",
+        "/users/profile",
+        "/courses",
+        "/courses/description",
+        "/contact",
+        "/denied",
+        "*",
+    ];
 
     useEffect(() => {
-        (async () => {
-            const res = await dispatch(getProfile());
-            if (res?.payload == 403) {
-                dispatch(refreshToken());
-            }
-        })();
-    }, [location.key]);
+        if (!isLoggedIn || !paths.includes(location.pathname)) {
+            (async () => {
+                const res = await dispatch(getProfile());
+                if (res?.payload == 403) {
+                    dispatch(refreshToken());
+                }
+            })();
+        }
+    }, [location.pathname]);
 
     return (
         <Routes>
@@ -52,7 +68,7 @@ function App() {
             <Route path="/resetpassword/:token" element={<ResetPassword />} />
             <Route
                 element={
-                    <RequireAuth allowedRoles={["USER", "TEACHER", "ADMIN"]} />
+                    <RequireAuth allowedRoles={["GUEST", "USER", "TEACHER", "ADMIN"]} />
                 }
             >
                 <Route path="users/profile" element={<Profile />} />

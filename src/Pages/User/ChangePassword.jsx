@@ -17,6 +17,7 @@ function ChangePassword() {
         formState: { errors },
     } = useForm();
 
+    const oldPassword = watch("oldPassword");
     const newPassword = watch("newPassword");
 
     const onSubmit = async (data) => {
@@ -59,7 +60,7 @@ function ChangePassword() {
                             </label>
                             <div className="relative">
                                 <input
-                                    type="oldPassword"
+                                    type="password"
                                     placeholder="••••••••"
                                     className="input input-bordered pl-10 w-full"
                                     {...register("oldPassword", {
@@ -74,9 +75,6 @@ function ChangePassword() {
                                             message:
                                                 "Must contain uppercase, number, and special character",
                                         },
-                                        validate: (value) =>
-                                            value !== newPassword ||
-                                            "New password must be different",
                                     })}
                                 />
                                 <FiLock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-base-content/50" />
@@ -98,7 +96,7 @@ function ChangePassword() {
                             </label>
                             <div className="relative">
                                 <input
-                                    type="newPassword"
+                                    type="password"
                                     placeholder="••••••••"
                                     className="input input-bordered pl-10 w-full"
                                     {...register("newPassword", {
@@ -113,6 +111,9 @@ function ChangePassword() {
                                             message:
                                                 "Must contain uppercase, number, and special character",
                                         },
+                                        validate: (value) =>
+                                            value !== oldPassword ||
+                                            "New password must be different from old password",
                                     })}
                                 />
                                 <FiLock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-base-content/50" />
@@ -134,7 +135,7 @@ function ChangePassword() {
                             </label>
                             <div className="relative">
                                 <input
-                                    type="confirmPassword"
+                                    type="password"
                                     placeholder="••••••••"
                                     className="input input-bordered pl-10 w-full"
                                     {...register("confirmPassword", {

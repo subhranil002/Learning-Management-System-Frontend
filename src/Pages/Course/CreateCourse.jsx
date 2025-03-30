@@ -98,7 +98,7 @@ function CreateCourse() {
                                     />
                                     {errors.file && (
                                         <label className="label">
-                                            <span className="label-text-alt text-error">
+                                            <span className="label-text-alt text-error whitespace-normal">
                                                 {errors.file.message}
                                             </span>
                                         </label>
@@ -133,7 +133,7 @@ function CreateCourse() {
                                     />
                                     {errors.title && (
                                         <label className="label">
-                                            <span className="label-text-alt text-error">
+                                            <span className="label-text-alt text-error whitespace-normal">
                                                 {errors.title.message}
                                             </span>
                                         </label>
@@ -166,7 +166,7 @@ function CreateCourse() {
                                     />
                                     {errors.category && (
                                         <label className="label">
-                                            <span className="label-text-alt text-error">
+                                            <span className="label-text-alt text-error whitespace-normal">
                                                 {errors.category.message}
                                             </span>
                                         </label>
@@ -232,7 +232,7 @@ function CreateCourse() {
                                         />
                                         {errors.description && (
                                             <label className="label">
-                                                <span className="label-text-alt text-error">
+                                                <span className="label-text-alt text-error whitespace-normal">
                                                     {errors.description.message}
                                                 </span>
                                             </label>

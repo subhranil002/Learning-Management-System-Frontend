@@ -13,7 +13,7 @@ const safeParse = (item, defaultValue) => {
 
 const initialState = {
     isLoggedIn: safeParse(sessionStorage.getItem("isLoggedIn"), false),
-    role: sessionStorage.getItem("role") || "GUEST",
+    role: sessionStorage.getItem("role") || "VISITOR",
     data: safeParse(sessionStorage.getItem("data"), { _: "" }),
 };
 
@@ -48,6 +48,25 @@ export const signUp = createAsyncThunk("/auth/signup", async (data) => {
 export const login = createAsyncThunk("/auth/login", async (data) => {
     try {
         const res = axiosInstance.post("/users/login", data);
+        toast.promise(res, {
+            loading: "Wait! logging in...",
+            success: (data) => {
+                return data?.data?.message;
+            },
+        });
+        return (await res).data;
+    } catch (error) {
+        if (error?.response?.data?.message) {
+            toast.error(error?.response?.data?.message);
+        } else {
+            console.log(error.message);
+        }
+    }
+});
+
+export const guestLogin = createAsyncThunk("/auth/guestlogin", async () => {
+    try {
+        const res = axiosInstance.get("/users/guest-login");
         toast.promise(res, {
             loading: "Wait! logging in...",
             success: (data) => {
@@ -247,6 +266,20 @@ const AuthSlice = createSlice({
                 );
             })
             .addCase(login.fulfilled, (state, action) => {
+                state.isLoggedIn = action.payload?.success;
+                state.role = action.payload?.data?.role;
+                state.data = action.payload?.data;
+                sessionStorage.setItem(
+                    "isLoggedIn",
+                    JSON.stringify(action.payload?.success)
+                );
+                sessionStorage.setItem("role", action.payload?.data?.role);
+                sessionStorage.setItem(
+                    "data",
+                    JSON.stringify(action.payload?.data)
+                );
+            })
+            .addCase(guestLogin.fulfilled, (state, action) => {
                 state.isLoggedIn = action.payload?.success;
                 state.role = action.payload?.data?.role;
                 state.data = action.payload?.data;

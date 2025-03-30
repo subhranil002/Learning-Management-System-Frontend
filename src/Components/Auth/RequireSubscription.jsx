@@ -10,7 +10,7 @@ function RequireSubscription() {
     ) : isLoggedIn ? (
         <Navigate
             to="/denied"
-            state={{ message: "Buy subscription to access this page" }}
+            state={{ message: "Please subscribe to access this page" }}
         />
     ) : (
         <Navigate to="/login" />

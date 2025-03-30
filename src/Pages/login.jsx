@@ -4,7 +4,7 @@ import { useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 
 import HomeLayout from "../Layouts/HomeLayout";
-import { login } from "../Redux/Slices/AuthSlice";
+import { guestLogin, login } from "../Redux/Slices/AuthSlice";
 
 function Login() {
     const dispatch = useDispatch();
@@ -64,7 +64,7 @@ function Login() {
                             </div>
                             {errors.email && (
                                 <label className="label">
-                                    <span className="label-text-alt text-error">
+                                    <span className="label-text-alt text-error whitespace-normal">
                                         {errors.email.message}
                                     </span>
                                 </label>
@@ -100,19 +100,31 @@ function Login() {
                             </div>
                             {errors.password && (
                                 <label className="label">
-                                    <span className="label-text-alt text-error">
+                                    <span className="label-text-alt text-error whitespace-normal">
                                         {errors.password.message}
                                     </span>
                                 </label>
                             )}
                         </div>
-                        <button
-                            type="submit"
-                            className="btn btn-warning btn-block gap-2"
-                        >
-                            <FiLogIn className="text-xl" />
-                            Login
-                        </button>
+                        <div className="flex flex-col gap-3">
+                            <button
+                                type="submit"
+                                className="btn btn-warning btn-block gap-2"
+                            >
+                                <FiLogIn className="text-xl" />
+                                Login
+                            </button>
+                            <button
+                                onClick={async () => {
+                                    navigate("/");
+                                    await dispatch(guestLogin());
+                                }}
+                                className="btn btn-success btn-block gap-2"
+                            >
+                                <FiLogIn className="text-xl" />
+                                Guest Login
+                            </button>
+                        </div>
                         <span>
                             <Link
                                 to="/forgotpassword"

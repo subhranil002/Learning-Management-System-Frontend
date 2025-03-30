@@ -70,7 +70,7 @@ function ForgotPassword() {
                             </div>
                             {errors.email && (
                                 <label className="label">
-                                    <span className="label-text-alt text-error">
+                                    <span className="label-text-alt text-error whitespace-normal">
                                         {errors.email.message}
                                     </span>
                                 </label>

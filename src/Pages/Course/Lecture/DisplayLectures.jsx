@@ -1,12 +1,12 @@
 import parser from "html-react-parser";
 import { useEffect, useRef, useState } from "react";
-import { AiOutlineClose, AiOutlineMenu } from "react-icons/ai";
+import { AiOutlineArrowLeft, AiOutlineClose } from "react-icons/ai";
 import { FaCheck, FaEdit, FaExclamationTriangle } from "react-icons/fa";
 import { IoIosAddCircle } from "react-icons/io";
+import { RiMenuFold2Fill } from "react-icons/ri";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
 
-import HomeLayout from "../../../Layouts/HomeLayout";
 import {
     deleteLecture,
     getLecturesByCourse,
@@ -28,6 +28,7 @@ function Displaylectures() {
     async function onLectureDelete(courseId, lectureId) {
         await dispatch(deleteLecture({ courseId, lectureId }));
         await dispatch(getLecturesByCourse(courseId));
+        setCurrentVideo(0);
     }
 
     useEffect(() => {
@@ -38,7 +39,7 @@ function Displaylectures() {
     }, []);
 
     return (
-        <HomeLayout>
+        <>
             <dialog id="lecture-delete-modal" className="modal">
                 <div className="modal-box bg-base-100 border border-error/20 shadow-xl mx-2">
                     <div className="flex flex-col items-center text-center space-y-4">
@@ -85,7 +86,7 @@ function Displaylectures() {
                     </div>
                 </div>
             </dialog>
-            <div className="drawer lg:drawer-open md:px-4 ">
+            <div className="drawer lg:drawer-open md:px-4">
                 <input
                     id="lecture-drawer"
                     type="checkbox"
@@ -93,20 +94,29 @@ function Displaylectures() {
                     ref={inputRef}
                 />
                 <div className="drawer-content flex flex-col min-h-[90vh]">
-                    <div className="lg:hidden flex justify-between items-center p-4 bg-base-200">
-                        <label
-                            htmlFor="lecture-drawer"
-                            className="btn btn-ghost drawer-button"
-                        >
-                            <AiOutlineMenu className="text-2xl" />
-                        </label>
-                        <h1
-                            onClick={() => navigate(-1)}
-                            className="text-2xl text-warning font-bold cursor-pointer"
-                        >
-                            {state?.title}
-                        </h1>
-                    </div>
+                    <header className="navbar bg-base-100 shadow-md px-4 lg:hidden">
+                        <div className="flex-none">
+                            <button
+                                onClick={() => navigate(-1)}
+                                className="btn btn-ghost gap-2 text-xl"
+                            >
+                                <AiOutlineArrowLeft />
+                            </button>
+                        </div>
+                        <div className="flex-1">
+                            <h1 className="text-xl font-bold line-clamp-1">
+                                {state?.title}
+                            </h1>
+                        </div>
+                        <div className="flex-none">
+                            <label
+                                htmlFor="lecture-drawer"
+                                className="btn btn-ghost drawer-button"
+                            >
+                                <RiMenuFold2Fill className="text-xl" />
+                            </label>
+                        </div>
+                    </header>
                     <div className="flex-1 p-4 lg:p-6">
                         <div className="relative aspect-video bg-neutral rounded-xl overflow-hidden shadow-2xl">
                             <video
@@ -124,7 +134,7 @@ function Displaylectures() {
                             <h2 className="text-2xl font-bold mb-4">
                                 {lectures?.[currentVideo]?.title}
                             </h2>
-                            <span className="text-base-content/80 leading-relaxed">
+                            <span className="text-base-content/80 leading-relaxed whitespace-normal">
                                 {parser(
                                     lectures?.[currentVideo]?.description ||
                                         "No description available"
@@ -139,13 +149,18 @@ function Displaylectures() {
                         aria-label="close sidebar"
                         className="drawer-overlay"
                     ></label>
-                    <div className="menu bg-base-200 text-base-content w-80 min-h-full p-4">
-                        <h1
-                            onClick={() => navigate(-1)}
-                            className="text-2xl text-warning hidden lg:block font-bold mb-5 cursor-pointer"
-                        >
-                            {state?.title}
-                        </h1>
+                    <div className="menu bg-base-200 text-base-content w-80 h-screen p-4">
+                        <div className="gap-3 items-center mb-6 hidden lg:flex">
+                            <button
+                                onClick={() => navigate(-1)}
+                                className="btn btn-ghost btn-xs text-2xl btn-square ml-[-5px]"
+                            >
+                                <AiOutlineArrowLeft />
+                            </button>
+                            <h1 className="text-2xl font-bold line-clamp-1">
+                                {state?.title}
+                            </h1>
+                        </div>
                         <div className="flex justify-between items-center mb-6">
                             <h2 className="text-xl font-bold">Lectures</h2>
                             <label
@@ -194,49 +209,49 @@ function Displaylectures() {
                                                 {lecture.title}
                                             </span>
                                         </div>
-                                        {(role === "TEACHER" &&
+                                        {((role === "TEACHER" &&
                                             state?.createdBy?._id ===
                                                 data?._id) ||
-                                            (role === "ADMIN" && (
-                                                <div className="flex gap-2">
-                                                    <button
-                                                        onClick={() => {
-                                                            navigate(
-                                                                "/courses/lectures/edit",
-                                                                {
-                                                                    state: {
-                                                                        course: state,
-                                                                        lecture:
-                                                                            lecture,
-                                                                    },
-                                                                }
-                                                            );
-                                                        }}
-                                                        className="btn btn-warning btn-xs gap-1"
-                                                    >
-                                                        <FaEdit className="text-xs" />
-                                                        Edit
-                                                    </button>
-                                                    <button
-                                                        onClick={() => {
-                                                            setLectureToDelete({
-                                                                courseId:
-                                                                    state?._id,
-                                                                lectureId:
-                                                                    lecture?._id,
-                                                            });
-                                                            document
-                                                                .getElementById(
-                                                                    "lecture-delete-modal"
-                                                                )
-                                                                .showModal();
-                                                        }}
-                                                        className="btn btn-error btn-xs gap-1"
-                                                    >
-                                                        Delete
-                                                    </button>
-                                                </div>
-                                            ))}
+                                            role === "ADMIN") && (
+                                            <div className="flex gap-2">
+                                                <button
+                                                    onClick={() => {
+                                                        navigate(
+                                                            "/courses/lectures/edit",
+                                                            {
+                                                                state: {
+                                                                    course: state,
+                                                                    lecture:
+                                                                        lecture,
+                                                                },
+                                                            }
+                                                        );
+                                                    }}
+                                                    className="btn btn-warning btn-xs gap-1"
+                                                >
+                                                    <FaEdit className="text-xs" />
+                                                    Edit
+                                                </button>
+                                                <button
+                                                    onClick={() => {
+                                                        setLectureToDelete({
+                                                            courseId:
+                                                                state?._id,
+                                                            lectureId:
+                                                                lecture?._id,
+                                                        });
+                                                        document
+                                                            .getElementById(
+                                                                "lecture-delete-modal"
+                                                            )
+                                                            .showModal();
+                                                    }}
+                                                    className="btn btn-error btn-xs gap-1"
+                                                >
+                                                    Delete
+                                                </button>
+                                            </div>
+                                        )}
                                     </a>
                                 </li>
                             ))}
@@ -244,7 +259,7 @@ function Displaylectures() {
                     </div>
                 </div>
             </div>
-        </HomeLayout>
+        </>
     );
 }
 

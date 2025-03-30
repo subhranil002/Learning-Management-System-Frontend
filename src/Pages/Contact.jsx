@@ -58,7 +58,7 @@ function Contact() {
                                 </div>
                                 {errors.name && (
                                     <label className="label">
-                                        <span className="label-text-alt text-error">
+                                        <span className="label-text-alt text-error whitespace-normal">
                                             {errors.name.message}
                                         </span>
                                     </label>
@@ -88,7 +88,7 @@ function Contact() {
                                 </div>
                                 {errors.email && (
                                     <label className="label">
-                                        <span className="label-text-alt text-error">
+                                        <span className="label-text-alt text-error whitespace-normal">
                                             {errors.email.message}
                                         </span>
                                     </label>
@@ -115,7 +115,7 @@ function Contact() {
                                 ></textarea>
                                 {errors.message && (
                                     <label className="label">
-                                        <span className="label-text-alt text-error">
+                                        <span className="label-text-alt text-error whitespace-normal">
                                             {errors.message.message}
                                         </span>
                                     </label>
