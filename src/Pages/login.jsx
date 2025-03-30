@@ -115,9 +115,10 @@ function Login() {
                                 Login
                             </button>
                             <button
-                                onClick={async () => {
-                                    navigate("/");
+                                onClick={async (e) => {
+                                    e.preventDefault();
                                     await dispatch(guestLogin());
+                                    navigate("/");
                                 }}
                                 className="btn btn-success btn-block gap-2"
                             >

@@ -1,7 +1,16 @@
 import parser from "html-react-parser";
 import { useEffect, useRef, useState } from "react";
-import { AiOutlineArrowLeft, AiOutlineClose } from "react-icons/ai";
-import { FaCheck, FaEdit, FaExclamationTriangle } from "react-icons/fa";
+import {
+    AiOutlineArrowLeft,
+    AiOutlineArrowRight,
+    AiOutlineClose,
+} from "react-icons/ai";
+import {
+    FaCheck,
+    FaEdit,
+    FaExclamationTriangle,
+    FaRegFolderOpen,
+} from "react-icons/fa";
 import { IoIosAddCircle } from "react-icons/io";
 import { RiMenuFold2Fill } from "react-icons/ri";
 import { useDispatch, useSelector } from "react-redux";
@@ -30,6 +39,17 @@ function Displaylectures() {
         await dispatch(getLecturesByCourse(courseId));
         setCurrentVideo(0);
     }
+
+    const handleNavigation = (direction) => {
+        if (direction === "prev" && currentVideo > 0) {
+            setCurrentVideo((prev) => prev - 1);
+        } else if (
+            direction === "next" &&
+            currentVideo < lectures?.length - 1
+        ) {
+            setCurrentVideo((prev) => prev + 1);
+        }
+    };
 
     useEffect(() => {
         if (!state) navigate("/courses");
@@ -118,29 +138,89 @@ function Displaylectures() {
                         </div>
                     </header>
                     <div className="flex-1 p-4 lg:p-6">
-                        <div className="relative aspect-video bg-neutral rounded-xl overflow-hidden shadow-2xl">
-                            <video
-                                src={
-                                    lectures?.[currentVideo]?.lecture
-                                        ?.secure_url
-                                }
-                                className="w-full h-full object-contain"
-                                controls
-                                disablePictureInPicture
-                                controlsList="nodownload"
-                            />
-                        </div>
-                        <div className="mt-6 bg-base-200 rounded-box p-6 shadow">
-                            <h2 className="text-2xl font-bold mb-4">
-                                {lectures?.[currentVideo]?.title}
-                            </h2>
-                            <span className="text-base-content/80 leading-relaxed whitespace-normal">
-                                {parser(
-                                    lectures?.[currentVideo]?.description ||
-                                        "No description available"
-                                )}
-                            </span>
-                        </div>
+                        {lectures && lectures.length > 0 ? (
+                            <>
+                                <div className="relative aspect-video bg-neutral rounded-xl overflow-hidden shadow-2xl">
+                                    <video
+                                        src={
+                                            lectures?.[currentVideo]?.lecture
+                                                ?.secure_url
+                                        }
+                                        className="w-full h-full object-contain"
+                                        controls
+                                        autoPlay
+                                        disablePictureInPicture
+                                        controlsList="nodownload"
+                                        onEnded={() => handleNavigation("next")}
+                                    />
+                                </div>
+                                <div className="flex justify-between gap-4 mt-4">
+                                    <button
+                                        onClick={() => handleNavigation("prev")}
+                                        disabled={currentVideo === 0}
+                                        className="btn btn-success btn-sm sm:btn-md flex-1 gap-2"
+                                    >
+                                        <AiOutlineArrowLeft className="text-lg" />
+                                        <span className="hidden sm:inline">
+                                            Previous
+                                        </span>
+                                    </button>
+                                    <button
+                                        onClick={() => handleNavigation("next")}
+                                        disabled={
+                                            currentVideo === lectures.length - 1
+                                        }
+                                        className="btn btn-warning btn-sm sm:btn-md flex-1 gap-2"
+                                    >
+                                        <span className="hidden sm:inline">
+                                            Next
+                                        </span>
+                                        <AiOutlineArrowRight className="text-lg" />
+                                    </button>
+                                </div>
+                                <div className="mt-6 bg-base-200 rounded-box p-6 shadow">
+                                    <h2 className="text-2xl font-bold mb-4 whitespace-normal">
+                                        {lectures?.[currentVideo]?.title}
+                                    </h2>
+                                    <span className="text-base-content/80 leading-relaxed whitespace-normal">
+                                        {parser(
+                                            lectures?.[currentVideo]
+                                                ?.description ||
+                                                "No description available"
+                                        )}
+                                    </span>
+                                </div>
+                            </>
+                        ) : (
+                            <div className="flex flex-col items-center justify-center h-full min-h-[60vh]">
+                                <div className="text-center max-w-md p-6">
+                                    <FaRegFolderOpen className="text-6xl text-neutral-content mx-auto mb-4" />
+                                    <h2 className="text-2xl font-bold mb-2">
+                                        No Lectures Available
+                                    </h2>
+                                    <p className="text-base-content/70 mb-6">
+                                        This course doesn&apos;t have any
+                                        lectures yet
+                                    </p>
+                                    {((role === "TEACHER" &&
+                                        state?.createdBy?._id === data?._id) ||
+                                        role === "ADMIN") && (
+                                        <button
+                                            onClick={() =>
+                                                navigate(
+                                                    "/courses/lectures/add",
+                                                    { state }
+                                                )
+                                            }
+                                            className="btn btn-error gap-2"
+                                        >
+                                            <IoIosAddCircle className="text-xl" />
+                                            Add First Lecture
+                                        </button>
+                                    )}
+                                </div>
+                            </div>
+                        )}
                     </div>
                 </div>
                 <div className="drawer-side z-50">
@@ -170,14 +250,14 @@ function Displaylectures() {
                                 <AiOutlineClose className="text-xl" />
                             </label>
                         </div>
-                        {((role === "TEACHER" &&
+                        {((lectures &&
+                            lectures.length > 0 &&
+                            role === "TEACHER" &&
                             state?.createdBy?._id === data?._id) ||
                             role === "ADMIN") && (
                             <button
                                 onClick={() =>
-                                    navigate("/courses/lectures/add", {
-                                        state,
-                                    })
+                                    navigate("/courses/lectures/add", { state })
                                 }
                                 className="btn btn-neutral btn-block mb-6"
                             >
@@ -186,7 +266,7 @@ function Displaylectures() {
                             </button>
                         )}
                         <ul className="space-y-2">
-                            {lectures?.map((lecture, idx) => (
+                            {lectures.map((lecture, idx) => (
                                 <li key={lecture._id}>
                                     <a
                                         className={`flex items-center justify-between p-3 rounded-lg ${
@@ -215,7 +295,8 @@ function Displaylectures() {
                                             role === "ADMIN") && (
                                             <div className="flex gap-2">
                                                 <button
-                                                    onClick={() => {
+                                                    onClick={(e) => {
+                                                        e.stopPropagation();
                                                         navigate(
                                                             "/courses/lectures/edit",
                                                             {
@@ -233,7 +314,8 @@ function Displaylectures() {
                                                     Edit
                                                 </button>
                                                 <button
-                                                    onClick={() => {
+                                                    onClick={(e) => {
+                                                        e.stopPropagation();
                                                         setLectureToDelete({
                                                             courseId:
                                                                 state?._id,
