@@ -34,11 +34,51 @@ export const subscribe = createAsyncThunk("/payments/subscribe", async () => {
     }
 });
 
-export const verifyPayment = createAsyncThunk(
-    "/payments/verify",
+export const createOrder = createAsyncThunk(
+    "/payments/create/order",
     async (data) => {
         try {
-            const res = axiosInstance.post("/payments/verify", data);
+            const res = await axiosInstance.post("/payments/order", data);
+            return res.data;
+        } catch (error) {
+            if (error?.response?.data?.message) {
+                toast.error(error?.response?.data?.message);
+            } else {
+                console.log(error.message);
+            }
+        }
+    }
+);
+
+export const verifySubscription = createAsyncThunk(
+    "/payments/verify/subscription",
+    async (data) => {
+        try {
+            const res = axiosInstance.post(
+                "/payments/verify/subscription",
+                data
+            );
+            toast.promise(res, {
+                success: (data) => {
+                    return data?.data?.message;
+                },
+            });
+            return (await res).data;
+        } catch (error) {
+            if (error?.response?.data?.message) {
+                toast.error(error?.response?.data?.message);
+            } else {
+                console.log(error.message);
+            }
+        }
+    }
+);
+
+export const verifyPayment = createAsyncThunk(
+    "/payments/verify/payment",
+    async (data) => {
+        try {
+            const res = axiosInstance.post("/payments/verify/payment", data);
             toast.promise(res, {
                 success: (data) => {
                     return data?.data?.message;

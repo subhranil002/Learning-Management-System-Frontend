@@ -25,6 +25,8 @@ function EditCourse() {
             title: state?.title,
             category: state?.category,
             description: state?.description,
+            amount: state?.price?.amount,
+            currency: state?.price?.currency,
         },
     });
     const selectedFile = watch("file")?.[0];
@@ -33,6 +35,10 @@ function EditCourse() {
         const res = await dispatch(
             updateCourse({
                 ...data,
+                price: {
+                    amount: data.amount,
+                    currency: data.currency,
+                },
                 courseId: state._id,
             })
         );
@@ -184,6 +190,59 @@ function EditCourse() {
                                                     "Category must be at most 10 characters",
                                             },
                                         })}
+                                    />
+                                    {errors.category && (
+                                        <label className="label">
+                                            <span className="label-text-alt text-error whitespace-normal">
+                                                {errors.category.message}
+                                            </span>
+                                        </label>
+                                    )}
+                                </div>
+                                <div className="form-control w-full">
+                                    <label className="label pr-5">
+                                        <span className="label-text text-lg font-semibold flex items-center gap-2">
+                                            <BsTag className="text-xl" />
+                                            Course Price
+                                        </span>
+                                    </label>
+                                    <input
+                                        type="number"
+                                        placeholder="Enter course price"
+                                        className="input input-bordered input-lg"
+                                        {...register("amount", {
+                                            min: {
+                                                value: 0,
+                                                message:
+                                                    "Price must be at least 0",
+                                            },
+                                            max: {
+                                                value: 10000,
+                                                message:
+                                                    "Price must be at most 10000",
+                                            },
+                                        })}
+                                    />
+                                    {errors.category && (
+                                        <label className="label">
+                                            <span className="label-text-alt text-error whitespace-normal">
+                                                {errors.category.message}
+                                            </span>
+                                        </label>
+                                    )}
+                                </div>
+                                <div className="form-control w-full">
+                                    <label className="label pr-5">
+                                        <span className="label-text text-lg font-semibold flex items-center gap-2">
+                                            <BsTag className="text-xl" />
+                                            Select Currency
+                                        </span>
+                                    </label>
+                                    <input
+                                        type="text"
+                                        placeholder="Enter course price"
+                                        className="input input-bordered input-lg"
+                                        {...register("currency")}
                                     />
                                     {errors.category && (
                                         <label className="label">
