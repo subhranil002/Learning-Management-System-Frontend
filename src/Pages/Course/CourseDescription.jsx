@@ -2,12 +2,14 @@ import parser from "html-react-parser";
 import { useEffect } from "react";
 import {
     FaCheck,
+    FaCoins,
     FaEdit,
     FaExclamationTriangle,
     FaFilm,
     FaInfoCircle,
     FaPlay,
     FaShoppingCart,
+    FaSync,
     FaTrash,
     FaUserTie,
 } from "react-icons/fa";
@@ -32,8 +34,88 @@ function CourseDescription() {
         navigate("/courses");
     }
 
+    const alreadyEnrolled = data?.coursesPurchased?.includes(state._id);
+
     return (
         <HomeLayout>
+            <dialog id="enrollment-options-modal" className="modal">
+                <div className="modal-box bg-base-100 border border-primary/20 shadow-xl mx-2 max-w-md">
+                    <div className="flex flex-col items-center text-center space-y-4">
+                        <div className="text-warning mb-4">
+                            <FaShoppingCart className="text-4xl animate-pulse" />
+                        </div>
+                        <h3 className="font-bold text-xl sm:text-2xl flex items-center gap-2">
+                            Choose Enrollment Type
+                        </h3>
+                        <div className="w-full space-y-4 py-4">
+                            <button
+                                onClick={() => {
+                                    document
+                                        .getElementById(
+                                            "enrollment-options-modal"
+                                        )
+                                        .close();
+                                    navigate("/checkout", {
+                                        state: {
+                                            course: state,
+                                            type: "lifetime",
+                                        },
+                                    });
+                                }}
+                                className="btn btn-outline btn-primary btn-sm sm:btn-md md:btn-lg gap-2 w-full"
+                            >
+                                <FaCoins className="text-xl" />
+                                Lifetime Access
+                                <span className="badge badge-primary badge-sm ml-2">
+                                    {state?.price?.amount}&nbsp;
+                                    {state?.price?.currency} Only
+                                </span>
+                            </button>
+                            <button
+                                onClick={() => {
+                                    document
+                                        .getElementById(
+                                            "enrollment-options-modal"
+                                        )
+                                        .close();
+                                    navigate("/checkout", {
+                                        state: {
+                                            type: "subscription",
+                                        },
+                                    });
+                                }}
+                                className="btn btn-outline btn-secondary btn-sm sm:btn-md md:btn-lg gap-2 w-full min-h-10"
+                            >
+                                <FaSync className="text-xl" />
+                                {import.meta.env.VITE_SUBSCRIPTION_PERIOD}ly
+                                Subscription
+                                <span className="badge badge-secondary badge-sm ml-2">
+                                    ₹
+                                    {
+                                        import.meta.env
+                                            .VITE_SUBSCRIPTION_OFFER_PRICE
+                                    }
+                                    /month
+                                </span>
+                            </button>
+                        </div>
+                        <div className="modal-action mt-4 w-full">
+                            <button
+                                className="btn btn-outline btn-sm sm:btn-md md:btn-lg w-full"
+                                onClick={() =>
+                                    document
+                                        .getElementById(
+                                            "enrollment-options-modal"
+                                        )
+                                        .close()
+                                }
+                            >
+                                Close
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </dialog>
             <dialog id="course-delete-modal" className="modal">
                 <div className="modal-box bg-base-100 border border-error/20 shadow-xl mx-2">
                     <div className="flex flex-col items-center text-center space-y-4">
@@ -140,7 +222,8 @@ function CourseDescription() {
                                         {role === "TEACHER" ||
                                         role === "ADMIN" ||
                                         data?.subscription?.status ===
-                                            "active" ? (
+                                            "active" ||
+                                        alreadyEnrolled ? (
                                             <button
                                                 onClick={() =>
                                                     navigate(
@@ -156,11 +239,15 @@ function CourseDescription() {
                                         ) : (
                                             <button
                                                 onClick={() =>
-                                                    navigate("/checkout")
+                                                    document
+                                                        .getElementById(
+                                                            "enrollment-options-modal"
+                                                        )
+                                                        .showModal()
                                                 }
                                                 className="btn btn-secondary btn-lg gap-2 min-w-[200px] hover:scale-105 transition-transform"
                                             >
-                                                <FaShoppingCart className="text-xl" />{" "}
+                                                <FaShoppingCart className="text-xl" />
                                                 Enroll Now
                                             </button>
                                         )}

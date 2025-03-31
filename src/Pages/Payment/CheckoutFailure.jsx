@@ -1,9 +1,17 @@
+import { useEffect } from "react";
 import { RxCrossCircled } from "react-icons/rx";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
 import HomeLayout from "../../Layouts/HomeLayout";
 
 function CheckoutFailure() {
+    const { state } = useLocation();
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        if (!state) navigate("/courses");
+    }, []);
+
     return (
         <HomeLayout>
             <div className="min-h-[90vh] flex items-center justify-center px-4">
@@ -34,7 +42,7 @@ function CheckoutFailure() {
                                 </p>
                             </div>
                         </div>
-                        <Link to="/checkout" className="w-full">
+                        <Link to="/courses" className="w-full">
                             <button className="btn btn-error btn-lg w-full hover:scale-105 transition-transform">
                                 Try Again
                             </button>
