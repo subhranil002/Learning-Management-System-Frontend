@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { Route, Routes, useLocation } from "react-router-dom";
 
 import RequireAuth from "./Components/Auth/RequireAuth";
-import RequireSubscription from "./Components/Auth/RequireSubscription";
 import AboutUs from "./Pages/AboutUs";
 import AdminDashboard from "./Pages/Admin/AdminDashboard";
 import Contact from "./Pages/Contact";
@@ -22,6 +21,7 @@ import Checkout from "./Pages/Payment/Checkout";
 import CheckoutFailure from "./Pages/Payment/CheckoutFailure";
 import CheckoutSuccess from "./Pages/Payment/CheckoutSuccess";
 import Signup from "./Pages/SignUp";
+import TeacherDashboard from "./Pages/Teacher/TeacherDashboard";
 import ChangePassword from "./Pages/User/ChangePassword";
 import EditProfile from "./Pages/User/EditProfile";
 import ForgotPassword from "./Pages/User/ForgotPassword";
@@ -32,7 +32,7 @@ import { getProfile, refreshToken } from "./Redux/Slices/AuthSlice";
 function App() {
     const dispatch = useDispatch();
     const location = useLocation();
-    const {isLoggedIn} = useSelector((state) => state.auth);
+    const { isLoggedIn } = useSelector((state) => state.auth);
 
     const paths = [
         "/",
@@ -51,8 +51,8 @@ function App() {
         if (!isLoggedIn || !paths.includes(location.pathname)) {
             (async () => {
                 const res = await dispatch(getProfile());
-                if (res?.payload == 403) {
-                    dispatch(refreshToken());
+                if (res?.payload === 403) {
+                    await dispatch(refreshToken());
                 }
             })();
         }
@@ -60,37 +60,43 @@ function App() {
 
     return (
         <Routes>
+            {/* Public Routes */}
             <Route path="/" element={<HomePage />} />
             <Route path="/about" element={<AboutUs />} />
+            <Route path="/contact" element={<Contact />} />
+            <Route path="/denied" element={<Denied />} />
             <Route path="/signup" element={<Signup />} />
             <Route path="/login" element={<Login />} />
             <Route path="/forgotpassword" element={<ForgotPassword />} />
             <Route path="/resetpassword/:token" element={<ResetPassword />} />
+            <Route path="/courses" element={<CourseList />} />
+            <Route path="*" element={<NotFound />} />
+
+            {/* Protected Routes for Authenticated Users */}
             <Route
                 element={
-                    <RequireAuth allowedRoles={["GUEST", "USER", "TEACHER", "ADMIN"]} />
+                    <RequireAuth
+                        allowedRoles={["GUEST", "USER", "TEACHER", "ADMIN"]}
+                    />
                 }
             >
-                <Route path="users/profile" element={<Profile />} />
-                <Route path="users/editprofile" element={<EditProfile />} />
+                <Route path="/users/profile" element={<Profile />} />
+                <Route path="/users/editprofile" element={<EditProfile />} />
                 <Route
-                    path="users/changepassword"
+                    path="/users/changepassword"
                     element={<ChangePassword />}
                 />
                 <Route path="/checkout" element={<Checkout />} />
                 <Route path="/checkout/success" element={<CheckoutSuccess />} />
                 <Route path="/checkout/failure" element={<CheckoutFailure />} />
-            </Route>
-            <Route path="/courses" element={<CourseList />} />
-            <Route
-                path="/courses/description"
-                element={<CourseDescription />}
-            />
-            <Route element={<RequireSubscription />}>
+                <Route
+                    path="/courses/description"
+                    element={<CourseDescription />}
+                />
                 <Route path="/courses/lectures" element={<Displaylectures />} />
             </Route>
-            <Route path="/contact" element={<Contact />} />
-            <Route path="/denied" element={<Denied />} />
+
+            {/* Protected Routes for TEACHER & ADMIN */}
             <Route
                 element={<RequireAuth allowedRoles={["TEACHER", "ADMIN"]} />}
             >
@@ -105,10 +111,19 @@ function App() {
                     element={<EditLecture />}
                 />
             </Route>
+
+            {/* Protected Routes for TEACHER Only */}
+            <Route element={<RequireAuth allowedRoles={["TEACHER"]} />}>
+                <Route
+                    path="/teacher/dashboard"
+                    element={<TeacherDashboard />}
+                />
+            </Route>
+
+            {/* Protected Routes for ADMIN Only */}
             <Route element={<RequireAuth allowedRoles={["ADMIN"]} />}>
                 <Route path="/admin/dashboard" element={<AdminDashboard />} />
             </Route>
-            <Route path="*" element={<NotFound />} />
         </Routes>
     );
 }

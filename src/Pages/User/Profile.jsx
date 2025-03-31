@@ -5,6 +5,7 @@ import {
     FaExclamationTriangle,
     FaKey,
     FaStar,
+    FaTimes,
     FaTimesCircle,
     FaUserTag,
 } from "react-icons/fa";
@@ -25,6 +26,7 @@ function Profile() {
     }
 
     function modifyCloudinaryURL(url) {
+        if (!url) return "";
         return url.replace(
             "/upload/",
             "/upload/ar_1:1,c_auto,g_auto,w_500/r_max/"
@@ -33,6 +35,33 @@ function Profile() {
 
     return (
         <HomeLayout>
+            <dialog id="avatar-modal" className="modal">
+                <div className="modal-box max-w-2xl bg-base-100 shadow-xl p-0 overflow-hidden">
+                    <form
+                        method="dialog"
+                        className="absolute right-2 top-2 z-10"
+                    >
+                        <button className="btn btn-circle btn-neutral btn-sm">
+                            <FaTimes className="text-xl" />
+                        </button>
+                    </form>
+                    <div className="flex items-center justify-center min-h-[50vh]">
+                        {userData?.avatar?.secure_url ? (
+                            <img
+                                src={userData.avatar.secure_url}
+                                alt="Full Size Avatar"
+                                className="w-full h-auto object-contain max-h-[70vh]"
+                            />
+                        ) : (
+                            <div className="text-center p-8">
+                                <p className="text-gray-500">
+                                    No avatar available
+                                </p>
+                            </div>
+                        )}
+                    </div>
+                </div>
+            </dialog>
             <dialog id="cancel-subscription-modal" className="modal">
                 <div className="modal-box bg-base-100 border border-error/20 shadow-xl mx-2">
                     <div className="flex flex-col items-center text-center space-y-4">
@@ -84,7 +113,14 @@ function Profile() {
                 <div className="card w-full max-w-md bg-base-100 shadow-xl bg-opacity-90 backdrop-blur-sm">
                     <div className="card-body items-center text-center gap-4 px-4 sm:px-6">
                         <div className="avatar online">
-                            <div className="w-24 sm:w-32 rounded-full ring-2 ring-primary ring-offset-2 sm:ring-offset-4">
+                            <div
+                                className="w-24 sm:w-32 rounded-full ring-2 ring-primary ring-offset-2 sm:ring-offset-4 cursor-pointer hover:ring-primary-focus transition-all"
+                                onClick={() =>
+                                    document
+                                        .getElementById("avatar-modal")
+                                        .showModal()
+                                }
+                            >
                                 <img
                                     src={modifyCloudinaryURL(
                                         userData?.avatar?.secure_url
@@ -121,7 +157,7 @@ function Profile() {
                                         userData?.role === "ADMIN"
                                             ? "badge-success"
                                             : userData?.subscription?.status ===
-                                            "active"
+                                              "active"
                                             ? "badge-success"
                                             : "badge-error"
                                     }`}
@@ -130,7 +166,7 @@ function Profile() {
                                     userData?.role === "ADMIN"
                                         ? "Active"
                                         : userData?.subscription?.status ===
-                                        "active"
+                                          "active"
                                         ? "Active"
                                         : "Inactive"}
                                 </span>

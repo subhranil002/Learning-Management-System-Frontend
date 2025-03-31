@@ -161,9 +161,7 @@ function Displaylectures() {
                                         className="btn btn-success btn-sm sm:btn-md flex-1 gap-2"
                                     >
                                         <AiOutlineArrowLeft className="text-lg" />
-                                        <span className="hidden sm:inline">
-                                            Previous
-                                        </span>
+                                        Previous
                                     </button>
                                     <button
                                         onClick={() => handleNavigation("next")}
@@ -172,14 +170,15 @@ function Displaylectures() {
                                         }
                                         className="btn btn-warning btn-sm sm:btn-md flex-1 gap-2"
                                     >
-                                        <span className="hidden sm:inline">
-                                            Next
-                                        </span>
+                                        Next
                                         <AiOutlineArrowRight className="text-lg" />
                                     </button>
                                 </div>
                                 <div className="mt-6 bg-base-200 rounded-box p-6 shadow">
-                                    <h2 className="text-2xl font-bold mb-4 whitespace-normal">
+                                    <h2 className="text-2xl font-bold mb-4 whitespace-normal flex items-center gap-3">
+                                        <span className="badge badge-info lg:hidden">
+                                            {currentVideo + 1}
+                                        </span>
                                         {lectures?.[currentVideo]?.title}
                                     </h2>
                                     <span className="text-base-content/80 leading-relaxed whitespace-normal">
@@ -266,7 +265,7 @@ function Displaylectures() {
                             </button>
                         )}
                         <ul className="space-y-2">
-                            {lectures.map((lecture, idx) => (
+                            {lectures?.map((lecture, idx) => (
                                 <li key={lecture._id}>
                                     <a
                                         className={`flex items-center justify-between p-3 rounded-lg ${

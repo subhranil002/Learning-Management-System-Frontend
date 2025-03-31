@@ -1,5 +1,6 @@
 import "./index.css";
 
+import { SpeedInsights } from "@vercel/speed-insights/react";
 import { createRoot } from "react-dom/client";
 import { Toaster } from "react-hot-toast";
 import { Provider } from "react-redux";
@@ -13,6 +14,7 @@ createRoot(document.getElementById("root")).render(
         <BrowserRouter>
             <App />
             <Toaster />
+            <SpeedInsights />
         </BrowserRouter>
     </Provider>
 );
