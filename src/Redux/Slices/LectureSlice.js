@@ -29,7 +29,16 @@ export const createLecture = createAsyncThunk(
                 loading: "Wait! uploading your lecture...",
                 success: "Lecture created successfully",
             });
-            return (await lecvidRes).data;
+            const res = await lecvidRes;
+            if (res?.data?.success) {
+                toast.success(
+                    "Video is currently being processed, please wait for a few minutes before viewing the lecture",
+                    {
+                        duration: 10000,
+                    }
+                );
+            }
+            return res.data;
         } catch (error) {
             if (error?.response?.data?.message) {
                 toast.error(error?.response?.data?.message);
@@ -87,6 +96,12 @@ export const updateLecture = createAsyncThunk(
                     loading: "Wait! uploading your lecture...",
                 });
                 await lecvidRes;
+                toast.success(
+                    "Video is currently being processed, please wait for a few minutes before viewing the lecture",
+                    {
+                        duration: 10000,
+                    }
+                );
             }
             toast.success("Lecture updated successfully");
             return {

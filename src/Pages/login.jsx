@@ -1,6 +1,7 @@
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { FiLock, FiLogIn, FiMail } from "react-icons/fi";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 
 import HomeLayout from "../Layouts/HomeLayout";
@@ -9,6 +10,7 @@ import { guestLogin, login } from "../Redux/Slices/AuthSlice";
 function Login() {
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    const { isLoggedIn } = useSelector((state) => state.auth);
     const {
         register,
         handleSubmit,
@@ -21,6 +23,12 @@ function Login() {
             navigate("/");
         }
     }
+
+    useEffect(() => {
+        if (isLoggedIn) {
+            navigate("/");
+        }
+    }, []);
 
     return (
         <HomeLayout>

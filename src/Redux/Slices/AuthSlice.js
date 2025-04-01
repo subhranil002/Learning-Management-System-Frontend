@@ -146,29 +146,18 @@ export const logout = createAsyncThunk("/auth/logout", async () => {
     }
 });
 
-export const getProfile = createAsyncThunk(
-    "/auth/profile",
-    async () => {
-        try {
-            const res = await axiosInstance.get("/users/profile");
-            return res.data;
-        } catch (error) {
-            return error?.response?.status;
+export const getProfile = createAsyncThunk("/auth/profile", async () => {
+    try {
+        const res = await axiosInstance.get("/users/profile");
+        return res.data;
+    } catch (error) {
+        if (error?.response?.data?.message) {
+            toast.error(error?.response?.data?.message);
+        } else {
+            console.log(error.message);
         }
     }
-);
-
-export const refreshToken = createAsyncThunk(
-    "/auth/refreshtoken",
-    async (_, { dispatch }) => {
-        try {
-            await axiosInstance.get("/users/refresh-token");
-            await dispatch(getProfile());
-        } catch (e) {
-            toast.error("Session expired! Please login again");
-        }
-    }
-);
+});
 
 export const updateProfile = createAsyncThunk(
     "auth/editprofile",

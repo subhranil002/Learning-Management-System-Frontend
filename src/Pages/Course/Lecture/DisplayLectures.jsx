@@ -16,6 +16,7 @@ import { RiMenuFold2Fill } from "react-icons/ri";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
 
+import VideoPlayer from "../../../Components/VideoPlayer";
 import {
     deleteLecture,
     getLecturesByCourse,
@@ -141,17 +142,31 @@ function Displaylectures() {
                         {lectures && lectures.length > 0 ? (
                             <>
                                 <div className="relative aspect-video bg-neutral rounded-xl overflow-hidden shadow-2xl">
-                                    <video
-                                        src={
+                                    <VideoPlayer
+                                        hlsUrl={
+                                            lectures?.[currentVideo]?.lecture
+                                                ?.playback_url
+                                        }
+                                        mp4Url={
                                             lectures?.[currentVideo]?.lecture
                                                 ?.secure_url
                                         }
-                                        className="w-full h-full object-contain"
+                                        handleEnded={() =>
+                                            handleNavigation("next")
+                                        }
+                                        config={{
+                                            file: {
+                                                attributes: {
+                                                    disablePictureInPicture: true,
+                                                    controlsList: "nodownload",
+                                                },
+                                            },
+                                        }}
+                                        playing
                                         controls
-                                        autoPlay
-                                        disablePictureInPicture
-                                        controlsList="nodownload"
-                                        onEnded={() => handleNavigation("next")}
+                                        playsinline
+                                        width="100%"
+                                        height="100%"
                                     />
                                 </div>
                                 <div className="flex justify-between gap-4 mt-4">

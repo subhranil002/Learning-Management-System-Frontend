@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Route, Routes, useLocation } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 
 import RequireAuth from "./Components/Auth/RequireAuth";
 import AboutUs from "./Pages/AboutUs";
@@ -27,36 +27,17 @@ import EditProfile from "./Pages/User/EditProfile";
 import ForgotPassword from "./Pages/User/ForgotPassword";
 import Profile from "./Pages/User/Profile";
 import ResetPassword from "./Pages/User/ResetPassword";
-import { getProfile, refreshToken } from "./Redux/Slices/AuthSlice";
+import { getProfile } from "./Redux/Slices/AuthSlice";
 
 function App() {
     const dispatch = useDispatch();
-    const location = useLocation();
     const { isLoggedIn } = useSelector((state) => state.auth);
 
-    const paths = [
-        "/",
-        "/about",
-        "/signup",
-        "/login",
-        "/users/profile",
-        "/courses",
-        "/courses/description",
-        "/contact",
-        "/denied",
-        "*",
-    ];
-
     useEffect(() => {
-        if (!isLoggedIn || !paths.includes(location.pathname)) {
-            (async () => {
-                const res = await dispatch(getProfile());
-                if (res?.payload === 403) {
-                    await dispatch(refreshToken());
-                }
-            })();
+        if (!isLoggedIn) {
+            (async () => await dispatch(getProfile()))();
         }
-    }, [location.pathname]);
+    }, []);
 
     return (
         <Routes>
