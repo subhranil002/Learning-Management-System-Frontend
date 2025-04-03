@@ -7,9 +7,11 @@ import {
     FaExclamationTriangle,
     FaFilm,
     FaInfoCircle,
+    FaList,
     FaPlay,
     FaShoppingCart,
     FaSync,
+    FaTag,
     FaTrash,
     FaUserTie,
 } from "react-icons/fa";
@@ -189,7 +191,7 @@ function CourseDescription() {
                         </div>
                     )}
                     <div className="text-center mb-8 space-y-2">
-                        <h1 className="text-4xl md:text-5xl font-bold text-warning mb-2">
+                        <h1 className="text-2xl sm:text-3xl md:text-5xl font-bold text-warning mb-2">
                             {state?.title}
                         </h1>
                     </div>
@@ -206,7 +208,7 @@ function CourseDescription() {
                                 <div className="card-body p-6">
                                     <div className="flex flex-col md:flex-row justify-between items-center gap-4">
                                         <div className="flex items-center gap-4">
-                                            <div className="text-3xl text-warning">
+                                            <div className="text-3xl text-primary">
                                                 <FaFilm />
                                             </div>
                                             <div>
@@ -254,6 +256,39 @@ function CourseDescription() {
                                     </div>
                                 </div>
                             </div>
+                            <div className="card bg-base-100 border border-base-content/10 shadow-xl mt-6">
+                                <div className="card-body p-6">
+                                    <div className="flex items-center gap-3 mb-4">
+                                        <FaList className="text-2xl text-primary" />
+                                        <h2 className="card-title text-2xl">
+                                            Lecture Planning
+                                        </h2>
+                                    </div>
+                                    <div className="space-y-4">
+                                        {state?.lectures?.map(
+                                            (lecture, index) => (
+                                                <div
+                                                    key={index}
+                                                    className="collapse sm:collapse-arrow bg-base-200 hover:bg-base-300 transition-colors"
+                                                >
+                                                    <input type="checkbox" />
+                                                    <div className="collapse-title text-lg font-medium text-info">
+                                                        Lecture {index + 1}:{" "}
+                                                        {lecture.title}
+                                                    </div>
+                                                    <div className="collapse-content">
+                                                        <div className="prose max-w-none">
+                                                            {parser(
+                                                                lecture.description
+                                                            )}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            )
+                                        )}
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                         <div className="w-full lg:w-1/3 xl:w-1/2">
                             <div className="sticky top-24 space-y-6">
@@ -273,11 +308,33 @@ function CourseDescription() {
                                                 <FaUserTie className="text-xl text-primary" />
                                                 <div>
                                                     <h3 className="font-bold text-lg">
-                                                        Course Instructor
+                                                        Instructor
                                                     </h3>
-                                                    <p className="opacity-90 capitalize">
+                                                    <p className="opacity-90 capitalize text-error font-bold">
                                                         {state?.createdBy?.name}
                                                     </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div className="bg-base-200 rounded-lg p-4">
+                                            <div className="flex items-center gap-3">
+                                                <FaTag className="text-xl text-primary" />
+                                                <div>
+                                                    <h3 className="font-bold text-lg">
+                                                        Categories
+                                                    </h3>
+                                                    <div className="flex flex-wrap">
+                                                        {state?.category?.map(
+                                                            (cat, index) => (
+                                                                <div
+                                                                    key={index}
+                                                                    className="badge badge-outline text-sm text-error font-bold"
+                                                                >
+                                                                    {cat}
+                                                                </div>
+                                                            )
+                                                        )}
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>

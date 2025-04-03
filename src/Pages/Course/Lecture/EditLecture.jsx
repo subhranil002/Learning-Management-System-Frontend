@@ -64,77 +64,78 @@ function EditLecture() {
                         <h1 className="card-title text-3xl justify-center mt-10 sm:mt-4 mb-8 font-bold text-warning">
                             Edit Lecture
                         </h1>
-                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                            <div className="col-span-1">
-                                <div className="form-control w-full">
-                                    <label className="label">
-                                        <span className="label-text text-lg font-semibold flex items-center gap-2">
-                                            <AiOutlineCloudUpload className="text-xl" />
-                                            Lecture Video
-                                        </span>
-                                    </label>
-                                    <label
-                                        htmlFor="lecture"
-                                        className="group relative block w-full rounded-box overflow-hidden cursor-pointer bg-base-200"
-                                        style={{ paddingTop: "55%" }}
-                                    >
-                                        <div className="absolute inset-0 flex items-center justify-center">
-                                            {selectedFile?.type?.startsWith(
-                                                "video/"
-                                            ) ? (
-                                                <video
-                                                    className="w-full h-full object-cover rounded-box"
-                                                    src={URL.createObjectURL(
-                                                        selectedFile
-                                                    )}
-                                                    autoPlay
-                                                    muted
-                                                    controlsList=""
-                                                />
-                                            ) : (
-                                                <div className="flex flex-col items-center gap-2 p-4 text-center">
-                                                    <video
-                                                        className="w-full h-full object-cover rounded-box"
-                                                        src={
-                                                            state?.lecture
-                                                                ?.lecture
-                                                                ?.secure_url
-                                                        }
-                                                        autoPlay
-                                                        muted
-                                                    />
-                                                </div>
+                        <div className="form-control w-full mb-8">
+                            <label className="label">
+                                <span className="label-text text-lg font-semibold flex items-center gap-2">
+                                    <AiOutlineCloudUpload className="text-xl" />
+                                    Lecture Video
+                                </span>
+                            </label>
+                            <label
+                                htmlFor="lecture"
+                                className="group relative block w-full rounded-box overflow-hidden cursor-pointer bg-base-200"
+                                style={{ paddingTop: "60%" }}
+                            >
+                                <div className="absolute inset-0 flex items-center justify-center">
+                                    {selectedFile?.type?.startsWith(
+                                        "video/"
+                                    ) ? (
+                                        <video
+                                            className="w-full h-full object-cover rounded-box"
+                                            src={URL.createObjectURL(
+                                                selectedFile
                                             )}
+                                            controls
+                                            autoPlay
+                                        />
+                                    ) : state?.lecture?.lecture?.secure_url ? (
+                                        <video
+                                            className="w-full h-full object-cover rounded-box"
+                                            src={
+                                                state.lecture.lecture.secure_url
+                                            }
+                                            autoPlay
+                                            muted
+                                            controlsList=""
+                                        />
+                                    ) : (
+                                        <div className="flex flex-col items-center gap-2 p-4 text-center">
+                                            <AiOutlineCloudUpload className="text-4xl text-base-content/50 group-hover:text-primary transition-colors" />
+                                            <p className="font-medium">
+                                                Click to update video
+                                            </p>
                                         </div>
-                                    </label>
-                                    <input
-                                        type="file"
-                                        className="hidden"
-                                        id="lecture"
-                                        accept="video/*"
-                                        {...register("file", {
-                                            validate: (file) => {
-                                                if (!file?.[0]) return true;
-                                                return file[0]?.type?.startsWith(
-                                                    "video/"
-                                                )
-                                                    ? true
-                                                    : "Only video files are allowed";
-                                            },
-                                        })}
-                                    />
-                                    {errors.file && (
-                                        <label className="label">
-                                            <span className="label-text-alt text-error whitespace-normal">
-                                                {errors.file.message}
-                                            </span>
-                                        </label>
                                     )}
                                 </div>
-                            </div>
-                            <div className="col-span-1 space-y-6">
+                            </label>
+                            <input
+                                type="file"
+                                className="hidden"
+                                id="lecture"
+                                accept="video/*"
+                                {...register("file", {
+                                    validate: (file) => {
+                                        if (!file?.[0]) return true;
+                                        return file[0]?.type?.startsWith(
+                                            "video/"
+                                        )
+                                            ? true
+                                            : "Only video files are allowed";
+                                    },
+                                })}
+                            />
+                            {errors.file && (
+                                <label className="label">
+                                    <span className="label-text-alt text-error whitespace-normal">
+                                        {errors.file.message}
+                                    </span>
+                                </label>
+                            )}
+                        </div>
+                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                            <div className="space-y-6">
                                 <div className="form-control w-full">
-                                    <label className="label mr-5">
+                                    <label className="label">
                                         <span className="label-text text-lg font-semibold flex items-center gap-2">
                                             <FiBook className="text-xl" />
                                             Lecture Title
@@ -143,7 +144,7 @@ function EditLecture() {
                                     <input
                                         type="text"
                                         placeholder="Enter lecture title"
-                                        className="input input-bordered input-lg"
+                                        className="input input-bordered input-lg w-full"
                                         {...register("title", {
                                             minLength: {
                                                 value: 5,

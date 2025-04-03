@@ -183,7 +183,7 @@ function Checkout() {
                 >
                     <div className="card w-full max-w-md bg-base-300 text-base-content shadow-xl hover:shadow-2xl transition-shadow duration-300">
                         <div className="card-body p-8">
-                            <h2 className="card-title justify-center text-3xl mb-6 text-primary">
+                            <h2 className="card-title justify-center text-3xl mb-6 text-warning">
                                 Lifetime Course Access
                             </h2>
                             <div className="space-y-4 mb-6">
@@ -222,7 +222,7 @@ function Checkout() {
                             </div>
                             <button
                                 type="submit"
-                                className="btn btn-primary btn-lg hover:scale-105 transition-transform"
+                                className="btn btn-warning btn-lg hover:scale-105 transition-transform"
                                 disabled={isSubmitting}
                             >
                                 {isSubmitting ? (

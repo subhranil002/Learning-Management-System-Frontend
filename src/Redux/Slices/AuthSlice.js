@@ -151,10 +151,8 @@ export const getProfile = createAsyncThunk("/auth/profile", async () => {
         const res = await axiosInstance.get("/users/profile");
         return res.data;
     } catch (error) {
-        if (error?.response?.data?.message) {
+        if (error?.response?.data?.status === 403) {
             toast.error(error?.response?.data?.message);
-        } else {
-            console.log(error.message);
         }
     }
 });
