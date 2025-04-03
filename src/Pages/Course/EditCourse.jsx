@@ -2,8 +2,9 @@ import { Editor } from "@tinymce/tinymce-react";
 import { useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { AiOutlineArrowLeft, AiOutlineCloudUpload } from "react-icons/ai";
-import { BsTag, BsTextParagraph } from "react-icons/bs";
+import { BsCurrencyDollar, BsTag, BsTextParagraph } from "react-icons/bs";
 import { FiBook } from "react-icons/fi";
+import { GrMoney } from "react-icons/gr";
 import { useDispatch } from "react-redux";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 
@@ -23,7 +24,7 @@ function EditCourse() {
     } = useForm({
         defaultValues: {
             title: state?.title,
-            category: state?.category,
+            category: state?.category?.join(", "),
             description: state?.description,
             amount: state?.price?.amount,
             currency: state?.price?.currency,
@@ -32,9 +33,15 @@ function EditCourse() {
     const selectedFile = watch("file")?.[0];
 
     async function onSubmit(data) {
+        const categoriesArray = data.category
+            .split(",")
+            .map((item) => item.trim().toUpperCase())
+            .filter((item) => item.length > 0);
+
         const res = await dispatch(
             updateCourse({
                 ...data,
+                category: categoriesArray,
                 price: {
                     amount: data.amount,
                     currency: data.currency,
@@ -70,73 +77,67 @@ function EditCourse() {
                         <h1 className="card-title text-3xl justify-center mt-10 sm:mt-4 mb-8 font-bold text-warning">
                             Edit Course
                         </h1>
-                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                            <div className="col-span-1">
+                        <div className="form-control w-full mb-8">
+                            <label className="label">
+                                <span className="label-text text-lg font-semibold flex items-center gap-2">
+                                    <AiOutlineCloudUpload className="text-xl" />
+                                    Course Thumbnail
+                                </span>
+                            </label>
+                            <label
+                                htmlFor="image_uploads"
+                                className="group relative block w-full rounded-box overflow-hidden cursor-pointer bg-base-200"
+                                style={{ paddingTop: "60%" }}
+                            >
+                                <div className="absolute inset-0 flex items-center justify-center">
+                                    {selectedFile?.type?.startsWith(
+                                        "image/"
+                                    ) ? (
+                                        <div className="relative w-full h-full">
+                                            <img
+                                                className="w-full h-full object-cover rounded-box"
+                                                src={URL.createObjectURL(
+                                                    selectedFile
+                                                )}
+                                                alt="Course thumbnail preview"
+                                            />
+                                            <div className="absolute inset-0 bg-black/50 flex items-center justify-center rounded-box opacity-0 group-hover:opacity-100 transition-opacity">
+                                                <AiOutlineCloudUpload className="text-3xl text-white" />
+                                            </div>
+                                        </div>
+                                    ) : state?.thumbnail?.secure_url ? (
+                                        <div className="relative w-full h-full">
+                                            <img
+                                                className="w-full h-full object-cover rounded-box"
+                                                src={state.thumbnail.secure_url}
+                                                alt="Current course thumbnail"
+                                            />
+                                            <div className="absolute inset-0 bg-black/50 flex items-center justify-center rounded-box opacity-0 group-hover:opacity-100 transition-opacity">
+                                                <AiOutlineCloudUpload className="text-3xl text-white" />
+                                            </div>
+                                        </div>
+                                    ) : (
+                                        <div className="flex flex-col items-center gap-2 p-4 text-center">
+                                            <AiOutlineCloudUpload className="text-4xl text-base-content/50 group-hover:text-primary transition-colors" />
+                                            <p className="font-medium">
+                                                Click to update thumbnail
+                                            </p>
+                                        </div>
+                                    )}
+                                </div>
+                            </label>
+                            <input
+                                className="hidden"
+                                type="file"
+                                id="image_uploads"
+                                accept=".jpg, .jpeg, .png"
+                                {...register("file")}
+                            />
+                        </div>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-5 md:gap-10">
+                            <div className="space-y-6">
                                 <div className="form-control w-full">
                                     <label className="label">
-                                        <span className="label-text text-lg font-semibold flex items-center gap-2">
-                                            <AiOutlineCloudUpload className="text-xl" />
-                                            Course Thumbnail
-                                        </span>
-                                    </label>
-                                    <label
-                                        htmlFor="image_uploads"
-                                        className="group relative block w-full rounded-box overflow-hidden cursor-pointer bg-base-200"
-                                        style={{ paddingTop: "55%" }}
-                                    >
-                                        <div className="absolute inset-0 flex items-center justify-center">
-                                            {selectedFile?.type?.startsWith(
-                                                "image/"
-                                            ) ? (
-                                                <div className="relative w-full h-full">
-                                                    <img
-                                                        className="w-full h-full object-cover rounded-box"
-                                                        src={URL.createObjectURL(
-                                                            selectedFile
-                                                        )}
-                                                        alt="Course thumbnail preview"
-                                                    />
-                                                    <div className="absolute inset-0 bg-black/50 flex items-center justify-center rounded-box opacity-0 group-hover:opacity-100 transition-opacity">
-                                                        <AiOutlineCloudUpload className="text-3xl text-white" />
-                                                    </div>
-                                                </div>
-                                            ) : state?.thumbnail?.secure_url ? (
-                                                <div className="relative w-full h-full">
-                                                    <img
-                                                        className="w-full h-full object-cover rounded-box"
-                                                        src={
-                                                            state.thumbnail
-                                                                .secure_url
-                                                        }
-                                                        alt="Current course thumbnail"
-                                                    />
-                                                    <div className="absolute inset-0 bg-black/50 flex items-center justify-center rounded-box opacity-0 group-hover:opacity-100 transition-opacity">
-                                                        <AiOutlineCloudUpload className="text-3xl text-white" />
-                                                    </div>
-                                                </div>
-                                            ) : (
-                                                <div className="flex flex-col items-center gap-2 p-4 text-center">
-                                                    <AiOutlineCloudUpload className="text-4xl text-base-content/50 group-hover:text-primary transition-colors" />
-                                                    <p className="font-medium">
-                                                        Click to update
-                                                        thumbnail
-                                                    </p>
-                                                </div>
-                                            )}
-                                        </div>
-                                    </label>
-                                    <input
-                                        className="hidden"
-                                        type="file"
-                                        id="image_uploads"
-                                        accept=".jpg, .jpeg, .png"
-                                        {...register("file")}
-                                    />
-                                </div>
-                            </div>
-                            <div className="col-span-1 space-y-6 gap-5">
-                                <div className="form-control w-full">
-                                    <label className="label pr-5">
                                         <span className="label-text text-lg font-semibold flex items-center gap-2">
                                             <FiBook className="text-xl" />
                                             Course Title
@@ -145,7 +146,7 @@ function EditCourse() {
                                     <input
                                         type="text"
                                         placeholder="Enter course title"
-                                        className="input input-bordered input-lg"
+                                        className="input input-bordered input-lg w-full"
                                         {...register("title", {
                                             minLength: {
                                                 value: 5,
@@ -168,7 +169,7 @@ function EditCourse() {
                                     )}
                                 </div>
                                 <div className="form-control w-full">
-                                    <label className="label pr-5">
+                                    <label className="label">
                                         <span className="label-text text-lg font-semibold flex items-center gap-2">
                                             <BsTag className="text-xl" />
                                             Course Category
@@ -176,8 +177,8 @@ function EditCourse() {
                                     </label>
                                     <input
                                         type="text"
-                                        placeholder="Enter course category"
-                                        className="input input-bordered input-lg"
+                                        placeholder="Enter comma separated categories"
+                                        className="input input-bordered input-lg w-full"
                                         {...register("category", {
                                             minLength: {
                                                 value: 3,
@@ -185,9 +186,9 @@ function EditCourse() {
                                                     "Category must be at least 3 characters",
                                             },
                                             maxLength: {
-                                                value: 10,
+                                                value: 50,
                                                 message:
-                                                    "Category must be at most 10 characters",
+                                                    "Category must be at most 50 characters",
                                             },
                                         })}
                                     />
@@ -199,17 +200,19 @@ function EditCourse() {
                                         </label>
                                     )}
                                 </div>
+                            </div>
+                            <div className="space-y-6">
                                 <div className="form-control w-full">
-                                    <label className="label pr-5">
+                                    <label className="label">
                                         <span className="label-text text-lg font-semibold flex items-center gap-2">
-                                            <BsTag className="text-xl" />
+                                            <GrMoney className="text-xl" />
                                             Course Price
                                         </span>
                                     </label>
                                     <input
                                         type="number"
                                         placeholder="Enter course price"
-                                        className="input input-bordered input-lg"
+                                        className="input input-bordered input-lg w-full"
                                         {...register("amount", {
                                             min: {
                                                 value: 0,
@@ -223,31 +226,33 @@ function EditCourse() {
                                             },
                                         })}
                                     />
-                                    {errors.category && (
+                                    {errors.amount && (
                                         <label className="label">
                                             <span className="label-text-alt text-error whitespace-normal">
-                                                {errors.category.message}
+                                                {errors.amount.message}
                                             </span>
                                         </label>
                                     )}
                                 </div>
                                 <div className="form-control w-full">
-                                    <label className="label pr-5">
+                                    <label className="label">
                                         <span className="label-text text-lg font-semibold flex items-center gap-2">
-                                            <BsTag className="text-xl" />
+                                            <BsCurrencyDollar className="text-xl" />
                                             Select Currency
                                         </span>
                                     </label>
-                                    <input
-                                        type="text"
-                                        placeholder="Enter course price"
-                                        className="input input-bordered input-lg"
+                                    <select
+                                        className="select select-bordered select-lg w-full"
                                         {...register("currency")}
-                                    />
-                                    {errors.category && (
+                                    >
+                                        <option value="INR">INR (₹)</option>
+                                        <option value="USD">USD ($)</option>
+                                        <option value="EUR">EUR (€)</option>
+                                    </select>
+                                    {errors.currency && (
                                         <label className="label">
                                             <span className="label-text-alt text-error whitespace-normal">
-                                                {errors.category.message}
+                                                {errors.currency.message}
                                             </span>
                                         </label>
                                     )}
