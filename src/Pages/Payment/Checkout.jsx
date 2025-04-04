@@ -1,7 +1,13 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
-import { BiCheckCircle, BiErrorCircle, BiRupee } from "react-icons/bi";
+import {
+    BiCheckCircle,
+    BiDollar,
+    BiErrorCircle,
+    BiEuro,
+    BiRupee,
+} from "react-icons/bi";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
 
@@ -189,7 +195,7 @@ function Checkout() {
                             <div className="space-y-4 mb-6">
                                 <div className="flex items-center gap-2 text-lg">
                                     <BiCheckCircle className="text-success" />
-                                    <span>
+                                    <span className="max-w-[80%] sm:max-w-[90%]">
                                         Full lifetime access to{" "}
                                         {state?.course?.title}
                                     </span>
@@ -206,7 +212,15 @@ function Checkout() {
                             <div className="text-center mb-8">
                                 <div className="flex justify-center items-center gap-5">
                                     <span className="text-4xl font-bold text-primary flex items-center">
-                                        <BiRupee />
+                                        {state?.course?.price?.currency ===
+                                        "INR" ? (
+                                            <BiRupee />
+                                        ) : state?.course?.price?.currency ===
+                                            "USD" ? (
+                                            <BiDollar />
+                                        ) : (
+                                            <BiEuro />
+                                        )}
                                         {state?.course?.price?.amount}
                                     </span>
                                 </div>

@@ -52,7 +52,7 @@ function CheckoutSuccess() {
                                 </div>
                             </div>
                             <Link
-                                to={`/course/${state?.course?._id}`}
+                                to={"/courses"}
                                 className="w-full"
                             >
                                 <button className="btn btn-primary btn-lg w-full hover:scale-105 transition-transform">

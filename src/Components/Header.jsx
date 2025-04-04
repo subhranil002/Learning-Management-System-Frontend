@@ -18,10 +18,13 @@ function Header() {
     }
 
     function modifyCloudinaryURL(url) {
-        return url.replace(
-            "/upload/",
-            "/upload/ar_1:1,c_auto,g_auto,w_500/r_max/"
-        );
+        if (import.meta.env.VITE_IMAGE_TRANSFORMATION === "true") {
+            return url.replace(
+                "/upload/",
+                "/upload/ar_1:1,c_auto,g_auto,w_500/r_max/"
+            );
+        }
+        return url;
     }
 
     const isActive = (path) => location.pathname === path;
@@ -163,6 +166,22 @@ function Header() {
                                             </Link>
                                         </li>
                                     )}
+                                    {isLoggedIn && role === "TEACHER" && (
+                                        <li>
+                                            <Link
+                                                to="/teacher/dashboard"
+                                                className={`rounded-md ${
+                                                    isActive(
+                                                        "/teacher/dashboard"
+                                                    )
+                                                        ? "bg-neutral text-neutral-content"
+                                                        : ""
+                                                }`}
+                                            >
+                                                Teacher Dashboard
+                                            </Link>
+                                        </li>
+                                    )}
                                     <li>
                                         <Link
                                             to="/courses/create"
@@ -205,7 +224,16 @@ function Header() {
                     </li>
                 </ul>
             </div>
-            <div className="navbar-end dropdown dropdown-bottom">
+            <div className="navbar-end dropdown dropdown-bottom text-md flex items-center gap-2">
+                <span className="hidden md:block">
+                    {isLoggedIn && location.pathname === "/" ? (
+                        <span className="capitalize font-semibold">
+                            Wellcome, {data?.fullName.split(" ")[0]}
+                        </span>
+                    ) : (
+                        ""
+                    )}
+                </span>
                 <div
                     tabIndex={0}
                     role="button"
@@ -244,6 +272,21 @@ function Header() {
                                 Profile
                             </Link>
                         </li>
+                        {isLoggedIn &&
+                            (role === "USER" || role === "GUEST") && (
+                                <li>
+                                    <Link
+                                        to="/users/dashboard"
+                                        className={`rounded-md ${
+                                            isActive("/users/dashboard")
+                                                ? "bg-neutral text-neutral-content"
+                                                : ""
+                                        }`}
+                                    >
+                                        Dashboard
+                                    </Link>
+                                </li>
+                            )}
                         <li>
                             <button onClick={() => handleLogout()}>
                                 Logout

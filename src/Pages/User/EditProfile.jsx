@@ -24,10 +24,13 @@ function EditProfile() {
     }
 
     function modifyCloudinaryURL(url) {
-        return url.replace(
-            "/upload/",
-            "/upload/ar_1:1,c_auto,g_auto,w_500/r_max/"
-        );
+        if (import.meta.env.VITE_IMAGE_TRANSFORMATION === "true") {
+            return url.replace(
+                "/upload/",
+                "/upload/ar_1:1,c_auto,g_auto,w_500/r_max/"
+            );
+        }
+        return url;
     }
 
     return (

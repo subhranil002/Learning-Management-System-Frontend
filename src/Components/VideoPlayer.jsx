@@ -1,17 +1,24 @@
 import Hls from "hls.js";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import ReactPlayer from "react-player";
 
 const VideoPlayer = ({ hlsUrl, mp4Url, handleEnded, config, ...props }) => {
     const [videoUrl, setVideoUrl] = useState(null);
-    const playerRef = useRef(null);
 
     useEffect(() => {
         const video = document.createElement("video");
 
-        if (hlsUrl && video.canPlayType("application/vnd.apple.mpegurl")) {
+        if (
+            hlsUrl &&
+            video.canPlayType("application/vnd.apple.mpegurl") &&
+            import.meta.env.VITE_VIDEO_STREAMING === "true"
+        ) {
             setVideoUrl(hlsUrl.trim());
-        } else if (Hls.isSupported() && hlsUrl) {
+        } else if (
+            Hls.isSupported() &&
+            hlsUrl &&
+            import.meta.env.VITE_VIDEO_STREAMING === "true"
+        ) {
             const hls = new Hls();
             hls.loadSource(hlsUrl);
             hls.attachMedia(video);
@@ -31,11 +38,11 @@ const VideoPlayer = ({ hlsUrl, mp4Url, handleEnded, config, ...props }) => {
     if (videoUrl) {
         return (
             <ReactPlayer
-                ref={playerRef}
                 url={videoUrl}
                 onEnded={handleEnded}
                 config={config}
                 {...props}
+                onContextMenu={(e) => e.preventDefault()}
             />
         );
     }

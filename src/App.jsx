@@ -23,6 +23,7 @@ import CheckoutSuccess from "./Pages/Payment/CheckoutSuccess";
 import Signup from "./Pages/SignUp";
 import TeacherDashboard from "./Pages/Teacher/TeacherDashboard";
 import ChangePassword from "./Pages/User/ChangePassword";
+import Dashboard from "./Pages/User/Dashboard";
 import EditProfile from "./Pages/User/EditProfile";
 import ForgotPassword from "./Pages/User/ForgotPassword";
 import Profile from "./Pages/User/Profile";
@@ -90,6 +91,14 @@ function App() {
                 <Route
                     path="/courses/lectures/edit"
                     element={<EditLecture />}
+                />
+            </Route>
+
+            {/* Protected Routes for USERS Only */}
+            <Route element={<RequireAuth allowedRoles={["USER", "GUEST"]} />}>
+                <Route
+                    path="/users/dashboard"
+                    element={<Dashboard />}
                 />
             </Route>
 

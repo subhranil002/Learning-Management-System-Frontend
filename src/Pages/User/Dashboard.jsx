@@ -1,11 +1,11 @@
 import HomeLayout from "../../Layouts/HomeLayout";
 
-function TeacherDashboard() {
+function Dashboard() {
     return (
         <HomeLayout>
-            <span>Teacher Dashboard</span>
+            <span>Dashboard</span>
         </HomeLayout>
     );
 }
 
-export default TeacherDashboard;
+export default Dashboard;
