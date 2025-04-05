@@ -34,12 +34,14 @@ function CourseCard({ data }) {
                     <div className="flex items-center gap-2 py-1 rounded-lg">
                         <FaBook className="text-warning" />
                         <span className="font-medium">Category:</span>
-                        <span className="text-warning">{data?.category}</span>
+                        <span className="text-secondary line-clamp-1 capitalize">
+                            {data?.category?.join(", ")}
+                        </span>
                     </div>
                     <div className="flex items-center gap-2 py-1 rounded-lg">
                         <FaChalkboardTeacher className="text-warning" />
                         <span className="font-medium">Instructor:</span>
-                        <span className="text-warning line-clamp-1 capitalize">
+                        <span className="text-secondary line-clamp-1 capitalize">
                             {data?.createdBy?.name}
                         </span>
                     </div>

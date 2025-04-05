@@ -117,28 +117,6 @@ export const unsubscribe = createAsyncThunk(
     }
 );
 
-export const paymentHistory = createAsyncThunk(
-    "/payments/history",
-    async (count) => {
-        try {
-            const res = axiosInstance.get(`/payments/?count=${count}`);
-            toast.promise(res, {
-                loading: "Wait! getting the payment records",
-                success: (data) => {
-                    return data?.data?.message;
-                },
-            });
-            return (await res).data;
-        } catch (error) {
-            if (error?.response?.data?.message) {
-                toast.error(error?.response?.data?.message);
-            } else {
-                console.log(error.message);
-            }
-        }
-    }
-);
-
 const paymentSlice = createSlice({
     name: "payment",
     initialState,
@@ -157,9 +135,6 @@ const paymentSlice = createSlice({
             .addCase(unsubscribe.fulfilled, (state) => {
                 state.subscription_id = "";
                 state.isPaymentVerified = false;
-            })
-            .addCase(paymentHistory.fulfilled, (state, action) => {
-                state.allPayments = action?.payload?.data?.items;
             });
     },
 });

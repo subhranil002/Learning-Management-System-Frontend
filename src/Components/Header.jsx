@@ -1,4 +1,15 @@
-import { FaUserCircle } from "react-icons/fa";
+import {
+    FaBook,
+    FaBookOpen,
+    FaChalkboardTeacher,
+    FaEnvelope,
+    FaInfoCircle,
+    FaPlusCircle,
+    FaReceipt,
+    FaSignOutAlt,
+    FaUser,
+    FaUserCircle,
+} from "react-icons/fa";
 import { RiMenu2Fill } from "react-icons/ri";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useLocation, useNavigate } from "react-router-dom";
@@ -47,12 +58,13 @@ function Header() {
                         <li>
                             <Link
                                 to="/courses"
-                                className={`rounded-md ${
+                                className={`flex items-center gap-2 rounded-md ${
                                     isActive("/courses")
                                         ? "bg-neutral text-neutral-content"
                                         : ""
                                 }`}
                             >
+                                <FaBookOpen className="text-lg" />
                                 All Courses
                             </Link>
                         </li>
@@ -60,13 +72,16 @@ function Header() {
                             (role === "TEACHER" || role === "ADMIN") && (
                                 <li>
                                     <details>
-                                        <summary>Admin/Teacher</summary>
+                                        <summary className="flex items-center gap-2">
+                                            <FaChalkboardTeacher className="text-lg" />
+                                            Admin/Teacher
+                                        </summary>
                                         <ul className="p-2">
                                             {isLoggedIn && role === "ADMIN" && (
                                                 <li>
                                                     <Link
                                                         to="/admin/dashboard"
-                                                        className={`rounded-md ${
+                                                        className={`flex items-center gap-2 rounded-md ${
                                                             isActive(
                                                                 "/admin/dashboard"
                                                             )
@@ -74,14 +89,33 @@ function Header() {
                                                                 : ""
                                                         }`}
                                                     >
+                                                        <FaChalkboardTeacher className="text-lg" />
                                                         Admin Dashboard
                                                     </Link>
                                                 </li>
                                             )}
+                                            {isLoggedIn &&
+                                                role === "TEACHER" && (
+                                                    <li>
+                                                        <Link
+                                                            to="/teacher/dashboard"
+                                                            className={`flex items-center gap-2 rounded-md ${
+                                                                isActive(
+                                                                    "/teacher/dashboard"
+                                                                )
+                                                                    ? "bg-neutral text-neutral-content"
+                                                                    : ""
+                                                            }`}
+                                                        >
+                                                            <FaChalkboardTeacher className="text-xl" />
+                                                            Teacher Dashboard
+                                                        </Link>
+                                                    </li>
+                                                )}
                                             <li>
                                                 <Link
                                                     to="/courses/create"
-                                                    className={`rounded-md ${
+                                                    className={`flex items-center gap-2 rounded-md ${
                                                         isActive(
                                                             "/courses/create"
                                                         )
@@ -89,6 +123,7 @@ function Header() {
                                                             : ""
                                                     }`}
                                                 >
+                                                    <FaPlusCircle className="text-lg" />
                                                     Add Course
                                                 </Link>
                                             </li>
@@ -99,24 +134,26 @@ function Header() {
                         <li>
                             <Link
                                 to="/about"
-                                className={`rounded-md ${
+                                className={`flex items-center gap-2 rounded-md ${
                                     isActive("/about")
                                         ? "bg-neutral text-neutral-content"
                                         : ""
                                 }`}
                             >
+                                <FaInfoCircle className="text-lg" />
                                 About Us
                             </Link>
                         </li>
                         <li>
                             <Link
                                 to="/contact"
-                                className={`rounded-md ${
+                                className={`flex items-center gap-2 rounded-md ${
                                     isActive("/contact")
                                         ? "bg-neutral text-neutral-content"
                                         : ""
                                 }`}
                             >
+                                <FaEnvelope className="text-lg" />
                                 Contact Us
                             </Link>
                         </li>
@@ -138,30 +175,35 @@ function Header() {
                     <li>
                         <Link
                             to="/courses"
-                            className={`rounded-md ${
+                            className={`flex items-center gap-2 rounded-md ${
                                 isActive("/courses")
                                     ? "bg-neutral text-neutral-content"
                                     : ""
                             }`}
                         >
+                            <FaBookOpen className="text-lg" />
                             All Courses
                         </Link>
                     </li>
                     {isLoggedIn && (role === "TEACHER" || role === "ADMIN") && (
                         <li>
                             <details>
-                                <summary>Admin/Teacher</summary>
+                                <summary className="flex items-center gap-2">
+                                    <FaChalkboardTeacher className="text-lg" />
+                                    Admin/Teacher
+                                </summary>
                                 <ul className="p-2 z-1">
                                     {isLoggedIn && role === "ADMIN" && (
                                         <li>
                                             <Link
                                                 to="/admin/dashboard"
-                                                className={`rounded-md ${
+                                                className={`flex items-center gap-2 rounded-md ${
                                                     isActive("/admin/dashboard")
                                                         ? "bg-neutral text-neutral-content"
                                                         : ""
                                                 }`}
                                             >
+                                                <FaChalkboardTeacher className="text-2xl" />
                                                 Admin Dashboard
                                             </Link>
                                         </li>
@@ -170,7 +212,7 @@ function Header() {
                                         <li>
                                             <Link
                                                 to="/teacher/dashboard"
-                                                className={`rounded-md ${
+                                                className={`flex items-center gap-2 rounded-md ${
                                                     isActive(
                                                         "/teacher/dashboard"
                                                     )
@@ -178,6 +220,7 @@ function Header() {
                                                         : ""
                                                 }`}
                                             >
+                                                <FaChalkboardTeacher className="text-2xl" />
                                                 Teacher Dashboard
                                             </Link>
                                         </li>
@@ -185,12 +228,13 @@ function Header() {
                                     <li>
                                         <Link
                                             to="/courses/create"
-                                            className={`rounded-md ${
+                                            className={`flex items-center gap-2 rounded-md ${
                                                 isActive("/courses/create")
                                                     ? "bg-neutral text-neutral-content"
                                                     : ""
                                             }`}
                                         >
+                                            <FaPlusCircle className="text-lg" />
                                             Add Course
                                         </Link>
                                     </li>
@@ -201,24 +245,26 @@ function Header() {
                     <li>
                         <Link
                             to="/about"
-                            className={`rounded-md ${
+                            className={`flex items-center gap-2 rounded-md ${
                                 isActive("/about")
                                     ? "bg-neutral text-neutral-content"
                                     : ""
                             }`}
                         >
+                            <FaInfoCircle className="text-lg" />
                             About Us
                         </Link>
                     </li>
                     <li>
                         <Link
                             to="/contact"
-                            className={`rounded-md ${
+                            className={`flex items-center gap-2 rounded-md ${
                                 isActive("/contact")
                                     ? "bg-neutral text-neutral-content"
                                     : ""
                             }`}
                         >
+                            <FaEnvelope className="text-lg" />
                             Contact Us
                         </Link>
                     </li>
@@ -228,7 +274,7 @@ function Header() {
                 <span className="hidden md:block">
                     {isLoggedIn && location.pathname === "/" ? (
                         <span className="capitalize font-semibold">
-                            Wellcome, {data?.fullName.split(" ")[0]}
+                            Welcome, {data?.fullName.split(" ")[0]}
                         </span>
                     ) : (
                         ""
@@ -263,32 +309,55 @@ function Header() {
                         <li>
                             <Link
                                 to="/users/profile"
-                                className={`rounded-md ${
+                                className={`flex items-center gap-2 rounded-md ${
                                     isActive("/users/profile")
                                         ? "bg-neutral text-neutral-content"
                                         : ""
                                 }`}
                             >
-                                Profile
+                                <FaUser className="text-lg" />
+                                My Profile
                             </Link>
                         </li>
                         {isLoggedIn &&
                             (role === "USER" || role === "GUEST") && (
-                                <li>
-                                    <Link
-                                        to="/users/dashboard"
-                                        className={`rounded-md ${
-                                            isActive("/users/dashboard")
-                                                ? "bg-neutral text-neutral-content"
-                                                : ""
-                                        }`}
-                                    >
-                                        Dashboard
-                                    </Link>
-                                </li>
+                                <>
+                                    <li>
+                                        <Link
+                                            to="/users/mycourses"
+                                            className={`flex items-center gap-2 rounded-md ${
+                                                isActive("/users/mycourses")
+                                                    ? "bg-neutral text-neutral-content"
+                                                    : ""
+                                            }`}
+                                        >
+                                            <FaBook className="text-lg" />
+                                            My Courses
+                                        </Link>
+                                    </li>
+                                    <li>
+                                        <Link
+                                            to="/users/purchasehistory"
+                                            className={`flex items-center gap-2 rounded-md ${
+                                                isActive(
+                                                    "/users/purchasehistory"
+                                                )
+                                                    ? "bg-neutral text-neutral-content"
+                                                    : ""
+                                            }`}
+                                        >
+                                            <FaReceipt className="text-lg" />
+                                            My Purchases
+                                        </Link>
+                                    </li>
+                                </>
                             )}
                         <li>
-                            <button onClick={() => handleLogout()}>
+                            <button
+                                onClick={() => handleLogout()}
+                                className="flex items-center gap-2"
+                            >
+                                <FaSignOutAlt className="text-lg" />
                                 Logout
                             </button>
                         </li>
@@ -301,24 +370,26 @@ function Header() {
                         <li>
                             <Link
                                 to="/login"
-                                className={`rounded-md ${
+                                className={`flex items-center gap-2 rounded-md ${
                                     isActive("/login")
                                         ? "bg-neutral text-neutral-content"
                                         : ""
                                 }`}
                             >
+                                <FaSignOutAlt className="text-lg" />
                                 Login
                             </Link>
                         </li>
                         <li>
                             <Link
                                 to="/signup"
-                                className={`rounded-md ${
+                                className={`flex items-center gap-2 rounded-md ${
                                     isActive("/signup")
                                         ? "bg-neutral text-neutral-content"
                                         : ""
                                 }`}
                             >
+                                <FaUser className="text-lg" />
                                 Signup
                             </Link>
                         </li>

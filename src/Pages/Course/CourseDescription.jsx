@@ -64,7 +64,7 @@ function CourseDescription() {
                                         },
                                     });
                                 }}
-                                className="btn btn-outline btn-primary btn-sm sm:btn-md md:btn-lg gap-2 w-full"
+                                className="btn md:btn-outline btn-primary btn-md md:btn-lg gap-2 w-full"
                             >
                                 <FaCoins className="text-xl" />
                                 Lifetime Access
@@ -86,7 +86,7 @@ function CourseDescription() {
                                         },
                                     });
                                 }}
-                                className="btn btn-outline btn-secondary btn-sm sm:btn-md md:btn-lg gap-2 w-full min-h-10"
+                                className="btn md:btn-outline btn-secondary btn-md md:btn-lg gap-2 w-full"
                             >
                                 <FaSync className="text-xl" />
                                 {import.meta.env.VITE_SUBSCRIPTION_PERIOD}ly
@@ -310,7 +310,7 @@ function CourseDescription() {
                                                     <h3 className="font-bold text-lg">
                                                         Instructor
                                                     </h3>
-                                                    <p className="opacity-90 capitalize text-error font-bold">
+                                                    <p className="opacity-90 capitalize text-secondary font-bold">
                                                         {state?.createdBy?.name}
                                                     </p>
                                                 </div>
@@ -323,18 +323,11 @@ function CourseDescription() {
                                                     <h3 className="font-bold text-lg">
                                                         Categories
                                                     </h3>
-                                                    <div className="flex flex-wrap">
-                                                        {state?.category?.map(
-                                                            (cat, index) => (
-                                                                <div
-                                                                    key={index}
-                                                                    className="badge badge-outline text-sm text-error font-bold"
-                                                                >
-                                                                    {cat}
-                                                                </div>
-                                                            )
+                                                    <p className="opacity-90 capitalize text-secondary font-bold">
+                                                        {state?.category?.join(
+                                                            ", "
                                                         )}
-                                                    </div>
+                                                    </p>
                                                 </div>
                                             </div>
                                         </div>
