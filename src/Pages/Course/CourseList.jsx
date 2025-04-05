@@ -1,21 +1,32 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import CourseCard from "../../Components/CourseCard";
+import Search from "../../Components/Search";
 import HomeLayout from "../../Layouts/HomeLayout";
 import { getAllCourses } from "../../Redux/Slices/CourseSlice";
 
 function CourseList() {
     const dispatch = useDispatch();
     const { courseData } = useSelector((state) => state.course);
+    const [searchQuery, setSearchQuery] = useState("");
 
-    async function loadCourses() {
-        await dispatch(getAllCourses());
+    async function search(data) {
+        console.log(data);
+        // TODO: search for courses
     }
 
     useEffect(() => {
-        loadCourses();
-    }, []);
+        searchQuery === "" &&
+            (async () =>
+                await dispatch(
+                    getAllCourses({
+                        start: 0,
+                        limit: 10,
+                        searchQuery,
+                    })
+                ))();
+    }, [searchQuery]);
 
     return (
         <HomeLayout>
@@ -31,6 +42,7 @@ function CourseList() {
                         </p>
                         <div className="divider divider-primary w-24 mx-auto my-4" />
                     </div>
+                    <Search cb={search} setSearchQuery={setSearchQuery} />
                     <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
                         {courseData.map((course) => (
                             <CourseCard key={course._id} data={course} />

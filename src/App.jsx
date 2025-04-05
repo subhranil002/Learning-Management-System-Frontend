@@ -23,10 +23,11 @@ import CheckoutSuccess from "./Pages/Payment/CheckoutSuccess";
 import Signup from "./Pages/SignUp";
 import TeacherDashboard from "./Pages/Teacher/TeacherDashboard";
 import ChangePassword from "./Pages/User/ChangePassword";
-import Dashboard from "./Pages/User/Dashboard";
 import EditProfile from "./Pages/User/EditProfile";
 import ForgotPassword from "./Pages/User/ForgotPassword";
+import MyCourses from "./Pages/User/MyCourses";
 import Profile from "./Pages/User/Profile";
+import PurchaseHistory from "./Pages/User/PurchaseHistory";
 import ResetPassword from "./Pages/User/ResetPassword";
 import { getProfile } from "./Redux/Slices/AuthSlice";
 
@@ -96,9 +97,10 @@ function App() {
 
             {/* Protected Routes for USERS Only */}
             <Route element={<RequireAuth allowedRoles={["USER", "GUEST"]} />}>
+                <Route path="/users/mycourses" element={<MyCourses />} />
                 <Route
-                    path="/users/dashboard"
-                    element={<Dashboard />}
+                    path="/users/purchasehistory"
+                    element={<PurchaseHistory />}
                 />
             </Route>
 

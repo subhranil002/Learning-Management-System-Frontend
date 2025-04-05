@@ -9,7 +9,7 @@ const initialState = {
 
 export const getAllCourses = createAsyncThunk(
     "course/getAllCourses",
-    async () => {
+    async (data) => {
         try {
             const res = axiosInstance.get("/courses/");
             toast.promise(res, {

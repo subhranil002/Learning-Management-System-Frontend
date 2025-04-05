@@ -15,6 +15,8 @@ const initialState = {
     isLoggedIn: safeParse(sessionStorage.getItem("isLoggedIn"), false),
     role: sessionStorage.getItem("role") || "VISITOR",
     data: safeParse(sessionStorage.getItem("data"), { _: "" }),
+    myCourses: [],
+    myPurchases: [],
 };
 
 export const signUp = createAsyncThunk("/auth/signup", async (data) => {
@@ -232,6 +234,47 @@ export const contactUs = createAsyncThunk("/auth/contactus", async (data) => {
     }
 });
 
+export const getMyCourses = createAsyncThunk("/auth/getmycourses", async () => {
+    try {
+        const res = axiosInstance.get("/users/getmycourses");
+        toast.promise(res, {
+            loading: "Wait! fetching your courses...",
+            success: (data) => {
+                return data?.data?.message;
+            },
+        });
+        return (await res).data;
+    } catch (error) {
+        if (error?.response?.data?.message) {
+            toast.error(error?.response?.data?.message);
+        } else {
+            console.log(error.message);
+        }
+    }
+});
+
+export const getMyPurchases = createAsyncThunk(
+    "/auth/getmypurchases",
+    async () => {
+        try {
+            const res = axiosInstance.get("/users/getmypurchases");
+            toast.promise(res, {
+                loading: "Wait! fetching your purchases...",
+                success: (data) => {
+                    return data?.data?.message;
+                },
+            });
+            return (await res).data;
+        } catch (error) {
+            if (error?.response?.data?.message) {
+                toast.error(error?.response?.data?.message);
+            } else {
+                console.log(error.message);
+            }
+        }
+    }
+);
+
 const AuthSlice = createSlice({
     name: "auth",
     initialState,
@@ -301,6 +344,12 @@ const AuthSlice = createSlice({
                     "data",
                     JSON.stringify(action.payload?.data)
                 );
+            })
+            .addCase(getMyCourses.fulfilled, (state, action) => {
+                state.myCourses = action.payload?.data;
+            })
+            .addCase(getMyPurchases.fulfilled, (state, action) => {
+                state.myPurchases = action.payload?.data;
             });
     },
 });
