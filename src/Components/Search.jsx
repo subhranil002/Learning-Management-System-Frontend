@@ -2,21 +2,15 @@ import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { FaSearch } from "react-icons/fa";
 
-import useDebounce from "../hooks/useDebounce.js";
-
 function Search({ cb, setSearchQuery }) {
     const { register, handleSubmit, watch } = useForm();
 
-    const debouncedSearch = useDebounce((value) => {
-        setSearchQuery(value);
-    });
-
     function search(data) {
         cb(data.searchQuery);
-    };
+    }
 
     useEffect(() => {
-        debouncedSearch(watch("searchQuery"));
+        setSearchQuery(watch("searchQuery"));
     }, [watch("searchQuery")]);
 
     return (
@@ -33,6 +27,7 @@ function Search({ cb, setSearchQuery }) {
                         type="text"
                         placeholder="Find your perfect course..."
                         className="input input-bordered w-full border-primary"
+                        autoFocus
                         {...register("searchQuery")}
                     />
                 </div>

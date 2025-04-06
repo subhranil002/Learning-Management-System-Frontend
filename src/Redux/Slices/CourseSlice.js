@@ -11,7 +11,9 @@ export const getAllCourses = createAsyncThunk(
     "course/getAllCourses",
     async (data) => {
         try {
-            const res = axiosInstance.get("/courses/");
+            const res = axiosInstance.get(
+                `/courses/?start=${data.start}&limit=${data.limit}&search_query=${data.searchQuery}`
+            );
             toast.promise(res, {
                 loading: "Wait! loading courses...",
                 success: (data) => {
@@ -130,11 +132,15 @@ const CourseSlice = createSlice({
     initialState,
     reducers: {},
     extraReducers: (builder) => {
-        builder.addCase(getAllCourses.fulfilled, (state, action) => {
-            if (action?.payload?.data?.length) {
-                state.courseData = action.payload?.data;
-            }
-        });
+        builder
+            .addCase(getAllCourses.pending, (state) => {
+                state.courseData = [];
+            })
+            .addCase(getAllCourses.fulfilled, (state, action) => {
+                if (action?.payload?.data?.length) {
+                    state.courseData = action.payload?.data;
+                }
+            });
     },
 });
 
