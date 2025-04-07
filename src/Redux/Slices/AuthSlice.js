@@ -3,20 +3,47 @@ import toast from "react-hot-toast";
 
 import axiosInstance from "../../Helpers/axiosInstance";
 
-const safeParse = (item, defaultValue) => {
-    try {
-        return item ? JSON.parse(item) : defaultValue;
-    } catch (e) {
-        return defaultValue;
-    }
+const AuthStorage = {
+    get: (key, defaultValue) => {
+        try {
+            const item = sessionStorage.getItem(key);
+            return item ? JSON.parse(item) : defaultValue;
+        } catch (e) {
+            return defaultValue;
+        }
+    },
+    set: (key, value) => {
+        sessionStorage.setItem(key, JSON.stringify(value));
+    },
+    clear: () => {
+        sessionStorage.removeItem("isLoggedIn");
+        sessionStorage.removeItem("role");
+        sessionStorage.removeItem("data");
+    },
 };
 
 const initialState = {
-    isLoggedIn: safeParse(sessionStorage.getItem("isLoggedIn"), false),
-    role: sessionStorage.getItem("role") || "VISITOR",
-    data: safeParse(sessionStorage.getItem("data"), { _: "" }),
+    isLoggedIn: AuthStorage.get("isLoggedIn", false),
+    role: AuthStorage.get("role", "VISITOR"),
+    data: AuthStorage.get("data", {}),
     myCourses: [],
     myPurchases: [],
+};
+
+const resetAuthState = (state) => {
+    state.isLoggedIn = false;
+    state.role = "VISITOR";
+    state.data = {};
+    state.myCourses = [];
+    state.myPurchases = [];
+    AuthStorage.clear();
+};
+
+const handleError = (error) => {
+    toast.error(error?.response?.data?.message || "An error occurred");
+    if (error?.response?.status === 455) {
+        return { clearState: true };
+    }
 };
 
 export const signUp = createAsyncThunk("/auth/signup", async (data) => {
@@ -39,11 +66,7 @@ export const signUp = createAsyncThunk("/auth/signup", async (data) => {
         });
         return (await res).data;
     } catch (error) {
-        if (error?.response?.data?.message) {
-            toast.error(error?.response?.data?.message);
-        } else {
-            console.log(error.message);
-        }
+        return handleError(error);
     }
 });
 
@@ -58,11 +81,7 @@ export const login = createAsyncThunk("/auth/login", async (data) => {
         });
         return (await res).data;
     } catch (error) {
-        if (error?.response?.data?.message) {
-            toast.error(error?.response?.data?.message);
-        } else {
-            console.log(error.message);
-        }
+        return handleError(error);
     }
 });
 
@@ -77,11 +96,7 @@ export const guestLogin = createAsyncThunk("/auth/guestlogin", async () => {
         });
         return (await res).data;
     } catch (error) {
-        if (error?.response?.data?.message) {
-            toast.error(error?.response?.data?.message);
-        } else {
-            console.log(error.message);
-        }
+        return handleError(error);
     }
 });
 
@@ -98,11 +113,7 @@ export const forgotPassword = createAsyncThunk(
             });
             return (await res).data;
         } catch (error) {
-            if (error?.response?.data?.message) {
-                toast.error(error?.response?.data?.message);
-            } else {
-                console.log(error.message);
-            }
+            return handleError(error);
         }
     }
 );
@@ -120,11 +131,7 @@ export const resetPassword = createAsyncThunk(
             });
             return (await res).data;
         } catch (error) {
-            if (error?.response?.data?.message) {
-                toast.error(error?.response?.data?.message);
-            } else {
-                console.log(error.message);
-            }
+            return handleError(error);
         }
     }
 );
@@ -140,11 +147,7 @@ export const logout = createAsyncThunk("/auth/logout", async () => {
         });
         await res;
     } catch (error) {
-        if (error?.response?.data?.message) {
-            toast.error(error?.response?.data?.message);
-        } else {
-            console.log(error.message);
-        }
+        return handleError(error);
     }
 });
 
@@ -153,9 +156,7 @@ export const getProfile = createAsyncThunk("/auth/profile", async () => {
         const res = await axiosInstance.get("/users/profile");
         return res.data;
     } catch (error) {
-        if (error?.response?.data?.status === 403) {
-            toast.error(error?.response?.data?.message);
-        }
+        return handleError(error);
     }
 });
 
@@ -184,11 +185,7 @@ export const updateProfile = createAsyncThunk(
             }
             toast.success("Profile updated successfully");
         } catch (error) {
-            if (error?.response?.data?.message) {
-                toast.error(error?.response?.data?.message);
-            } else {
-                console.log(error.message);
-            }
+            return handleError(error);
         }
     }
 );
@@ -206,11 +203,7 @@ export const changePassword = createAsyncThunk(
             });
             return (await res).data;
         } catch (error) {
-            if (error?.response?.data?.message) {
-                toast.error(error?.response?.data?.message);
-            } else {
-                console.log(error.message);
-            }
+            return handleError(error);
         }
     }
 );
@@ -226,11 +219,7 @@ export const contactUs = createAsyncThunk("/auth/contactus", async (data) => {
         });
         return (await res).data;
     } catch (error) {
-        if (error?.response?.data?.message) {
-            toast.error(error?.response?.data?.message);
-        } else {
-            console.log(error.message);
-        }
+        return handleError(error);
     }
 });
 
@@ -245,11 +234,7 @@ export const getMyCourses = createAsyncThunk("/auth/getmycourses", async () => {
         });
         return (await res).data;
     } catch (error) {
-        if (error?.response?.data?.message) {
-            toast.error(error?.response?.data?.message);
-        } else {
-            console.log(error.message);
-        }
+        return handleError(error);
     }
 });
 
@@ -266,11 +251,7 @@ export const getMyPurchases = createAsyncThunk(
             });
             return (await res).data;
         } catch (error) {
-            if (error?.response?.data?.message) {
-                toast.error(error?.response?.data?.message);
-            } else {
-                console.log(error.message);
-            }
+            return handleError(error);
         }
     }
 );
@@ -350,7 +331,13 @@ const AuthSlice = createSlice({
             })
             .addCase(getMyPurchases.fulfilled, (state, action) => {
                 state.myPurchases = action.payload?.data;
-            });
+            })
+            .addMatcher(
+                (action) => action.payload?.clearState,
+                (state) => {
+                    resetAuthState(state);
+                }
+            );
     },
 });
 

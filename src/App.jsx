@@ -1,6 +1,6 @@
 import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { Route, Routes } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { Route, Routes, useLocation } from "react-router-dom";
 
 import RequireAuth from "./Components/Auth/RequireAuth";
 import AboutUs from "./Pages/AboutUs";
@@ -33,12 +33,22 @@ import { getProfile } from "./Redux/Slices/AuthSlice";
 
 function App() {
     const dispatch = useDispatch();
-    const { isLoggedIn } = useSelector((state) => state.auth);
+    const location = useLocation();
+
+    const paths = ["/", "/about", "/signup", "/login", "/courses", "/contact"];
 
     useEffect(() => {
-        if (!isLoggedIn) {
-            (async () => await dispatch(getProfile()))();
+        if (!paths.includes(location.pathname)) {
+            (async () => {
+                await dispatch(getProfile());
+            })();
         }
+    }, [location.pathname]);
+
+    useEffect(() => {
+        (async () => {
+            await dispatch(getProfile());
+        })();
     }, []);
 
     return (
