@@ -56,25 +56,11 @@ function Displaylectures() {
         if (!state) navigate("/courses");
         (async () => {
             await dispatch(getLecturesByCourse(state._id));
-
-            const handleInspectMode = (e) => {
-                if (
-                    e.keyCode === 123 ||
-                    (e.ctrlKey &&
-                        e.shiftKey &&
-                        (e.keyCode === 73 || e.keyCode === 67)) ||
-                    (e.ctrlKey && e.keyCode === 85)
-                ) {
-                    e.preventDefault();
-                    e.stopPropagation();
-                }
-            };
-            document.addEventListener("keydown", handleInspectMode);
         })();
     }, []);
 
     return (
-        <span onContextMenu={(e) => e.preventDefault()}>
+        <>
             <dialog id="lecture-delete-modal" className="modal">
                 <div className="modal-box bg-base-100 border border-error/20 shadow-xl mx-2">
                     <div className="flex flex-col items-center text-center space-y-4">
@@ -369,7 +355,7 @@ function Displaylectures() {
                     </div>
                 </div>
             </div>
-        </span>
+        </>
     );
 }
 

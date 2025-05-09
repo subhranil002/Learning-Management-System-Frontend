@@ -42,7 +42,6 @@ const VideoPlayer = ({ hlsUrl, mp4Url, handleEnded, config, ...props }) => {
                 onEnded={handleEnded}
                 config={config}
                 {...props}
-                onContextMenu={(e) => e.preventDefault()}
             />
         );
     }
