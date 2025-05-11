@@ -1,8 +1,9 @@
 import { Editor } from "@tinymce/tinymce-react";
 import { useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
-import { AiOutlineArrowLeft, AiOutlineCloudUpload } from "react-icons/ai";
+import { AiOutlineCloudUpload } from "react-icons/ai";
 import { BsCurrencyDollar, BsTag, BsTextParagraph } from "react-icons/bs";
+import { FaArrowLeft } from "react-icons/fa";
 import { FiBook } from "react-icons/fi";
 import { GrMoney } from "react-icons/gr";
 import { useDispatch } from "react-redux";
@@ -69,16 +70,17 @@ function EditCourse() {
                 >
                     <div className="card-body relative p-8">
                         <Link
-                            to={-1}
-                            className="absolute top-6 left-6 btn btn-ghost btn-circle btn-sm hover:-translate-x-1 transition-transform"
+                            onClick={() => navigate(-1)}
+                            className="btn btn-neutral hidden sm:flex btn-md gap-2 absolute top-6 left-6"
                         >
-                            <AiOutlineArrowLeft className="text-xl text-error" />
+                            <FaArrowLeft className="text-lg" />
+                            Back
                         </Link>
                         <h1 className="card-title text-3xl justify-center mt-10 sm:mt-4 mb-8 font-bold text-warning">
                             Edit Course
                         </h1>
                         <div className="form-control w-full mb-8">
-                            <label className="label">
+                            <label className="label mb-2">
                                 <span className="label-text text-lg font-semibold flex items-center gap-2">
                                     <AiOutlineCloudUpload className="text-xl" />
                                     Course Thumbnail
@@ -137,7 +139,7 @@ function EditCourse() {
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-5 md:gap-10">
                             <div className="space-y-6">
                                 <div className="form-control w-full">
-                                    <label className="label">
+                                    <label className="label mb-2">
                                         <span className="label-text text-lg font-semibold flex items-center gap-2">
                                             <FiBook className="text-xl" />
                                             Course Title
@@ -169,7 +171,7 @@ function EditCourse() {
                                     )}
                                 </div>
                                 <div className="form-control w-full">
-                                    <label className="label">
+                                    <label className="label mb-2">
                                         <span className="label-text text-lg font-semibold flex items-center gap-2">
                                             <BsTag className="text-xl" />
                                             Course Category
@@ -203,7 +205,7 @@ function EditCourse() {
                             </div>
                             <div className="space-y-6">
                                 <div className="form-control w-full">
-                                    <label className="label">
+                                    <label className="label mb-2">
                                         <span className="label-text text-lg font-semibold flex items-center gap-2">
                                             <GrMoney className="text-xl" />
                                             Course Price
@@ -235,7 +237,7 @@ function EditCourse() {
                                     )}
                                 </div>
                                 <div className="form-control w-full">
-                                    <label className="label">
+                                    <label className="label mb-2">
                                         <span className="label-text text-lg font-semibold flex items-center gap-2">
                                             <BsCurrencyDollar className="text-xl" />
                                             Select Currency
@@ -260,7 +262,7 @@ function EditCourse() {
                             </div>
                         </div>
                         <div className="form-control w-full mt-6">
-                            <label className="label">
+                            <label className="label mb-2">
                                 <span className="label-text text-lg font-semibold flex items-center gap-2">
                                     <BsTextParagraph className="text-xl" />
                                     Course Description

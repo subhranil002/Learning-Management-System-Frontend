@@ -1,3 +1,4 @@
+import DOMPurify from "dompurify";
 import parser from "html-react-parser";
 import { useEffect, useRef, useState } from "react";
 import {
@@ -198,9 +199,11 @@ function Displaylectures() {
                                     </h2>
                                     <span className="text-base-content/80 leading-relaxed whitespace-normal">
                                         {parser(
-                                            lectures?.[currentVideo]
-                                                ?.description ||
-                                                "No description available"
+                                            DOMPurify.sanitize(
+                                                lectures?.[currentVideo]
+                                                    ?.description ||
+                                                    "No description available"
+                                            )
                                         )}
                                     </span>
                                 </div>
@@ -299,7 +302,7 @@ function Displaylectures() {
                                             <span className="badge badge-neutral">
                                                 {idx + 1}
                                             </span>
-                                            <span className="line-clamp-1">
+                                            <span className="line-clamp-1 max-w-25">
                                                 {lecture.title}
                                             </span>
                                         </div>

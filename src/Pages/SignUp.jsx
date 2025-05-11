@@ -190,10 +190,10 @@ function Signup() {
                             <span className="text-sm text-base-content/70">
                                 Already have an account? &nbsp;
                                 <Link
-                                    to="/login"
+                                    to="/signin"
                                     className="link link-accent font-semibold"
                                 >
-                                    Login
+                                    Sign In
                                 </Link>
                             </span>
                         </div>

@@ -1,3 +1,4 @@
+import DOMPurify from "dompurify";
 import parser from "html-react-parser";
 import { FaBook, FaChalkboardTeacher, FaListUl } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
@@ -28,7 +29,7 @@ function CourseCard({ data }) {
                     {data?.title}
                 </h2>
                 <span className="text-sm line-clamp-3 mb-2">
-                    {parser(data?.description)}
+                    {parser(DOMPurify.sanitize(data?.description))}
                 </span>
                 <div className="flex flex-col text-base">
                     <div className="flex items-center gap-2 py-1 rounded-lg">

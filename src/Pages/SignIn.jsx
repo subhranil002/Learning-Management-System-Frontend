@@ -7,7 +7,7 @@ import { Link, useNavigate } from "react-router-dom";
 import HomeLayout from "../Layouts/HomeLayout";
 import { guestLogin, login } from "../Redux/Slices/AuthSlice";
 
-function Login() {
+function SignIn() {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const { isLoggedIn } = useSelector((state) => state.auth);
@@ -45,7 +45,7 @@ function Login() {
                                 Welcome Back
                             </h2>
                             <p className="text-sm text-base-content/70">
-                                Please Login to continue
+                                Please Sign In to continue
                             </p>
                         </div>
                         <div className="form-control">
@@ -120,13 +120,15 @@ function Login() {
                                 className="btn btn-warning btn-block gap-2"
                             >
                                 <FiLogIn className="text-xl" />
-                                Login
+                                Sign In
                             </button>
                             <button
                                 onClick={async (e) => {
                                     e.preventDefault();
-                                    await dispatch(guestLogin());
-                                    navigate("/");
+                                    const res = await dispatch(guestLogin());
+                                    if (res?.payload?.success) {
+                                        navigate("/");
+                                    }
                                 }}
                                 className="btn btn-success btn-block gap-2"
                             >
@@ -160,4 +162,4 @@ function Login() {
     );
 }
 
-export default Login;
+export default SignIn;

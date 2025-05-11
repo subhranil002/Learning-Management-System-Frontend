@@ -18,7 +18,7 @@ function ForgotPassword() {
     const onSubmit = async (data) => {
         const res = await dispatch(forgotPassword(data));
         if (res?.payload?.success) {
-            navigate("/login");
+            navigate("/signin");
         }
     };
 
@@ -27,7 +27,7 @@ function ForgotPassword() {
             <div className="min-h-[90vh] flex items-center justify-center bg-gradient-to-br from-base-100 to-base-200 p-4">
                 <div className="card w-full max-w-md bg-base-100 shadow-lg relative">
                     <Link
-                        to="/login"
+                        to="/signin"
                         className="absolute top-4 left-4 btn btn-ghost btn-circle z-10"
                     >
                         <FiArrowLeft className="text-xl text-error" />
@@ -85,8 +85,8 @@ function ForgotPassword() {
                         <div className="text-center mt-4">
                             <p className="text-sm text-base-content/70">
                                 Remember your password?{" "}
-                                <Link to="/login" className="link link-accent">
-                                    Login here
+                                <Link to="/signin" className="link link-accent">
+                                    Sign In
                                 </Link>
                             </p>
                         </div>

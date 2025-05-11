@@ -1,3 +1,4 @@
+import DOMPurify from "dompurify";
 import parser from "html-react-parser";
 import { useEffect } from "react";
 import {
@@ -176,7 +177,7 @@ function CourseDescription() {
                             onClick={() => navigate(-1)}
                             className="btn btn-neutral hidden sm:flex btn-md gap-2"
                         >
-                            <FaArrowLeft className="text-sm sm:text-lg" />
+                            <FaArrowLeft className="text-lg" />
                             Back
                         </button>
                         {isCreatorOrAdmin && (
@@ -336,7 +337,9 @@ function CourseDescription() {
                                                             <div className="collapse-content">
                                                                 <span className="prose max-w-none">
                                                                     {parser(
-                                                                        lecture.description
+                                                                        DOMPurify.sanitize(
+                                                                            lecture.description
+                                                                        )
                                                                     )}
                                                                 </span>
                                                             </div>
@@ -361,7 +364,11 @@ function CourseDescription() {
                                             </h2>
                                         </div>
                                         <span className="leading-relaxed opacity-90 mb-6">
-                                            {parser(state?.description)}
+                                            {parser(
+                                                DOMPurify.sanitize(
+                                                    state?.description
+                                                )
+                                            )}
                                         </span>
                                         <div className="bg-base-200 rounded-lg p-4">
                                             <div className="flex items-center gap-3">

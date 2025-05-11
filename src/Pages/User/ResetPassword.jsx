@@ -30,7 +30,7 @@ function ResetPassword() {
             resetPassword({ ...data, resetToken: token })
         );
         if (res?.payload?.success) {
-            navigate("/login");
+            navigate("/signin");
         }
     };
 
@@ -126,8 +126,8 @@ function ResetPassword() {
                         <div className="text-center mt-4">
                             <p className="text-sm text-base-content/70">
                                 Remember your password?{" "}
-                                <Link to="/login" className="link link-accent">
-                                    Login here
+                                <Link to="/signin" className="link link-accent">
+                                    Sign In
                                 </Link>
                             </p>
                         </div>

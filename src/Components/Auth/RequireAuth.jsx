@@ -14,7 +14,7 @@ function RequireAuth({ allowedRoles }) {
             }}
         />
     ) : (
-        <Navigate to="/login" />
+        <Navigate to="/signin" />
     );
 }
 

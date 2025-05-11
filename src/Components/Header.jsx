@@ -25,7 +25,7 @@ function Header() {
 
     async function handleLogout() {
         await dispatch(logout());
-        navigate("/login");
+        navigate("/signin");
     }
 
     function modifyCloudinaryURL(url) {
@@ -369,15 +369,15 @@ function Header() {
                     >
                         <li>
                             <Link
-                                to="/login"
+                                to="/signin"
                                 className={`flex items-center gap-2 rounded-md ${
-                                    isActive("/login")
+                                    isActive("/signin")
                                         ? "bg-neutral text-neutral-content"
                                         : ""
                                 }`}
                             >
                                 <FaSignOutAlt className="text-lg" />
-                                Login
+                                Sign In
                             </Link>
                         </li>
                         <li>

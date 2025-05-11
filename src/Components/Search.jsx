@@ -27,7 +27,6 @@ function Search({ cb, setSearchQuery }) {
                         type="text"
                         placeholder="Find your perfect course..."
                         className="input input-bordered w-full border-primary"
-                        autoFocus
                         {...register("searchQuery")}
                     />
                 </div>

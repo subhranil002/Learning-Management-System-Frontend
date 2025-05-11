@@ -15,11 +15,11 @@ import Displaylectures from "./Pages/Course/Lecture/DisplayLectures";
 import EditLecture from "./Pages/Course/Lecture/EditLecture";
 import Denied from "./Pages/Denied";
 import HomePage from "./Pages/HomePage";
-import Login from "./Pages/login";
 import NotFound from "./Pages/NotFound";
 import Checkout from "./Pages/Payment/Checkout";
 import CheckoutFailure from "./Pages/Payment/CheckoutFailure";
 import CheckoutSuccess from "./Pages/Payment/CheckoutSuccess";
+import SignIn from "./Pages/SignIn";
 import Signup from "./Pages/SignUp";
 import TeacherDashboard from "./Pages/Teacher/TeacherDashboard";
 import ChangePassword from "./Pages/User/ChangePassword";
@@ -35,7 +35,7 @@ function App() {
     const dispatch = useDispatch();
     const location = useLocation();
 
-    const paths = ["/", "/about", "/signup", "/login", "/courses", "/contact"];
+    const paths = ["/", "/about", "/signup", "/signin", "/courses", "/contact"];
 
     useEffect(() => {
         if (!paths.includes(location.pathname)) {
@@ -59,7 +59,7 @@ function App() {
             <Route path="/contact" element={<Contact />} />
             <Route path="/denied" element={<Denied />} />
             <Route path="/signup" element={<Signup />} />
-            <Route path="/login" element={<Login />} />
+            <Route path="/signin" element={<SignIn />} />
             <Route path="/forgotpassword" element={<ForgotPassword />} />
             <Route path="/resetpassword/:token" element={<ResetPassword />} />
             <Route path="/courses" element={<CourseList />} />

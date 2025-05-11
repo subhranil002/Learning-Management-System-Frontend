@@ -13,7 +13,7 @@ function RequireSubscription() {
             state={{ message: "Please subscribe to access this page" }}
         />
     ) : (
-        <Navigate to="/login" />
+        <Navigate to="/signin" />
     );
 }
 
